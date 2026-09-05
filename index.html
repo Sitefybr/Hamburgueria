@@ -884,6 +884,1187 @@
     setTimeout(removeLoader, 3000); // Trava de segurança para falhar seguro
 
     /* 2. NAVBAR & MOBILE MENU */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conexao3D — Impressão 3D Personalizada</title>
+  <meta name="description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
+  
+  <meta property="og:title" content="Conexao3D — Impressão 3D Personalizada">
+  <meta property="og:description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
+  <meta property="og:type" content="website">
+
+  <style>
+    :root {
+      /* Estilo Base */
+      --bg-top: #ffffff;
+      --bg-dark: #050508;
+      --card-dark: rgba(15, 15, 25, 0.9);
+      --card-border-neon: #00f0ff;
+      --primary-neon: #a855f7;
+      --accent-neon: #00f0ff;
+      --neon-glow: rgba(0, 240, 255, 0.4);
+      --purple-glow: rgba(168, 85, 247, 0.4);
+      --text-dark: #0f172a;
+      --text-light: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font: system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+
+    body {
+      /* Transição do fundo: Metade superior branca/clara, metade inferior preta */
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 22%, #0a0a12 45%, #050508 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* PARTICLES & GRID */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .grid-pattern {
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* LOADING SCREEN */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #030305;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .loader-brand {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #fff, var(--primary-neon), var(--accent-neon));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .loader-bar {
+      width: 180px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loader-line {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-neon), var(--accent-neon));
+      animation: load 1.2s ease-in-out infinite;
+    }
+
+    @keyframes load {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .loader-off {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .title-light {
+      color: #0f172a;
+    }
+
+    .title-dark {
+      background: linear-gradient(135deg, #fff 40%, var(--accent-neon));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px var(--neon-glow);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 50px;
+    }
+
+    .sub-light { color: #475569; }
+    .sub-dark { color: var(--text-muted); }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-neon), #7e22ce);
+      color: #fff;
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.8);
+    }
+
+    .btn-outline {
+      background: rgba(15, 23, 42, 0.05);
+      color: #0f172a;
+      border: 2px solid #0f172a;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary-neon);
+      color: var(--primary-neon);
+      transform: translateY(-2px);
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav.scrolled {
+      padding: 14px 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .nav-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0f172a;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--primary-neon); }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #334155;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--primary-neon); }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #0f172a;
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+
+    /* HERO (Metade Branca) */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 100px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    .hero-text h1 span {
+      background: linear-gradient(135deg, var(--primary-neon), #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      color: #475569;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* 3D PRINTER CANVAS DISPLAY */
+    .canvas-wrapper {
+      width: 100%;
+      height: 440px;
+      background: #07070c;
+      border: 2px solid var(--accent-neon);
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 30px var(--neon-glow), inset 0 0 15px rgba(0, 240, 255, 0.2);
+    }
+
+    #printer-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* PRODUCTS GRID 3x3 (A Partir Daqui: Estilo Neon 30% e Fundo Escuro) */
+    .products-section {
+      color: var(--text-light);
+    }
+
+    .grid-3x3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .neon-card {
+      background: var(--card-dark);
+      border: 1px solid rgba(0, 240, 255, 0.3); /* 30% Neon Accent */
+      border-radius: 20px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .neon-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-neon), var(--primary-neon));
+      opacity: 0.7;
+    }
+
+    .neon-card:hover {
+      border-color: var(--accent-neon);
+      box-shadow: 0 0 25px var(--neon-glow);
+      transform: translateY(-5px);
+    }
+
+    .card-img-placeholder {
+      width: 100%;
+      height: 180px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(0, 240, 255, 0.4);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 240, 255, 0.2);
+      border: 1px solid var(--accent-neon);
+      color: var(--accent-neon);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .product-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* STEPS & CUSTOMIZATION */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .dark-card {
+      background: var(--card-dark);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      color: var(--text-light);
+    }
+
+    .step-num {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--accent-neon);
+      text-shadow: 0 0 10px var(--neon-glow);
+      margin-bottom: 8px;
+    }
+
+    .custom-card {
+      background: linear-gradient(135deg, rgba(30, 15, 50, 0.8), rgba(10, 10, 20, 0.9));
+      border: 1px solid var(--primary-neon);
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+      text-align: center;
+      padding: 60px 30px;
+      border-radius: 24px;
+      color: #fff;
+    }
+
+    .pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 30px 0 40px 0;
+    }
+
+    .pill {
+      padding: 8px 20px;
+      border-radius: 20px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--accent-neon);
+      color: var(--accent-neon);
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+    }
+
+    /* GALLERY */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-box {
+      height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-radius: 16px;
+      background: var(--card-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .gallery-box:hover {
+      border-color: var(--accent-neon);
+      box-shadow: 0 0 20px var(--neon-glow);
+    }
+
+    .gallery-box svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--accent-neon);
+    }
+
+    /* FAQ */
+    .faq-list {
+      max-width: 750px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .faq-head {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
+
+    .faq-body {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 20px;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      line-height: 1.6;
+    }
+
+    .faq-item.open {
+      border-color: var(--accent-neon);
+    }
+
+    .faq-item.open .faq-body {
+      max-height: 150px;
+      padding-bottom: 20px;
+    }
+
+    /* FORM */
+    .form-wrap {
+      max-width: 650px;
+      margin: 0 auto;
+      background: var(--card-dark);
+      border: 1px solid var(--accent-neon);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.15);
+      border-radius: 20px;
+      padding: 30px;
+      color: #fff;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #fff;
+      outline: none;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent-neon);
+      box-shadow: 0 0 10px var(--neon-glow);
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+
+    .success-alert {
+      display: none;
+      padding: 16px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--accent-neon);
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 16px;
+      color: #fff;
+    }
+
+    /* RODAPÉ COMPLETO COM TEXTO DE 50 LINHAS E REDES */
+    footer {
+      background: #020204;
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+      color: var(--text-muted);
+      padding: 80px 0 30px 0;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .footer-brand h2 {
+      color: #fff;
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand h2 span { color: var(--accent-neon); }
+
+    .footer-text-block {
+      line-height: 1.7;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-align: justify;
+    }
+
+    .footer-text-block p {
+      margin-bottom: 12px;
+    }
+
+    .footer-col h3 {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background: var(--accent-neon);
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--accent-neon);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: #f3f4f6;
+    }
+
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent-neon);
+      flex-shrink: 0;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.8rem;
+    }
+
+    /* WHATSAPP FLOAT */
+    .wa-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+      z-index: 999;
+      transition: transform 0.3s;
+    }
+
+    .wa-float:hover { transform: scale(1.1); }
+    .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* REVEAL ANIMATION */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .grid-3x3 { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-text h1 { font-size: 2.5rem; }
+      .hero-actions { justify-content: center; }
+      .grid-3x3 { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .nav-links {
+        position: fixed;
+        inset: 0 -100% 0 auto;
+        width: 75%;
+        background: rgba(5, 5, 8, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+      }
+      .nav-links.open { right: 0; }
+      .nav-links a { color: #fff; }
+      .menu-btn { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="loader-brand">Conexao3D</div>
+    <div class="loader-bar"><div class="loader-line"></div></div>
+  </div>
+
+  <canvas id="bg-canvas"></canvas>
+  <div class="grid-pattern"></div>
+
+  <!-- NAVBAR -->
+  <nav class="nav" id="nav">
+    <div class="container nav-body">
+      <a href="#" class="logo">Conexao<span>3D</span></a>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#produtos">Produtos</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#personalizacao">Personalização</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#orcamento">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION (Metade Branca/Clara) -->
+  <section class="hero" id="inicio">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1>Transformamos ideias em <span>objetos reais.</span></h1>
+        <p>Brinquedos, chaveiros, miniaturas e produtos personalizados criados através de tecnologia avançada de impressão 3D com resolução milimétrica.</p>
+        <div class="hero-actions">
+          <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
+          <a href="#orcamento" class="btn btn-outline">FAZER ORÇAMENTO</a>
+        </div>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="printer-canvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUTOS SECTION (9 CARDS NEON 3x3 - Metade Escura) -->
+  <section class="products-section" id="produtos">
+    <div class="container">
+      <h2 class="section-title title-dark reveal">Nossos Produtos</h2>
+      <p class="section-subtitle sub-dark reveal">Precisão e acabamento impecável em cada peça impressa.</p>
+
+      <div class="grid-3x3">
+        <!-- Card 1 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 1 - Conexao3D" id="img-card-1">
+            <span class="card-badge">Novo</span>
+          </div>
+          <h3 class="product-title">Brinquedos Articulados</h3>
+          <p class="product-desc">Dragões, robôs e figuras dinâmicas impressas já montadas com alta resistência mecânica e movimentos fluidos.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 2 - Conexao3D" id="img-card-2">
+            <span class="card-badge">Popular</span>
+          </div>
+          <h3 class="product-title">Chaveiros Exclusivos</h3>
+          <p class="product-desc">Chaveiros corporativos, logos de marcas e símbolos de eSports fabricados com filamentos brilhantes e resistentes.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 3 - Conexao3D" id="img-card-3">
+            <span class="card-badge">Minecraft</span>
+          </div>
+          <h3 class="product-title">Bonecos & Figures</h3>
+          <p class="product-desc">Personagens de games clássicos e modernos estilo bloco/voxel como o Steve do Minecraft, heróis e ícones Pop.</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 4 - Conexao3D" id="img-card-4">
+            <span class="card-badge">Detalhe 4K</span>
+          </div>
+          <h3 class="product-title">Miniaturas de RPG</h3>
+          <p class="product-desc">Monstros, guerreiros e cenários detalhados para jogos de mesa e RPG com máxima riqueza de detalhes de textura.</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 5 - Conexao3D" id="img-card-5">
+            <span class="card-badge">Tech</span>
+          </div>
+          <h3 class="product-title">Decoração Futurista</h3>
+          <p class="product-desc">Luminárias de mesa, vasos geométricos, suportes para headphones e acessórios decorativos com design inovador.</p>
+
+        </div>
+
+        <!-- Card 6 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 6 - Conexao3D" id="img-card-6">
+            <span class="card-badge">Sob Medida</span>
+          </div>
+          <h3 class="product-title">Projetos Personalizados</h3>
+          <p class="product-desc">Desenvolvemos e imprimimos o seu protótipo, peça mecânica de reposição ou projeto autoral do zero.</p>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 7 - Conexao3D" id="img-card-7">
+            <span class="card-badge">Coleção</span>
+          </div>
+          <h3 class="product-title">Vasos & Cachepôs</h3>
+          <p class="product-desc">Design orgânico e espiralado para plantas e ambientes modernos com acabamento acetinado de alta qualidade.</p>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 8 - Conexao3D" id="img-card-8">
+            <span class="card-badge">Utilitários</span>
+          </div>
+          <h3 class="product-title">Organizadores Setup</h3>
+          <p class="product-desc">Ganchos, suportes de cabos, cases e organizadores de mesa sob medida para otimizar o seu espaço de trabalho.</p>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="neon-card reveal">
+          <div class="card-img-placeholder">
+            <!-- COLE AQUI O LINK DA SUA FOTO DO GITHUB NO SRC ABAIXO -->
+            <img src="" alt="Produto 9 - Conexao3D" id="img-card-9">
+            <span class="card-badge">Especial</span>
+          </div>
+          <h3 class="product-title">Lithophanes & Fotos 3D</h3>
+          <p class="product-desc">Transforme suas fotos em placas 3D gravadas em relevo que revelam a imagem original ao acender uma iluminação traseira.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="container">
+      <h2 class="section-title title-dark reveal">Como Funciona</h2>
+      <p class="section-subtitle sub-dark reveal">Passo a passo simplificado do envio à entrega.</p>
+
+      <div class="grid-4">
+        <div class="dark-card reveal">
+          <div class="step-num">01</div>
+          <h3 style="margin-bottom: 8px;">Escolha sua ideia</h3>
+          <p class="product-desc">Envie um modelo 3D, uma referência gráfica ou descreva seu projeto.</p>
+        </div>
+
+        <div class="dark-card reveal">
+          <div class="step-num">02</div>
+          <h3 style="margin-bottom: 8px;">Personalizamos</h3>
+          <p class="product-desc">Ajustamos dimensões, cores e detalhes para a sua aprovação final.</p>
+        </div>
+
+        <div class="dark-card reveal">
+          <div class="step-num">03</div>
+          <h3 style="margin-bottom: 8px;">Imprimimos em 3D</h3>
+          <p class="product-desc">Manufatura de alta tecnologia com filamentos de máxima qualidade.</p>
+        </div>
+
+        <div class="dark-card reveal">
+          <div class="step-num">04</div>
+          <h3 style="margin-bottom: 8px;">Produto pronto</h3>
+          <p class="product-desc">Inspeção de qualidade, acabamento cuidadoso e envio direto para você.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONALIZAÇÃO -->
+  <section id="personalizacao">
+    <div class="container">
+      <div class="custom-card reveal">
+        <h2 class="section-title title-dark" style="margin-bottom: 12px;">Sua ideia. Do seu jeito.</h2>
+        <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto;">Crie objetos exclusivos customizando todos os parâmetros de produção.</p>
+
+        <div class="pills">
+          <span class="pill">Nome</span>
+          <span class="pill">Cor Neon</span>
+          <span class="pill">Tamanho Escalável</span>
+          <span class="pill">Estilo Steve Minecraft</span>
+          <span class="pill">Formato Customizado</span>
+          <span class="pill">Design Exclusivo</span>
+        </div>
+
+        <a href="#orcamento" class="btn btn-primary">SOLICITAR ORÇAMENTO</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
+  <section id="galeria">
+    <div class="container">
+      <h2 class="section-title title-dark reveal">Galeria de Exemplos</h2>
+      <p class="section-subtitle sub-dark reveal">Modelos e criações desenvolvidas em impressão 3D.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Bonecos Articulados</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="4.5"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Chaveiros Exclusivos</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Miniaturas RPG</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Brinquedos Flex</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Decoração Tech</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="container">
+      <div class="dark-card reveal" style="max-width: 750px; margin: 0 auto; text-align: center; padding: 50px 30px; border-color: var(--accent-neon);">
+        <h2 class="section-title title-dark" style="margin-bottom: 16px;">Criatividade que ganha forma.</h2>
+        <p style="color: var(--text-muted); line-height: 1.7; font-size: 1rem;">
+          A <strong>Conexao3D</strong> é especializada em transformar conceitos digitais em peças físicas de altíssima qualidade através do uso de impressão 3D e manufatura aditiva avançada. Unimos precisão tecnológica e personalização total para dar vida a projetos sob medida.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <h2 class="section-title title-dark reveal">Perguntas Frequentes</h2>
+      <p class="section-subtitle sub-dark reveal">Tire suas dúvidas técnicas e comerciais.</p>
+
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <div class="faq-head">O que posso personalizar? <span>+</span></div>
+          <div class="faq-body">Você pode personalizar cores, dimensões, nomes gravados, estrutura e até mesmo enviar um arquivo STL/OBJ próprio para impressão.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Vocês fazem brinquedos? <span>+</span></div>
+          <div class="faq-body">Sim! Criamos brinquedos articulados, colecionáveis e peças flexíveis produzidas com materiais seguros e de alta durabilidade.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Posso escolher a cor? <span>+</span></div>
+          <div class="faq-body">Com certeza. Trabalhamos com uma extensa paleta de cores, incluindo filamentos foscos, metálicos, brilhantes, translúcidos e tons neon.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Posso enviar minha própria ideia? <span>+</span></div>
+          <div class="faq-body">Sim! Aceitamos fotos de referência, esboços ou arquivos prontos em 3D. Analisamos a viabilidade técnica e preparamos a produção.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Quanto tempo demora? <span>+</span></div>
+          <div class="faq-body">O prazo de produção é variável e depende do tamanho do modelo, nível de detalhamento e quantidade solicitada. Ele é informado no orçamento.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULÁRIO DE ORÇAMENTO -->
+  <section id="orcamento">
+    <div class="container">
+      <h2 class="section-title title-dark reveal">Fazer Orçamento</h2>
+      <p class="section-subtitle sub-dark reveal">Envie os dados do seu projeto para receber uma cotação instantânea.</p>
+
+      <div class="form-wrap reveal">
+        <form id="quote-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Seu Nome</label>
+              <input type="text" id="nome" required placeholder="Digite seu nome">
+            </div>
+            <div class="form-group">
+              <label for="produto">Tipo de Produto</label>
+              <select id="produto" required>
+                <option value="">Selecione...</option>
+                <option value="Brinquedo 3D">Brinquedo 3D</option>
+                <option value="Chaveiro">Chaveiro</option>
+                <option value="Boneco Steve Minecraft">Boneco Steve Minecraft</option>
+                <option value="Miniatura RPG">Miniatura RPG</option>
+                <option value="Decoração Neon">Decoração Tech</option>
+                <option value="Personalizado">Projeto Personalizado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cor">Cor Preferida</label>
+              <input type="text" id="cor" placeholder="Ex: Azul Neon, Roxo, Preto">
+            </div>
+            <div class="form-group">
+              <label for="tamanho">Tamanho Estimado</label>
+              <input type="text" id="tamanho" placeholder="Ex: 12 cm de altura">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição do Projeto</label>
+            <textarea id="descricao" required placeholder="Detalhe como você quer sua peça..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="obs">Observações Adicionais</label>
+            <input type="text" id="obs" placeholder="Outras informações importantes">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">SOLICITAR ORÇAMENTO</button>
+        </form>
+
+        <div class="success-alert" id="success-alert">
+          <strong>Solicitação registrada com sucesso!</strong><br>
+          Redirecionando para o WhatsApp...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RODAPÉ COMPLETO -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Coluna 1: Nome + Texto de ~50 Linhas -->
+        <div class="footer-brand">
+          <h2>Conexao<span>3d</span></h2>
+          <div class="footer-text-block">
+            <p>A Conexao3d é uma empresa líder em inovação, especializada na criação de protótipos e peças através de tecnologia avançada de impressão 3D FDM e Manufatura Aditiva de alta resolução.</p>
+            <p>Nossa missão é democratizar a criação de objetos tridimensionais, permitindo que criadores, engenheiros, designers e entusiastas transformem ideias conceituais em produtos tangíveis de alta performance mecânica e estética impecável.</p>
+            <p>Trabalhamos com polímeros técnicos de primeira linha, como PLA de alta fluidez, PETG de extrema resistência a impacto, TPU flexível e filamentos especiais contendo partículas metálicas e cores neon ultrabrilhantes.</p>
+            <p>Cada projeto passa por um rigoroso processo de fatiamento digital, ajuste de preenchimento estrutural (infill), orientação ótima de camadas e acabamento manual para garantir precisão dimensional de nível industrial.</p>
+            <p>Seja para peças funcionais, miniaturas ricas em detalhes, chaveiros personalizados ou projetos autorais exclusivos, a Conexao3d entrega qualidade, agilidade e excelência em todo o território nacional.</p>
+            <p>A revolução da manufatura personalizada está aqui: criamos o futuro camada por camada com máxima dedicação a cada detalhe.</p>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Navegação -->
+        <div class="footer-col">
+          <h3>Navegação</h3>
+          <ul>
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
+            <li><a href="#produtos">Serviços</a></li>
+            <li><a href="#como-funciona">Como Funciona</a></li>
+            <li><a href="#personalizacao">Criação Personalizada</a></li>
+            <li><a href="#orcamento">Contato</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 3: Outra Coisa Legal -->
+        <div class="footer-col">
+          <h3>Serviços & Destaques</h3>
+          <ul>
+            <li><a href="#produtos">Impressão em Resina 4K</a></li>
+            <li><a href="#produtos">Prototipagem Rápida</a></li>
+            <li><a href="#produtos">Projetos CAD 3D</a></li>
+            <li><a href="#personalizacao">Peças Articuladas Flex</a></li>
+            <li><a href="#produtos">Brindes Corporativos</a></li>
+            <li><a href="#produtos">Lithophanes Iluminados</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 4: Contatos e Redes -->
+        <div class="footer-col">
+          <h3>Contato & Redes</h3>
+          <div class="contact-item">
+            <!-- Ícone Gmail -->
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span>Cristvnx577@gmail.com</span>
+          </div>
+
+          <div class="contact-item">
+            <!-- Ícone Instagram -->
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            <span>@Conexao3d_</span>
+          </div>
+
+          <p style="margin-top: 16px; color: var(--accent-neon); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+            Atendimento em todo o Brasil
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Conexao3d. Todos os direitos reservados. Manufatura Aditiva e Personalizados de Alta Precisão.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="#" class="wa-float" id="wa-link" target="_blank" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32">
+      <path d="M16 2a13.94 13.94 0 0 0-12 21.08L2 30l7.16-1.87A13.94 13.94 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.87-1.6l-.42-.25-4.36 1.14 1.16-4.25-.28-.44A11.5 11.5 0 1 1 16 27.5zm6.3-8.62c-.35-.17-2.07-1.02-2.39-1.14s-.55-.17-.79.17-.92 1.14-1.13 1.38-.42.26-.77.09a9.72 9.72 0 0 1-2.86-1.77 10.72 10.72 0 0 1-1.98-2.47c-.2-.35 0-.54.17-.71s.35-.41.52-.61a2.36 2.36 0 0 0 .35-.59.65.65 0 0 0 0-.61c-.08-.17-.79-1.91-1.09-2.61s-.58-.59-.79-.6h-.67a1.29 1.29 0 0 0-.93.43 3.93 3.93 0 0 0-1.23 2.92 6.84 6.84 0 0 0 1.43 3.63c.18.24 2.48 3.79 6 5.31.84.36 1.49.58 2 .74a4.81 4.81 0 0 0 2.21.14 3.61 3.61 0 0 0 2.37-1.67 2.94 2.94 0 0 0 .2-1.67c-.07-.12-.27-.2-.62-.37z"/>
+    </svg>
+  </a>
+
+  <!-- SCRIPTS -->
+  <script>
+    var WHATSAPP_NUMBER = "5500999999999";
+
+    /* 1. REMOVE LOADER */
+    function removeLoader() {
+      var loader = document.getElementById('loader');
+      if (loader) loader.classList.add('loader-off');
+    }
+    window.addEventListener('load', function() { setTimeout(removeLoader, 800); });
+    setTimeout(removeLoader, 2500);
+
+    /* 2. NAVBAR SCROLL & MOBILE MENU */
     var nav = document.getElementById('nav');
     window.addEventListener('scroll', function() {
       if (window.scrollY > 40) nav.classList.add('scrolled');
@@ -899,7 +2080,7 @@
       a.addEventListener('click', function() { navLinks.classList.remove('open'); });
     });
 
-    /* 3. ANIMAÇÃO PRECISE DE IMPRESSORA 3D (BONECO EM 10 SEGUNDOS) */
+    /* 3. ANIMAÇÃO DE IMPRESSORA 3D PROFISSIONAL E CORRIGIDA */
     var pCanvas = document.getElementById('printer-canvas');
     var pCtx = pCanvas.getContext('2d');
 
@@ -911,124 +2092,155 @@
     resizePrinter();
     window.addEventListener('resize', resizePrinter);
 
-    var printDuration = 10000; // Loop exato de 10 segundos
+    var printDuration = 10000; // Loop em 10 segundos
     var startTime = null;
 
     function drawPrinterAnimation(timestamp) {
       if (!startTime) startTime = timestamp;
       var elapsed = (timestamp - startTime) % printDuration;
-      var progress = elapsed / printDuration; // De 0.0 a 1.0 em 10s
+      var progress = elapsed / printDuration; // De 0.0 a 1.0
 
       var w = pCanvas.width;
       var h = pCanvas.height;
       pCtx.clearRect(0, 0, w, h);
 
       var cx = w / 2;
-      var bedY = h - 60;
-      var figureMaxHeight = 220;
-      var currentBuildHeight = progress * figureMaxHeight;
+      var bedY = h - 50; // Base da mesa de impressão
+      var figureMaxHeight = 220; // Altura máxima do Steve
+      var currentBuildHeight = progress * figureMaxHeight; // Altura exata construída até o momento
 
-      // Desenhar Mesa da Impressora (Bed)
-      pCtx.fillStyle = '#0f0f18';
-      pCtx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
+      // 1. MESA AQUECIDA DA IMPRESSORA (HEATBED)
+      pCtx.fillStyle = '#0a0a14';
+      pCtx.fillRect(cx - 120, bedY, 240, 12);
+      pCtx.strokeStyle = '#00f0ff';
       pCtx.lineWidth = 2;
-      pCtx.fillRect(cx - 110, bedY, 220, 10);
-      pCtx.strokeRect(cx - 110, bedY, 220, 10);
+      pCtx.strokeRect(cx - 120, bedY, 240, 12);
 
-      // Hastes da Estrutura
-      pCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      pCtx.lineWidth = 4;
+      // LEDs indicadores da mesa
+      pCtx.fillStyle = '#00f0ff';
       pCtx.beginPath();
-      pCtx.moveTo(cx - 100, bedY); pCtx.lineTo(cx - 100, bedY - 240);
-      pCtx.moveTo(cx + 100, bedY); pCtx.lineTo(cx + 100, bedY - 240);
-      pCtx.moveTo(cx - 100, bedY - 240); pCtx.lineTo(cx + 100, bedY - 240);
+      pCtx.arc(cx - 105, bedY + 6, 3, 0, Math.PI * 2);
+      pCtx.arc(cx + 105, bedY + 6, 3, 0, Math.PI * 2);
+      pCtx.fill();
+
+      // 2. ESTRUTURA E HASTES Z (FRAME)
+      pCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      pCtx.lineWidth = 6;
+      pCtx.beginPath();
+      pCtx.moveTo(cx - 110, bedY); pCtx.lineTo(cx - 110, bedY - 260);
+      pCtx.moveTo(cx + 110, bedY); pCtx.lineTo(cx + 110, bedY - 260);
+      pCtx.moveTo(cx - 110, bedY - 260); pCtx.lineTo(cx + 110, bedY - 260);
       pCtx.stroke();
 
-      // Posição Atual do Trilho Z
+      // 3. ALTURA EXATA DO EIXO Z E BICO (CORREÇÃO DO BUG)
+      // O trilho Z fica exatamente no topo da camada em criação
       var currentZ = bedY - currentBuildHeight;
 
-      // Trilho Eixo X
-      pCtx.strokeStyle = 'rgba(168, 85, 247, 0.5)';
-      pCtx.lineWidth = 3;
+      // TRILHO DO EIXO X (Acompanha o crescimento do boneco sem falhas)
+      pCtx.strokeStyle = '#a855f7';
+      pCtx.lineWidth = 4;
       pCtx.beginPath();
-      pCtx.moveTo(cx - 100, currentZ);
-      pCtx.lineTo(cx + 100, currentZ);
+      pCtx.moveTo(cx - 110, currentZ);
+      pCtx.lineTo(cx + 110, currentZ);
       pCtx.stroke();
 
-      // Calcular Posição X e Largura do Extrusor baseada nas seções do Boneco
-      var currentX = cx;
-      var activeWidth = 10;
+      // CALCULAR MOVIMENTO HORIZONTAL (VARREDURA X DO EXTRUSOR)
+      var sweep = Math.sin(timestamp / 30) * 30;
+      var currentX = cx + sweep;
 
-      // Definir a anatomia da impressão conforme o progresso vertical (0 a 220px)
-      if (currentBuildHeight <= 80) {
-        // Pernas (Duas colunas)
-        var legSweep = Math.sin(timestamp / 50) * 20;
-        currentX = cx + (legSweep > 0 ? 18 : -18) + legSweep;
-        activeWidth = 40;
-      } else if (currentBuildHeight <= 150) {
-        // Tronco + Braços estendidos
-        var armSweep = Math.sin(timestamp / 40) * 45;
-        currentX = cx + armSweep;
-        activeWidth = 50;
-      } else {
-        // Cabeça
-        var headSweep = Math.sin(timestamp / 60) * 20;
-        currentX = cx + headSweep;
-        activeWidth = 25;
-      }
+      // 4. DESENHO DO BONECO (STEVE MINECRAFT)
+      // Desenha apenas o que já foi fabricado até a altura atual (currentBuildHeight)
 
-      // DESENHO DO BONECO IMPRESSO (Camadas fixas)
-      pCtx.fillStyle = '#00f0ff';
-      pCtx.shadowBlur = 12;
-      pCtx.shadowColor = '#00f0ff';
-
-      // 1. Pernas (0px a 80px)
+      // a) PERNAS (0px até 80px)
       if (currentBuildHeight > 0) {
         var hLegs = Math.min(currentBuildHeight, 80);
-        pCtx.fillRect(cx - 25, bedY - hLegs, 14, hLegs); // Perna Esquerda
-        pCtx.fillRect(cx + 11, bedY - hLegs, 14, hLegs); // Perna Direita
+        pCtx.fillStyle = '#1e3a8a'; // Calça Azul Steve
+        pCtx.fillRect(cx - 20, bedY - hLegs, 18, hLegs); // Perna Esquerda
+        pCtx.fillRect(cx + 2, bedY - hLegs, 18, hLegs);  // Perna Direita
       }
 
-      // 2. Tronco e Braços (80px a 150px)
+      // b) TRONCO / CAMISA (80px até 150px)
       if (currentBuildHeight > 80) {
         var hTorso = Math.min(currentBuildHeight - 80, 70);
-        pCtx.fillRect(cx - 20, bedY - 80 - hTorso, 40, hTorso); // Tronco
+        pCtx.fillStyle = '#06b6d4'; // Camisa Ciano Steve
+        pCtx.fillRect(cx - 20, bedY - 80 - hTorso, 40, hTorso); // Peitoral
 
         // Braços
-        var hArms = Math.min(currentBuildHeight - 90, 50);
+        var hArms = Math.min(currentBuildHeight - 90, 55);
         if (hArms > 0) {
-          pCtx.fillRect(cx - 45, bedY - 140, 20, hArms); // Braço Esquerdo
-          pCtx.fillRect(cx + 25, bedY - 140, 20, hArms); // Braço Direito
+          pCtx.fillStyle = '#e0a96d'; // Pele dos Braços
+          pCtx.fillRect(cx - 36, bedY - 145, 14, hArms); // Braço Esquerdo
+          pCtx.fillRect(cx + 22, bedY - 145, 14, hArms); // Braço Direito
         }
       }
 
-      // 3. Cabeça (150px a 220px)
+      // c) CABEÇA E ROSTO MINECRAFT (150px até 220px)
       if (currentBuildHeight > 150) {
-        var hHead = Math.min(currentBuildHeight - 150, 50);
-        pCtx.fillRect(cx - 20, bedY - 150 - hHead, 40, hHead); // Cabeça articulada
+        var hHead = Math.min(currentBuildHeight - 150, 60);
+        
+        // Bloco da Cabeça (Pele Steve)
+        pCtx.fillStyle = '#e0a96d';
+        pCtx.fillRect(cx - 25, bedY - 150 - hHead, 50, hHead);
+
+        // ROSTO QUADRADO TIPO STEVE DO MINECRAFT (Se a altura atingir o rosto)
+        if (currentBuildHeight > 180) {
+          var faceY = bedY - 195;
+
+          // Cabelo Quadrado Steve (Castanho)
+          pCtx.fillStyle = '#4a2c11';
+          pCtx.fillRect(cx - 25, bedY - 210, 50, 12);
+
+          // Olhos Quadrados Pixelados
+          pCtx.fillStyle = '#ffffff'; // Parte Branca Olho Esquerdo
+          pCtx.fillRect(cx - 18, faceY, 10, 6);
+          pCtx.fillStyle = '#2563eb'; // Íris Azul Esquerda
+          pCtx.fillRect(cx - 13, faceY, 5, 6);
+
+          pCtx.fillStyle = '#ffffff'; // Parte Branca Olho Direito
+          pCtx.fillRect(cx + 8, faceY, 10, 6);
+          pCtx.fillStyle = '#2563eb'; // Íris Azul Direita
+          pCtx.fillRect(cx + 8, faceY, 5, 6);
+
+          // Nariz Quadrado
+          pCtx.fillStyle = '#bc804c';
+          pCtx.fillRect(cx - 4, faceY + 8, 8, 6);
+
+          // Boca Quadrada Steve
+          pCtx.fillStyle = '#6b3e1e';
+          pCtx.fillRect(cx - 8, faceY + 16, 16, 5);
+        }
       }
 
-      pCtx.shadowBlur = 0; // Reset sombra
-
-      // CABEÇOTE EXTRUSOR
+      // 5. CABEÇOTE EXTRUSOR E BICO (NOZZLE - Sempre no nível Z exato)
+      pCtx.fillStyle = '#334155';
+      pCtx.fillRect(currentX - 18, currentZ - 25, 36, 20); // Bloco Aquecedor
       pCtx.fillStyle = '#a855f7';
-      pCtx.fillRect(currentX - 16, currentZ - 20, 32, 16);
-      pCtx.fillStyle = '#ffffff';
-      pCtx.fillRect(currentX - 3, currentZ - 4, 6, 4); // Nozzle
+      pCtx.fillRect(currentX - 10, currentZ - 29, 20, 4);  // Conector
 
-      // FILAMENTO SAINDO DO BICO
+      // Bico de Latão (Nozzle)
+      pCtx.fillStyle = '#eab308';
+      pCtx.beginPath();
+      pCtx.moveTo(currentX - 5, currentZ - 5);
+      pCtx.lineTo(currentX + 5, currentZ - 5);
+      pCtx.lineTo(currentX, currentZ);
+      pCtx.closePath();
+      pCtx.fill();
+
+      // PONTO DE FUSÃO DO FILAMENTO / LASER NEON
       pCtx.strokeStyle = '#00f0ff';
       pCtx.lineWidth = 2;
       pCtx.beginPath();
       pCtx.moveTo(currentX, currentZ);
-      pCtx.lineTo(currentX, currentZ);
+      pCtx.lineTo(currentX, currentZ + 2);
       pCtx.stroke();
 
-      // Ponto incandescente
-      pCtx.fillStyle = '#fff';
+      pCtx.fillStyle = '#ffffff';
+      pCtx.shadowBlur = 10;
+      pCtx.shadowColor = '#00f0ff';
       pCtx.beginPath();
       pCtx.arc(currentX, currentZ, 3, 0, Math.PI * 2);
       pCtx.fill();
+      pCtx.shadowBlur = 0; // Limpa o efeito de iluminação para a próxima frame
 
       requestAnimationFrame(drawPrinterAnimation);
     }
@@ -1046,7 +2258,7 @@
     resizeBg();
     window.addEventListener('resize', resizeBg);
 
-    for (var i = 0; i < 35; i++) {
+    for (var i = 0; i < 30; i++) {
       particles.push({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
@@ -1058,7 +2270,7 @@
 
     function renderBg() {
       bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-      bgCtx.fillStyle = 'rgba(168, 85, 247, 0.4)';
+      bgCtx.fillStyle = 'rgba(0, 240, 255, 0.3)';
 
       particles.forEach(function(p) {
         p.x += p.dx; p.y += p.dy;
@@ -1075,7 +2287,7 @@
     }
     renderBg();
 
-    /* 5. SCROLL REVEAL OBSERVER */
+    /* 5. SCROLL REVEAL */
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -1094,7 +2306,7 @@
       });
     });
 
-    /* 7. FORMULÁRIO DE ORÇAMENTO */
+    /* 7. FORMULÁRIO DE ORÇAMENTO COM INTEGRACAO WHATSAPP */
     var form = document.getElementById('quote-form');
     var alertMsg = document.getElementById('success-alert');
     var waLink = document.getElementById('wa-link');
