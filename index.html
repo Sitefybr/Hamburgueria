@@ -700,6 +700,192 @@
         transition-duration: 0.01ms !important;
       }
     }
+    /* --- CONEXAO3D UPGRADE --- */
+    :root {
+      --accent: #9d4edd;
+      --accent2: #6f2dbd;
+      --white: #f7f7fb;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(157,78,221,.12), transparent 38%),
+        #07080c;
+    }
+
+    section { position: relative; }
+
+    .products-section {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+
+    .section-head { text-align: center; margin-bottom: 3rem; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      perspective: 1400px;
+    }
+
+    .product-card {
+      position: relative;
+      min-height: 260px;
+      padding: 2rem;
+      overflow: hidden;
+      border: 1px solid rgba(157,78,221,.20);
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018)),
+        rgba(13,14,21,.75);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 20px 60px rgba(0,0,0,.22);
+      backdrop-filter: blur(18px);
+      transform-style: preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .35s, box-shadow .35s;
+    }
+
+    .product-card::before {
+      content: "";
+      position: absolute;
+      width: 180px; height: 180px;
+      top: -100px; right: -70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(157,78,221,.30), transparent 68%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px) rotateX(3deg) rotateY(-3deg);
+      border-color: rgba(157,78,221,.65);
+      box-shadow: 0 28px 80px rgba(111,45,189,.18), inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .product-card.featured {
+      border-color: rgba(157,78,221,.50);
+      background:
+        linear-gradient(145deg, rgba(157,78,221,.12), rgba(255,255,255,.025)),
+        rgba(13,14,21,.82);
+    }
+
+    .product-number {
+      position: absolute;
+      top: 1.15rem;
+      right: 1.3rem;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.35);
+    }
+
+    .product-icon {
+      width: 48px; height: 48px;
+      display: grid; place-items: center;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(157,78,221,.35);
+      border-radius: 14px;
+      color: #d9b5ff;
+      background: rgba(157,78,221,.08);
+      box-shadow: 0 0 28px rgba(157,78,221,.12);
+      font-weight: 800;
+    }
+
+    .product-card h3 { font-size: 1.25rem; margin-bottom: .45rem; }
+    .product-card p { color: var(--text-muted); font-size: .92rem; min-height: 48px; }
+
+    .price {
+      display: block;
+      margin: 1.2rem 0 1rem;
+      font-size: 1.02rem;
+      color: #fff;
+      letter-spacing: .02em;
+    }
+
+    .card-link {
+      color: #cfa5f6;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .85rem;
+      transition: color .25s;
+    }
+    .card-link:hover { color: #fff; }
+
+    .contact-cta {
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .contact-orb {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(157,78,221,.18), transparent 68%);
+      filter: blur(40px);
+      animation: floatOrb 7s ease-in-out infinite;
+    }
+
+    .cta-inner { position: relative; z-index: 2; }
+    .main-whatsapp { gap: .8rem; margin-top: 1rem; }
+    .main-whatsapp span { font-size: 1.2rem; }
+
+    .social-row { margin-top: 1.4rem; }
+    .instagram-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color .25s;
+    }
+    .instagram-link strong { color: #d9b5ff; }
+    .instagram-link:hover { color: #fff; }
+
+    .printer-card {
+      transform-style: preserve-3d;
+      animation: printerFloat 5s ease-in-out infinite;
+      box-shadow: 0 30px 90px rgba(111,45,189,.16);
+    }
+
+    .printer-container { perspective: 1200px; }
+
+    .printer-container:hover .printer-card {
+      transform: rotateY(-4deg) rotateX(2deg) translateY(-5px);
+    }
+
+    @keyframes printerFloat {
+      0%,100% { transform: translateY(0) rotateX(0deg); }
+      50% { transform: translateY(-8px) rotateX(1.5deg); }
+    }
+
+    @keyframes floatOrb {
+      0%,100% { transform: translate3d(-20px,0,0) scale(1); }
+      50% { transform: translate3d(20px,-20px,0) scale(1.08); }
+    }
+
+    .whatsapp-link { position: relative; overflow: hidden; }
+    .whatsapp-link::after {
+      content: "";
+      position: absolute;
+      inset: -100% 35%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+      transform: rotate(18deg);
+      animation: buttonShine 4.5s ease-in-out infinite;
+    }
+
+    @keyframes buttonShine {
+      0%, 70%, 100% { transform: translateX(-180%) rotate(18deg); }
+      85% { transform: translateX(180%) rotate(18deg); }
+    }
+
+    @media (max-width: 900px) {
+      .products-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .product-card { min-height: 230px; }
+    }
+
   </style>
 </head>
 <body>
@@ -738,7 +924,7 @@
       <p class="hero-desc">Brinquedos, chaveiros, miniaturas e produtos personalizados criados através da impressão 3D de alta qualidade.</p>
       <div class="hero-buttons">
         <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
-        <a href="#contato" class="btn btn-outline">FAZER ORÇAMENTO</a>
+        <a href="#contato" class="btn btn-outline whatsapp-link">FALAR NO WHATSAPP</a>
       </div>
     </div>
 
@@ -838,6 +1024,72 @@
     </div>
   </section>
 
+
+  <section id="produtos" class="products-section">
+    <div class="section-head reveal">
+      <span class="hero-tag">CATÁLOGO CONEXAO3D</span>
+      <h2 class="section-title">Peças que ganham vida.</h2>
+      <p class="section-subtitle">Escolha uma categoria ou fale conosco para criar algo totalmente personalizado.</p>
+    </div>
+
+    <div class="products-grid">
+      <article class="product-card reveal">
+        <div class="product-number">01</div><div class="product-icon">◈</div>
+        <h3>Boneco 3D</h3><p>Personagens, mascotes e modelos exclusivos.</p>
+        <strong class="price">Price: R$ 29,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">02</div><div class="product-icon">◇</div>
+        <h3>Miniatura</h3><p>Miniaturas detalhadas para coleção e decoração.</p>
+        <strong class="price">Price: R$ 24,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">03</div><div class="product-icon">✦</div>
+        <h3>Chaveiro</h3><p>Modelos personalizados com sua identidade.</p>
+        <strong class="price">Price: R$ 9,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">04</div><div class="product-icon">⬡</div>
+        <h3>Decoração</h3><p>Objetos modernos para transformar ambientes.</p>
+        <strong class="price">Price: R$ 39,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal featured">
+        <div class="product-number">05</div><div class="product-icon">3D</div>
+        <h3>Projeto Exclusivo</h3><p>Uma peça criada sob medida para sua ideia.</p>
+        <strong class="price">Price: R$ 59,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">06</div><div class="product-icon">◉</div>
+        <h3>Action Figure</h3><p>Peças com presença e acabamento premium.</p>
+        <strong class="price">Price: R$ 69,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">07</div><div class="product-icon">▣</div>
+        <h3>Logo 3D</h3><p>Identidade da sua marca transformada em objeto.</p>
+        <strong class="price">Price: R$ 34,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">08</div><div class="product-icon">△</div>
+        <h3>Peça Técnica</h3><p>Reposições e soluções sob medida.</p>
+        <strong class="price">Price: R$ 44,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+      <article class="product-card reveal">
+        <div class="product-number">09</div><div class="product-icon">∞</div>
+        <h3>Personalizado</h3><p>Você imagina. A Conexao3D transforma em realidade.</p>
+        <strong class="price">Price: R$ 79,90</strong>
+        <a class="card-link whatsapp-link" href="#contato">Quero este</a>
+      </article>
+    </div>
+  </section>
+
   <section id="como-funciona">
     <h2 class="section-title reveal">Como Funciona</h2>
     <p class="section-subtitle reveal">Do conceito ao produto final em 4 passos simples</p>
@@ -883,7 +1135,7 @@
         <span class="tag">Design Exclusivo</span>
       </div>
 
-      <a href="#contato" class="btn btn-primary">SOLICITAR ORÇAMENTO</a>
+      <a href="#contato" class="btn btn-primary whatsapp-link">FALAR NO WHATSAPP</a>
     </div>
   </section>
 
@@ -976,57 +1228,7 @@
       </div>
     </div>
   </section>
-
-  <section id="contato">
-    <h2 class="section-title reveal">Solicitar Orçamento</h2>
-    <p class="section-subtitle reveal">Preencha o formulário abaixo para enviar o seu projeto</p>
-
-    <div class="form-container reveal">
-      <form id="quote-form">
-        <div class="form-group">
-          <label for="name">Seu Nome</label>
-          <input type="text" id="name" class="form-control" required placeholder="Digite seu nome">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="product">Tipo de Produto</label>
-            <select id="product" class="form-control" required>
-              <option value="Brinquedo">Brinquedo 3D</option>
-              <option value="Chaveiro">Chaveiro</option>
-              <option value="Boneco">Boneco</option>
-              <option value="Miniatura">Miniatura</option>
-              <option value="Decoração">Decoração</option>
-              <option value="Personalizado">Personalizado</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="color">Cor Desejada</label>
-            <input type="text" id="color" class="form-control" placeholder="Ex: Preto, Azul, Violeta">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="size">Tamanho / Dimensões Aproximadas</label>
-          <input type="text" id="size" class="form-control" placeholder="Ex: 10 cm de altura">
-        </div>
-
-        <div class="form-group">
-          <label for="desc">Descrição do Projeto / Ideia</label>
-          <textarea id="desc" class="form-control" rows="4" required placeholder="Detalhe como deseja seu produto..."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%;">ENVIAR SOLICITAÇÃO</button>
-      </form>
-
-      <div id="form-success">
-        ✓ Mensagem pronta! Redirecionando para o WhatsApp...
-      </div>
-    </div>
-  </section>
-
-  <footer>
+<footer>
     <p>&copy; Conexao3D — Impressão 3D Personalizada. Todos os direitos reservados.</p>
   </footer>
 
@@ -1037,249 +1239,158 @@
     </svg>
   </a>
 
-  <script>
-  (() => {
-    "use strict";
+<script>
+(() => {
+  "use strict";
 
-    /*
-      CONFIGURAÇÃO
-      Coloque o número do WhatsApp da empresa aqui, somente números,
-      com código do país e DDD. Exemplo: 5511999999999
-    */
-    const WHATSAPP_NUMBER = "";
+  /* =========================
+     CONFIGURAÇÃO RÁPIDA
+     =========================
+     Coloque somente os números, com DDI + DDD.
+     Exemplo Brasil: 5511999999999
+  */
+  const WHATSAPP_NUMBER = "SEU_NUMERO_AQUI";
 
-    const loader = document.getElementById("loader");
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
-    // Proteção principal: o loader só é escondido uma vez.
-    let loaderClosed = false;
+  // LOADER: fecha uma única vez e nunca reinicia.
+  const loader = $("#loader");
+  let loaderClosed = false;
 
-    function hideLoader() {
-      if (loaderClosed || !loader) return;
-      loaderClosed = true;
+  function closeLoader() {
+    if (!loader || loaderClosed) return;
+    loaderClosed = true;
+    loader.classList.add("hidden");
+    setTimeout(() => loader.remove(), 800);
+  }
 
-      loader.classList.add("hidden");
+  if (document.readyState === "complete") {
+    setTimeout(closeLoader, 900);
+  } else {
+    window.addEventListener("load", () => setTimeout(closeLoader, 900), { once: true });
+  }
+  setTimeout(closeLoader, 3500);
 
-      // Remove o elemento depois do fade. Isso impede que ele
-      // volte ou bloqueie cliques.
-      window.setTimeout(() => {
-        if (loader && loader.parentNode) {
-          loader.parentNode.removeChild(loader);
+  // MENU MOBILE
+  const menu = $("#menu-toggle");
+  const nav = $("#nav-links");
+
+  menu?.addEventListener("click", () => nav?.classList.toggle("open"));
+  $$("#nav-links a").forEach(link => {
+    link.addEventListener("click", () => nav?.classList.remove("open"));
+  });
+
+  // NAVBAR
+  const navbar = $("#navbar");
+  window.addEventListener("scroll", () => {
+    navbar?.classList.toggle("scrolled", window.scrollY > 30);
+  }, { passive: true });
+
+  // REVEAL / SCROLL
+  const reveals = $$(".reveal");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          observer.unobserve(entry.target);
         }
-      }, 700);
-    }
-
-    // Não dependa de imagens, fontes ou qualquer outro recurso externo.
-    // O conteúdo principal é liberado rapidamente.
-    window.setTimeout(hideLoader, 1200);
-
-    // Segurança absoluta contra qualquer travamento.
-    window.setTimeout(hideLoader, 3500);
-
-    // Caso o script seja executado depois do load.
-    if (document.readyState === "complete") {
-      window.setTimeout(hideLoader, 300);
-    }
-
-    // Navbar
-    const navbar = document.getElementById("navbar");
-
-    function updateNavbar() {
-      if (navbar) {
-        navbar.classList.toggle("scrolled", window.scrollY > 30);
-      }
-    }
-
-    window.addEventListener("scroll", updateNavbar, { passive: true });
-    updateNavbar();
-
-    // Menu mobile
-    const menuToggle = document.getElementById("menu-toggle");
-    const navLinks = document.getElementById("nav-links");
-
-    if (menuToggle && navLinks) {
-      menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("open");
-        menuToggle.setAttribute(
-          "aria-expanded",
-          navLinks.classList.contains("open") ? "true" : "false"
-        );
       });
+    }, { threshold: 0.10 });
+    reveals.forEach(el => observer.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add("active"));
+  }
 
-      navLinks.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
-          navLinks.classList.remove("open");
-          menuToggle.setAttribute("aria-expanded", "false");
-        });
-      });
+  // FAQ
+  $$(".faq-question").forEach(button => {
+    button.addEventListener("click", () => {
+      const item = button.closest(".faq-item");
+      item?.classList.toggle("active");
+    });
+  });
+
+  // WHATSAPP
+  function openWhatsApp(label = "Olá! Vi o site da Conexao3D e gostaria de saber mais.") {
+    if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "SEU_NUMERO_AQUI") {
+      alert("Configure o número do WhatsApp no código: WHATSAPP_NUMBER.");
+      return;
+    }
+    const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(label);
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  $$(".whatsapp-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      openWhatsApp("Olá! Vi o site da Conexao3D e quero conhecer os produtos.");
+    });
+  });
+
+  $("#wa-float")?.addEventListener("click", e => {
+    e.preventDefault();
+    openWhatsApp("Olá! Vim pelo site da Conexao3D.");
+  });
+
+  // CARD 3D COM O MOUSE — suave e profissional
+  $$(".product-card").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      if (window.innerWidth < 800) return;
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5;
+      const y = (e.clientY - r.top) / r.height - .5;
+      card.style.transform =
+        "translateY(-10px) rotateX(" + (-y * 6) + "deg) rotateY(" + (x * 6) + "deg)";
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.transform = "";
+    });
+  });
+
+  // ORB SEGUINDO O MOUSE
+  const orb = $("#orb");
+  window.addEventListener("pointermove", e => {
+    if (!orb || window.innerWidth < 900) return;
+    const x = (e.clientX / window.innerWidth - .5) * 60;
+    const y = (e.clientY / window.innerHeight - .5) * 60;
+    orb.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+  }, { passive: true });
+
+  // IMPRESSORA: ciclo de 7 segundos, sempre suave.
+  const extruder = $("#extruder");
+  const beam = $("#laser-beam");
+  const figure = $("#figure");
+  const layers = [$("#layer1"), $("#layer2"), $("#layer3")].filter(Boolean);
+
+  let start = performance.now();
+
+  function printerLoop(now) {
+    const t = ((now - start) % 7000) / 7000;
+    const x = 18 + 64 * (0.5 + 0.5 * Math.sin(t * Math.PI * 2));
+    const y = 12 + 38 * Math.min(1, Math.max(0, (t * 1.35) % 1));
+
+    if (extruder) {
+      extruder.setAttribute("transform", "translate(" + x + " " + (20 + Math.sin(t * Math.PI * 2) * 2) + ")");
     }
 
-    // Animações de entrada
-    const reveals = document.querySelectorAll(".reveal");
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-
-      reveals.forEach(el => observer.observe(el));
-    } else {
-      reveals.forEach(el => el.classList.add("active"));
+    if (beam) beam.style.opacity = String(0.35 + 0.35 * Math.sin(t * Math.PI * 2) ** 2);
+    if (figure) {
+      const s = 0.65 + 0.35 * Math.min(1, t * 1.25);
+      figure.style.transform = "scale(" + s + ")";
+      figure.style.transformOrigin = "50% 100%";
     }
 
-    // FAQ
-    document.querySelectorAll(".faq-question").forEach(button => {
-      button.addEventListener("click", () => {
-        const item = button.closest(".faq-item");
-        if (!item) return;
-
-        const wasActive = item.classList.contains("active");
-
-        document.querySelectorAll(".faq-item.active").forEach(openItem => {
-          if (openItem !== item) openItem.classList.remove("active");
-        });
-
-        item.classList.toggle("active", !wasActive);
-
-        const icon = button.querySelector("span:last-child");
-        if (icon) icon.textContent = item.classList.contains("active") ? "−" : "+";
-      });
+    layers.forEach((layer, i) => {
+      layer.style.opacity = t > (i + 1) * .18 ? "1" : ".15";
     });
 
-    // Formulário
-    const form = document.getElementById("quote-form");
-    const success = document.getElementById("form-success");
+    requestAnimationFrame(printerLoop);
+  }
+  requestAnimationFrame(printerLoop);
 
-    if (form) {
-      form.addEventListener("submit", event => {
-        event.preventDefault();
-
-        const name = document.getElementById("name")?.value.trim() || "";
-        const product = document.getElementById("product")?.value || "";
-        const color = document.getElementById("color")?.value.trim() || "";
-        const size = document.getElementById("size")?.value.trim() || "";
-        const desc = document.getElementById("desc")?.value.trim() || "";
-
-        const message =
-          `Olá! Gostaria de solicitar um orçamento na Conexao3D.%0A%0A` +
-          `Nome: ${encodeURIComponent(name)}%0A` +
-          `Produto: ${encodeURIComponent(product)}%0A` +
-          `Cor: ${encodeURIComponent(color || "Não informada")}%0A` +
-          `Tamanho: ${encodeURIComponent(size || "Não informado")}%0A` +
-          `Projeto: ${encodeURIComponent(desc)}`;
-
-        if (WHATSAPP_NUMBER) {
-          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
-        }
-
-        if (success) {
-          success.style.display = "block";
-          success.textContent = WHATSAPP_NUMBER
-            ? "Solicitação preparada! O WhatsApp foi aberto."
-            : "Solicitação preenchida! Configure o número do WhatsApp no código para enviá-la diretamente.";
-        }
-
-        form.reset();
-      });
-    }
-
-    // WhatsApp flutuante
-    const waFloat = document.getElementById("wa-float");
-
-    if (waFloat) {
-      if (WHATSAPP_NUMBER) {
-        waFloat.href = `https://wa.me/${WHATSAPP_NUMBER}`;
-      } else {
-        waFloat.addEventListener("click", event => {
-          event.preventDefault();
-          alert("Configure o número do WhatsApp no código do site.");
-        });
-      }
-    }
-
-    // Animação da impressora / extrusor
-    const extruder = document.getElementById("extruder");
-    const beam = document.getElementById("laser-beam");
-    const figure = document.getElementById("figure");
-
-    const layers = [
-      document.getElementById("layer1"),
-      document.getElementById("layer2"),
-      document.getElementById("layer3")
-    ].filter(Boolean);
-
-    let printerStart = performance.now();
-
-    function animatePrinter(now) {
-      const elapsed = (now - printerStart) % 7200;
-      const progress = elapsed / 7200;
-
-      // Movimento horizontal suave do extrusor.
-      const x = 65 + 170 * (0.5 + 0.5 * Math.sin(progress * Math.PI * 2));
-      const y = 100 + 7 * Math.sin(progress * Math.PI * 4);
-
-      if (extruder) {
-        extruder.setAttribute("transform", `translate(${x},${y})`);
-      }
-
-      if (beam) {
-        beam.setAttribute("x1", "0");
-        beam.setAttribute("x2", "0");
-        beam.setAttribute("y1", "26");
-        beam.setAttribute("y2", "35");
-        beam.style.opacity = (0.55 + 0.45 * Math.sin(progress * Math.PI * 8)) + "";
-      }
-
-      // Boneco cresce por etapas.
-      const stage = Math.floor(progress * 4);
-
-      layers.forEach((layer, index) => {
-        layer.style.opacity = index < stage ? "1" : "0";
-        layer.style.transform = index < stage
-          ? "scaleY(1)"
-          : "scaleY(0.15)";
-      });
-
-      if (figure) {
-        const scale = stage >= 3 ? 1 : 0.65 + stage * 0.12;
-        figure.setAttribute("transform", `translate(150,235) scale(${scale})`);
-      }
-
-      requestAnimationFrame(animatePrinter);
-    }
-
-    requestAnimationFrame(animatePrinter);
-
-    // Glow que acompanha o mouse somente no desktop.
-    const orb = document.getElementById("orb");
-
-    if (orb && window.matchMedia("(pointer:fine)").matches) {
-      let targetX = -200;
-      let targetY = -200;
-      let currentX = targetX;
-      let currentY = targetY;
-
-      window.addEventListener("mousemove", event => {
-        targetX = event.clientX - 300;
-        targetY = event.clientY - 300;
-      }, { passive: true });
-
-      function animateOrb() {
-        currentX += (targetX - currentX) * 0.04;
-        currentY += (targetY - currentY) * 0.04;
-
-        orb.style.transform = `translate3d(${currentX + 200}px, ${currentY + 200}px, 0)`;
-        requestAnimationFrame(animateOrb);
-      }
-
-      requestAnimationFrame(animateOrb);
-    }
-  })();
-  </script>
+})();
+</script>
 
 </body>
 </html>
