@@ -335,3 +335,419 @@
       position: relative;
       overflow: hidden;
       display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    svg.printer-svg {
+      width: 380px;
+      height: 380px;
+    }
+
+    /* --- CARDS DE PRODUTOS --- */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--cyan);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(138, 43, 226, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      color: var(--cyan);
+    }
+
+    .card-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .product-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* --- COMO FUNCIONA --- */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .step-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--cyan);
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* --- PERSONALIZAÇÃO --- */
+    .custom-banner {
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 240, 255, 0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .options-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    /* --- GALERIA --- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      height: 200px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      transition: all 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .gallery-item:hover {
+      border-color: var(--primary-glow);
+      color: #fff;
+      transform: scale(1.02);
+    }
+
+    .gallery-item svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.7;
+    }
+
+    /* --- SOBRE --- */
+    .about-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* --- FAQ --- */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 1.2rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 1.2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 150px;
+      padding: 0 1.2rem 1.2rem;
+    }
+
+    /* --- FORMULÁRIO DE ORÇAMENTO --- */
+    .form-container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #form-success {
+      display: none;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* --- WHATSAPP FLOAT --- */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      z-index: 999;
+      transition: transform 0.3s ease;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* --- ANIMAÇÕES DE SCROLL --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- RESPONSIVIDADE --- */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 5rem;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: rgba(9, 10, 15, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: right 0.3s ease;
+      }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .printer-card {
+        height: 320px;
+      }
+
+      svg.printer-svg {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="loader-title">Conexao3D</div>
+    <div class="loader-bar">
+      <div class="loader-progress"></div>
+    </div>
+  </div>
+
+  <div class="bg-grid"></div>
+  <div class="glow-orb" id="orb"></div>
+
+  <header id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">Conexao<span>3D</span></a>
+      <button class="hamburger" id="menu-toggle" aria-label="Abrir Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#produtos">Produtos</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#personalizacao">Personalização</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero" id="inicio">
+    <div class="hero-content reveal">
+      <span class="hero-tag">Tecnologia & Precisão</span>
+      <h1 class="hero-title">Transformamos ideias em <span>objetos reais.</span></h1>
+      <p class="hero-desc">Brinquedos, chaveiros, miniaturas e produtos personalizados criados através da impressão 3D de alta qualidade.</p>
+      <div class="hero-buttons">
+        <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
+        <a href="#contato" class="btn btn-outline">FAZER ORÇAMENTO</a>
+      </div>
+    </div>
+
+    <div class="printer-container reveal">
+      <div class="printer-card">
+        <svg class="printer-svg" viewBox="0 0 300 300">
+          <defs>
+            <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff" />
+              <stop offset="100%" stop-color="#8a2be2" />
+            </linearGradient>
+            <filter id="neon
