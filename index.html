@@ -1,1035 +1,365 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conexao3D — Impressão 3D Personalizada</title>
-  <meta name="description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
-  <meta property="og:title" content="Conexao3D — Impressão 3D Personalizada">
-  <meta property="og:description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
-  <meta property="og:type" content="website">
-
-  <style>
-    /* --- RESETS E VARIÁVEIS --- */
-    :root {
-      --bg: #090a0f;
-      --card-bg: rgba(18, 20, 29, 0.65);
-      --border: rgba(138, 43, 226, 0.25);
-      --border-glow: rgba(0, 240, 255, 0.4);
-      --primary: #8a2be2;
-      --primary-glow: #9d4edf;
-      --cyan: #00f0ff;
-      --text: #f0f3f8;
-      --text-muted: #a0a5b5;
-      --glass: rgba(255, 255, 255, 0.03);
-      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      color-scheme: dark;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* --- BACKGROUND GRID & PARTÍCULAS --- */
-    .bg-grid {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -2;
-      pointer-events: none;
-    }
-
-    .glow-orb {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, rgba(0, 240, 255, 0.05) 50%, transparent 70%);
-      top: -200px;
-      left: -200px;
-      z-index: -1;
-      pointer-events: none;
-      filter: blur(80px);
-    }
-
-    /* --- LOADING SCREEN --- */
-    #loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #050508;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-      transition: opacity 0.6s ease, visibility 0.6s;
-    }
-
-    #loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .loader-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #fff, var(--cyan), var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 20px;
-    }
-
-    .loader-bar {
-      width: 160px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .loader-progress {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--cyan));
-      animation: loadAnim 1.5s infinite linear;
-      transform-origin: 0 50%;
-    }
-
-    @keyframes loadAnim {
-      0% { transform: scaleX(0); }
-      50% { transform: scaleX(0.7); }
-      100% { transform: scaleX(1); }
-    }
-
-    /* --- UI ELEMENTS --- */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.8rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      border: 1px solid transparent;
-      font-size: 0.95rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #5a189a);
-      color: #fff;
-      box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
-    }
-
-    .btn-primary:hover {
-      box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      color: var(--text);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, #fff, #b8c1ec);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      margin-bottom: 3rem;
-      font-size: 1rem;
-    }
-
-    section {
-      padding: 5rem 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* --- NAVBAR --- */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      transition: all 0.3s ease;
-      padding: 1.2rem 2rem;
-    }
-
-    header.scrolled {
-      background: rgba(9, 10, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 0.8rem 2rem;
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #fff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .logo span {
-      color: var(--cyan);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--cyan);
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .hamburger span {
-      width: 25px;
-      height: 2px;
-      background: var(--text);
-      transition: all 0.3s ease;
-    }
-
-    /* --- HERO & ANIMAÇÃO IMPRESSORA 3D --- */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 6rem;
-      gap: 2rem;
-    }
-
-    .hero-content {
-      flex: 1;
-      max-width: 550px;
-    }
-
-    .hero-tag {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      background: rgba(138, 43, 226, 0.15);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--cyan);
-      font-size: 0.85rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero-title {
-      font-size: 3rem;
-      line-height: 1.15;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title span {
-      background: linear-gradient(135deg, var(--cyan), var(--primary-glow));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-desc {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .printer-container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    /* Canvas / SVG Printer Visual */
-    .printer-card {
-      width: 100%;
-      max-width: 450px;
-      height: 420px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(138, 43, 226, 0.1);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    svg.printer-svg {
-      width: 380px;
-      height: 380px;
-    }
-
-    /* --- CARDS DE PRODUTOS --- */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .product-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.8rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .product-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--cyan);
-      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
-    }
-
-    .card-icon {
-      width: 50px;
-      height: 50px;
-      background: rgba(138, 43, 226, 0.2);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-      color: var(--cyan);
-    }
-
-    .card-icon svg {
-      width: 26px;
-      height: 26px;
-    }
-
-    .product-card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .product-card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* --- COMO FUNCIONA --- */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .step-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      position: relative;
-    }
-
-    .step-num {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--cyan);
-      opacity: 0.8;
-      margin-bottom: 0.5rem;
-    }
-
-    .step-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .step-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* --- PERSONALIZAÇÃO --- */
-    .custom-banner {
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 240, 255, 0.05));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      text-align: center;
-      backdrop-filter: blur(10px);
-    }
-
-    .options-tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.8rem;
-      margin: 1.5rem 0 2rem;
-    }
-
-    .tag {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: var(--text);
-    }
-
-    /* --- GALERIA --- */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem;
-    }
-
-    .gallery-item {
-      height: 200px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      transition: all 0.3s ease;
-      color: var(--text-muted);
-    }
-
-    .gallery-item:hover {
-      border-color: var(--primary-glow);
-      color: #fff;
-      transform: scale(1.02);
-    }
-
-    .gallery-item svg {
-      width: 40px;
-      height: 40px;
-      opacity: 0.7;
-    }
-
-    /* --- SOBRE --- */
-    .about-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      backdrop-filter: blur(10px);
-    }
-
-    /* --- FAQ --- */
-    .faq-container {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .faq-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .faq-question {
-      width: 100%;
-      text-align: left;
-      padding: 1.2rem;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 1rem;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-      padding: 0 1.2rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .faq-item.active .faq-answer {
-      max-height: 150px;
-      padding: 0 1.2rem 1.2rem;
-    }
-
-    /* --- FORMULÁRIO DE ORÇAMENTO --- */
-    .form-container {
-      max-width: 650px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.8rem;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.95rem;
-      transition: border 0.3s ease;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--cyan);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    #form-success {
-      display: none;
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
-      padding: 1rem;
-      border-radius: 8px;
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    /* --- WHATSAPP FLOAT --- */
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 55px;
-      height: 55px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-      z-index: 999;
-      transition: transform 0.3s ease;
-      color: #fff;
-      text-decoration: none;
-    }
-
-    .whatsapp-btn:hover {
-      transform: scale(1.1);
-    }
-
-    /* --- FOOTER --- */
-    footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* --- ANIMAÇÕES DE SCROLL --- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* --- RESPONSIVIDADE --- */
-    @media (max-width: 768px) {
-      .hero {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 5rem;
-      }
-
-      .hero-title {
-        font-size: 2.2rem;
-      }
-
-      .hero-buttons {
-        justify-content: center;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 60px;
-        right: -100%;
-        width: 100%;
-        height: calc(100vh - 60px);
-        background: rgba(9, 10, 15, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transition: right 0.3s ease;
-      }
-
-      .nav-links.open {
-        right: 0;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .printer-card {
-        height: 320px;
-      }
-
-      svg.printer-svg {
-        width: 300px;
-        height: 300px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conexao3D — Impressora 3D</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at center, #24143d 0%, #0b0710 45%, #050505 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+/* CENA */
+.scene {
+    width: 560px;
+    height: 560px;
+    position: relative;
+    perspective: 1000px;
+}
+
+/* BRILHO ATRÁS DA MÁQUINA */
+.glow {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    left: 90px;
+    top: 90px;
+    background: #9d4edd;
+    filter: blur(110px);
+    opacity: .16;
+}
+
+/* BASE */
+.base {
+    position: absolute;
+    width: 430px;
+    height: 65px;
+    left: 65px;
+    bottom: 55px;
+    background: linear-gradient(145deg, #29232e, #0e0c10);
+    border: 2px solid #594064;
+    border-radius: 14px;
+    box-shadow:
+        0 20px 50px #000,
+        inset 0 0 20px #000;
+    transform: perspective(500px) rotateX(55deg);
+}
+
+/* MESA */
+.bed {
+    position: absolute;
+    width: 330px;
+    height: 32px;
+    left: 115px;
+    bottom: 122px;
+    background: linear-gradient(#39313d, #151217);
+    border: 2px solid #754995;
+    border-radius: 6px;
+    box-shadow: 0 0 25px #8d42c866;
+    transform: perspective(500px) rotateX(55deg);
+}
+
+/* PILARES */
+.pillar {
+    position: absolute;
+    width: 18px;
+    height: 390px;
+    bottom: 110px;
+    background: linear-gradient(90deg, #111, #555, #171717);
+    border: 1px solid #6d5875;
+    border-radius: 5px;
+}
+
+.left {
+    left: 95px;
+}
+
+.right {
+    right: 95px;
+}
+
+/* TOPO */
+.top {
+    position: absolute;
+    width: 385px;
+    height: 20px;
+    left: 87px;
+    top: 72px;
+    background: linear-gradient(90deg, #171318, #51405a, #171318);
+    border-radius: 8px;
+    box-shadow: 0 0 15px #a14ce655;
+}
+
+/* EIXO */
+.rail {
+    position: absolute;
+    width: 350px;
+    height: 10px;
+    left: 105px;
+    top: 118px;
+    background: #29212e;
+    border: 1px solid #72517f;
+    border-radius: 10px;
+}
+
+/* CABEÇOTE */
+.head {
+    position: absolute;
+    width: 80px;
+    height: 60px;
+    left: 240px;
+    top: 100px;
+    z-index: 5;
+    animation: moveHead 4s ease-in-out infinite;
+}
+
+.head-body {
+    width: 80px;
+    height: 38px;
+    background: linear-gradient(145deg, #51465a, #17131a);
+    border: 2px solid #8c5ba3;
+    border-radius: 8px;
+    box-shadow: 0 0 20px #a54ee555;
+}
+
+.nozzle {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    left: 30px;
+    top: 35px;
+    background: linear-gradient(#777, #222);
+    clip-path: polygon(20% 0,80% 0,100% 65%,50% 100%,0 65%);
+}
+
+.tip {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #d98cff;
+    border-radius: 50%;
+    left: 36px;
+    top: 62px;
+    box-shadow: 0 0 15px #d98cff;
+}
+
+/* BONECO */
+.model {
+    position: absolute;
+    left: 215px;
+    bottom: 150px;
+    width: 130px;
+    height: 190px;
+}
+
+/* CAMADAS */
+.layer {
+    position: absolute;
+    left: 25px;
+    width: 80px;
+    height: 6px;
+    background: linear-gradient(90deg, #7b32b2, #d47cff, #7b32b2);
+    border-radius: 50%;
+    box-shadow: 0 0 7px #b653e8;
+    opacity: 0;
+    animation: print 8s infinite;
+}
+
+/* Faz cada camada aparecer em sequência */
+.layer:nth-child(1)  { bottom: 0; animation-delay: 0s; }
+.layer:nth-child(2)  { bottom: 7px; animation-delay: .2s; }
+.layer:nth-child(3)  { bottom: 14px; animation-delay: .4s; }
+.layer:nth-child(4)  { bottom: 21px; animation-delay: .6s; }
+.layer:nth-child(5)  { bottom: 28px; animation-delay: .8s; }
+.layer:nth-child(6)  { bottom: 35px; animation-delay: 1s; }
+.layer:nth-child(7)  { bottom: 42px; animation-delay: 1.2s; }
+.layer:nth-child(8)  { bottom: 49px; animation-delay: 1.4s; }
+.layer:nth-child(9)  { bottom: 56px; animation-delay: 1.6s; }
+.layer:nth-child(10) { bottom: 63px; animation-delay: 1.8s; }
+.layer:nth-child(11) { bottom: 70px; animation-delay: 2s; }
+.layer:nth-child(12) { bottom: 77px; animation-delay: 2.2s; }
+.layer:nth-child(13) { bottom: 84px; animation-delay: 2.4s; }
+.layer:nth-child(14) { bottom: 91px; animation-delay: 2.6s; }
+.layer:nth-child(15) { bottom: 98px; animation-delay: 2.8s; }
+.layer:nth-child(16) { bottom: 105px; animation-delay: 3s; }
+.layer:nth-child(17) { bottom: 112px; animation-delay: 3.2s; }
+.layer:nth-child(18) { bottom: 119px; animation-delay: 3.4s; }
+.layer:nth-child(19) { bottom: 126px; animation-delay: 3.6s; }
+.layer:nth-child(20) { bottom: 133px; animation-delay: 3.8s; }
+
+/* MOVIMENTO DO CABEÇOTE */
+@keyframes moveHead {
+    0%, 100% {
+        transform: translateX(-120px);
+    }
+
+    50% {
+        transform: translateX(120px);
+    }
+}
+
+/* IMPRESSÃO */
+@keyframes print {
+    0%, 8% {
+        opacity: 0;
+        transform: scaleX(.1);
+    }
+
+    15%, 75% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+
+    90%, 100% {
+        opacity: .9;
+        transform: scaleX(1);
+    }
+}
+
+/* FILAMENTO */
+.filament {
+    position: absolute;
+    width: 3px;
+    height: 45px;
+    background: #d77cff;
+    left: 276px;
+    top: 164px;
+    opacity: .8;
+    box-shadow: 0 0 8px #d77cff;
+    animation: filament 4s ease-in-out infinite;
+}
+
+@keyframes filament {
+    0%, 100% {
+        transform: translateX(-120px);
+    }
+
+    50% {
+        transform: translateX(120px);
+    }
+}
+
+/* LUZES */
+.light {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #b75cff;
+    box-shadow: 0 0 12px #b75cff;
+    animation: blink 1.5s infinite alternate;
+}
+
+.light.one {
+    left: 105px;
+    top: 80px;
+}
+
+.light.two {
+    right: 105px;
+    top: 80px;
+    animation-delay: .5s;
+}
+
+@keyframes blink {
+    from { opacity: .35; }
+    to { opacity: 1; }
+}
+
+/* TEXTO */
+.title {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    letter-spacing: 5px;
+    opacity: .8;
+}
+
+/* CELULAR */
+@media(max-width:600px) {
+    .scene {
+        transform: scale(.72);
+    }
+}
+
+@media(max-width:430px) {
+    .scene {
+        transform: scale(.58);
+    }
+}
+</style>
 </head>
+
 <body>
 
-  <div id="loader">
-    <div class="loader-title">Conexao3D</div>
-    <div class="loader-bar">
-      <div class="loader-progress"></div>
-    </div>
-  </div>
+<div class="scene">
 
-  <div class="bg-grid"></div>
-  <div class="glow-orb" id="orb"></div>
+    <div class="glow"></div>
 
-  <header id="navbar">
-    <div class="nav-container">
-      <a href="#" class="logo">Conexao<span>3D</span></a>
-      <button class="hamburger" id="menu-toggle" aria-label="Abrir Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#inicio">Início</a></li>
-        <li><a href="#produtos">Produtos</a></li>
-        <li><a href="#como-funciona">Como funciona</a></li>
-        <li><a href="#personalizacao">Personalização</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </div>
-  </header>
+    <div class="pillar left"></div>
+    <div class="pillar right"></div>
 
-  <section class="hero" id="inicio">
-    <div class="hero-content reveal">
-      <span class="hero-tag">Tecnologia & Precisão</span>
-      <h1 class="hero-title">Transformamos ideias em <span>objetos reais.</span></h1>
-      <p class="hero-desc">Brinquedos, chaveiros, miniaturas e produtos personalizados criados através da impressão 3D de alta qualidade.</p>
-      <div class="hero-buttons">
-        <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
-        <a href="#contato" class="btn btn-outline">FAZER ORÇAMENTO</a>
-      </div>
+    <div class="top"></div>
+    <div class="rail"></div>
+
+    <div class="head">
+        <div class="head-body"></div>
+        <div class="nozzle"></div>
+        <div class="tip"></div>
     </div>
 
-    <div class="printer-container reveal">
-      <div class="printer-card">
-        <svg class="printer-svg" viewBox="0 0 300 300">
-          <defs>
-            <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#00f0ff" />
-              <stop offset="100%" stop-color="#8a2be2" />
-            </linearGradient>
-            <filter id="neonGlow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
+    <div class="filament"></div>
 
-          <rect x="40" y="40" width="220" height="220" rx="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4" />
-          <line x1="50" y1="250" x2="250" y2="250" stroke="#333" stroke-width="8" stroke-linecap="round" />
-          
-          <rect x="70" y="235" width="160" height="10" rx="2" fill="#1a1c23" stroke="var(--primary)" stroke-width="1" />
+    <div class="bed"></div>
+    <div class="base"></div>
 
-          <line id="axis-x" x1="50" y1="120" x2="250" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="3" />
-
-          <g id="extruder" transform="translate(140, 105)">
-            <rect x="-15" y="0" width="30" height="20" rx="3" fill="#2a2e3d" stroke="var(--cyan)" stroke-width="1.5" />
-            <polygon points="-4,20 4,20 0,26" fill="var(--cyan)" />
-            <circle cx="0" cy="10" r="3" fill="var(--cyan)" filter="url(#neonGlow)" />
-            <line x1="0" y1="26" x2="0" y2="35" stroke="var(--cyan)" stroke-width="1.5" id="laser-beam" />
-          </g>
-
-          <g id="figure" transform="translate(150, 235)">
-            <rect id="layer1" x="-15" y="-6" width="30" height="6" fill="url(#glowGrad)" opacity="0" />
-            <rect id="layer2" x="-10" y="-18" width="20" height="12" fill="url(#glowGrad)" opacity="0" />
-            <circle id="layer3" cx="0" cy="-24" r="6" fill="url(#glowGrad)" opacity="0" />
-          </g>
-        </svg>
-      </div>
+    <!-- Boneco sendo construído -->
+    <div class="model">
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
     </div>
-  </section>
 
-  <section id="produtos">
-    <h2 class="section-title reveal">Nossos Produtos</h2>
-    <p class="section-subtitle reveal">Variedade e precisão em cada impressão</p>
-    
-    <div class="products-grid">
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-        </div>
-        <h3>Brinquedos 3D</h3>
-        <p>Articulados, colecionáveis e divertidos, impressos com segurança e alta qualidade.</p>
-      </div>
+    <div class="light one"></div>
+    <div class="light two"></div>
 
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        </div>
-        <h3>Chaveiros</h3>
-        <p>Personalizados para marcas, presentes, eventos ou estilo próprio.</p>
-      </div>
+    <div class="title">CONEXAO3D</div>
 
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </div>
-        <h3>Bonecos</h3>
-        <p>Personagens de games, animes e pop culture com ricos detalhes visualizáveis.</p>
-      </div>
+</div>
 
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        </div>
-        <h3>Miniaturas</h3>
-        <p>Miniaturas detalhadas para jogos de RPG, maquetes ou coleções.</p>
-      </div>
-
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        </div>
-        <h3>Decoração</h3>
-        <p>Vasos, luminárias, suportes e objetos decorativos geométricos exclusivos.</p>
-      </div>
-
-      <div class="product-card reveal">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-        </div>
-        <h3>Produtos Personalizados</h3>
-        <p>Peças exclusivas feitas exatamente a partir da sua ideia ou projeto 3D.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="como-funciona">
-    <h2 class="section-title reveal">Como Funciona</h2>
-    <p class="section-subtitle reveal">Do conceito ao produto final em 4 passos simples</p>
-
-    <div class="steps-grid">
-      <div class="step-card reveal">
-        <div class="step-num">01</div>
-        <h3>Escolha sua ideia</h3>
-        <p>Envie-nos sua referência, desenho, foto ou modelo 3D que gostaria de produzir.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-num">02</div>
-        <h3>Personalizamos o projeto</h3>
-        <p>Ajustamos dimensões, cores, formato e detalhes técnicos antes do envio para impressão.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-num">03</div>
-        <h3>Imprimimos em 3D</h3>
-        <p>Utilizamos tecnologia de ponta para fabricar sua peça camada por camada.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-num">04</div>
-        <h3>Produto pronto</h3>
-        <p>Finalização, acabamento e inspeção de qualidade prontos para entrega direta a você.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="personalizacao">
-    <div class="custom-banner reveal">
-      <h2 class="section-title" style="margin-bottom: 1rem;">Sua ideia. Do seu jeito.</h2>
-      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Oferecemos total liberdade para ajustar cada parâmetro da sua peça impresso em 3D.</p>
-      
-      <div class="options-tags">
-        <span class="tag">Nome / Iniciais</span>
-        <span class="tag">Cores Variadas</span>
-        <span class="tag">Escala / Tamanho</span>
-        <span class="tag">Personagem</span>
-        <span class="tag">Formato</span>
-        <span class="tag">Design Exclusivo</span>
-      </div>
-
-      <a href="#contato" class="btn btn-primary">SOLICITAR ORÇAMENTO</a>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="section-title reveal">Galeria de Projetos</h2>
-    <p class="section-subtitle reveal">Exemplos de criações e modelos impressos</p>
-
-    <div class="gallery-grid">
-      <div class="gallery-item reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Boneco Action Figure</span>
-      </div>
-      <div class="gallery-item reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        <span>Chaveiros Logo</span>
-      </div>
-      <div class="gallery-item reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        <span>Miniaturas RPG</span>
-      </div>
-      <div class="gallery-item reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-        <span>Brinquedo Articulado</span>
-      </div>
-    </div>
-  </section>
-
-  <section id="sobre">
-    <div class="about-card reveal">
-      <h2 class="section-title" style="text-align: left; margin-bottom: 1rem;">Criatividade que ganha forma.</h2>
-      <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7;">
-        A Conexao3D atua no desenvolvimento e fabricação de objetos personalizados através do processo de manufatura aditiva (impressão 3D). Nosso objetivo é materializar ideias com precisão tecnológica, atendendo desde criações divertidas, presentes e colecionáveis até peças sob medida com especificações únicas solicitadas por nossos clientes.
-      </p>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="section-title reveal">Perguntas Frequentes</h2>
-    <p class="section-subtitle reveal">Tire suas dúvidas sobre o serviço</p>
-
-    <div class="faq-container reveal">
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>O que posso personalizar?</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer">
-          Você pode personalizar o tamanho, a cor, o nome gravado, o formato e até o design completo do projeto 3D.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Vocês fazem brinquedos?</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer">
-          Sim! Imprimimos brinquedos e colecionáveis articulados com materiais resistentes e seguros.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Posso escolher a cor?</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer">
-          Sim, dispomos de diversas opções de cores de filamento para a impressão do seu modelo.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Posso enviar minha própria ideia?</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer">
-          Com certeza. Você pode enviar uma imagem de referência, croqui ou um arquivo 3D já pronto (.STL / .OBJ).
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <span>Quanto tempo demora?</span>
-          <span>+</span>
-        </button>
-        <div class="faq-answer">
-          O tempo de produção varia dependendo do tamanho, da complexidade do projeto e da quantidade de peças solicitadas.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contato">
-    <h2 class="section-title reveal">Solicitar Orçamento</h2>
-    <p class="section-subtitle reveal">Preencha o formulário abaixo para enviar o seu projeto</p>
-
-    <div class="form-container reveal">
-      <form id="quote-form">
-        <div class="form-group">
-          <label for="name">Seu Nome</label>
-          <input type="text" id="name" class="form-control" required placeholder="Digite seu nome">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="product">Tipo de Produto</label>
-            <select id="product" class="form-control" required>
-              <option value="Brinquedo">Brinquedo 3D</option>
-              <option value="Chaveiro">Chaveiro</option>
-              <option value="Boneco">Boneco</option>
-              <option value="Miniatura">Miniatura</option>
-              <option value="Decoração">Decoração</option>
-              <option value="Personalizado">Personalizado</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="color">Cor Desejada</label>
-            <input type="text" id="color" class="form-control" placeholder="Ex: Preto, Azul, Violeta">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="size">Tamanho / Dimensões Aproximadas</label>
-          <input type="text" id="size" class="form-control" placeholder="Ex: 10 cm de altura">
-        </div>
-
-        <div class="form-group">
-          <label for="desc">Descrição do Projeto / Ideia</label>
-          <textarea id="desc" class="form-control" rows="4" required placeholder="Detalhe como deseja seu produto..."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%;">ENVIAR SOLICITAÇÃO</button>
-      </form>
-
-      <div id="form-success">
-        ✓ Mensagem pronta! Redirecionando para o WhatsApp...
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <p>&copy; Conexao3D — Impressão 3D Personalizada. Todos os direitos reservados.</p>
-  </footer>
-
-  <a href="#" id="wa-float" class="whatsapp-btn" target="_blank" aria-label="Contato via WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.
+</body>
+</html>
