@@ -11,20 +11,16 @@
   <meta property="og:type" content="website">
 
   <style>
-    /* ==========================================================================
-       RESET & BASE VARIABLES
-       ========================================================================== */
     :root {
-      --bg-color: #08080a;
-      --card-bg: rgba(18, 18, 24, 0.65);
-      --card-border: rgba(138, 43, 226, 0.25);
-      --primary: #9d4edd;
-      --primary-glow: #7b2cbf;
+      --bg-main: #050508;
+      --card-bg: rgba(15, 15, 25, 0.7);
+      --card-border: rgba(147, 51, 234, 0.3);
+      --primary: #a855f7;
+      --primary-glow: rgba(168, 85, 247, 0.4);
       --accent: #00f0ff;
-      --text-main: #f0f0f5;
-      --text-muted: #a0a0b5;
-      --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      --curve-depth: 25px;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font: system-ui, -apple-system, sans-serif;
     }
 
     * {
@@ -35,66 +31,19 @@
 
     html {
       scroll-behavior: smooth;
-      background-color: var(--bg-color);
+      background-color: var(--bg-main);
       color: var(--text-main);
-      font-family: var(--font-family);
+      font-family: var(--font);
       overflow-x: hidden;
     }
 
     body {
-      overflow-x: hidden;
-      position: relative;
-      background: radial-gradient(circle at 50% 20%, #150a21 0%, var(--bg-color) 80%);
+      background: radial-gradient(circle at 50% 0%, #1a0b2e 0%, var(--bg-main) 70%);
       min-height: 100vh;
     }
 
-    /* ==========================================================================
-       CURVED MONITOR PERSPECTIVE EFFECT (EFEITO MONITOR CURVO)
-       ========================================================================== */
-    .viewport-perspective {
-      perspective: 1200px;
-      perspective-origin: 50% 50%;
-      width: 100%;
-      overflow-x: hidden;
-    }
-
-    .curved-screen {
-      width: 100%;
-      transform-style: preserve-3d;
-      transform: rotateX(0deg) rotateY(0deg);
-      transition: transform 0.1s ease-out;
-    }
-
-    /* Simulate subtle concave curve effect on desktop */
-    @media (min-width: 1024px) {
-      .curved-wrapper {
-        transform: translateZ(-30px) scale(0.99);
-        box-shadow: 0 0 100px rgba(0,0,0,0.9) inset, 0 0 40px rgba(157, 78, 221, 0.15);
-        border-left: 2px solid rgba(157, 78, 221, 0.1);
-        border-right: 2px solid rgba(157, 78, 221, 0.1);
-        border-radius: 20px;
-      }
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-color);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #2a1b4e;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary);
-    }
-
-    /* ==========================================================================
-       BACKGROUND GRID & PARTICLES
-       ========================================================================== */
-    #particle-canvas {
+    /* PARTICLES & GRID */
+    #bg-canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -104,83 +53,65 @@
       z-index: 0;
     }
 
-    .bg-grid {
+    .grid-pattern {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ==========================================================================
-       LOADING SCREEN
-       ========================================================================== */
-    #loader-wrapper {
+    /* LOADING SCREEN */
+    #loader {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #040405;
+      inset: 0;
+      background: #030305;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 99999;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
 
-    .loader-title {
-      font-size: 3rem;
+    .loader-brand {
+      font-size: 2.8rem;
       font-weight: 900;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%);
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #fff, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 20px;
-      text-transform: uppercase;
-      text-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
     }
 
     .loader-bar {
-      width: 200px;
-      height: 4px;
+      width: 180px;
+      height: 3px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
+      border-radius: 3px;
       overflow: hidden;
-      position: relative;
     }
 
-    .loader-progress {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .loader-line {
+      width: 100%;
       height: 100%;
-      width: 0%;
       background: linear-gradient(90deg, var(--primary), var(--accent));
-      animation: loadProgress 1.5s ease-in-out forwards;
-      box-shadow: 0 0 10px var(--accent);
+      animation: load 1.2s ease-in-out infinite;
     }
 
-    @keyframes loadProgress {
-      0% { width: 0%; }
-      100% { width: 100%; }
+    @keyframes load {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
 
-    .loader-hidden {
+    .loader-off {
       opacity: 0;
       visibility: hidden;
     }
 
-    /* ==========================================================================
-       LAYOUT & UTILITIES
-       ========================================================================== */
+    /* LAYOUT */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -191,7 +122,6 @@
 
     section {
       padding: 100px 0;
-      position: relative;
     }
 
     .section-title {
@@ -199,7 +129,7 @@
       font-weight: 800;
       text-align: center;
       margin-bottom: 12px;
-      background: linear-gradient(135deg, #fff, var(--text-muted));
+      background: linear-gradient(135deg, #fff 30%, var(--text-muted));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -207,83 +137,66 @@
     .section-subtitle {
       text-align: center;
       color: var(--text-muted);
-      font-size: 1.1rem;
-      margin-bottom: 60px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 1rem;
+      margin-bottom: 50px;
     }
 
+    /* BUTTONS & GLASS CARDS */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 28px;
-      border-radius: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       text-decoration: none;
       transition: all 0.3s ease;
       cursor: pointer;
       border: none;
-      outline: none;
-      gap: 10px;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-glow));
+      background: linear-gradient(135deg, var(--primary), #7e22ce);
       color: #fff;
-      box-shadow: 0 4px 20px rgba(157, 78, 221, 0.4);
+      box-shadow: 0 0 25px var(--primary-glow);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 30px rgba(157, 78, 221, 0.7);
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.6);
     }
 
     .btn-outline {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.03);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
     }
 
     .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--primary);
+      border-color: var(--accent);
+      color: var(--accent);
       transform: translateY(-2px);
     }
 
-    .glass-card {
+    .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
       padding: 30px;
-      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      transition: all 0.3s ease;
     }
 
-    .glass-card:hover {
-      border-color: rgba(0, 240, 255, 0.4);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(157, 78, 221, 0.2);
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.15);
+      transform: translateY(-4px);
     }
 
-    /* Scroll Animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ==========================================================================
-       NAVBAR
-       ========================================================================== */
-    .navbar {
+    /* NAVBAR */
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
@@ -293,15 +206,14 @@
       transition: all 0.3s ease;
     }
 
-    .navbar.scrolled {
-      padding: 12px 0;
-      background: rgba(8, 8, 10, 0.85);
-      backdrop-filter: blur(15px);
+    .nav.scrolled {
+      padding: 14px 0;
+      background: rgba(5, 5, 8, 0.85);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .nav-container {
+    .nav-body {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -313,14 +225,9 @@
       color: #fff;
       text-decoration: none;
       letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .logo span {
-      color: var(--accent);
-    }
+    .logo span { color: var(--accent); }
 
     .nav-links {
       display: flex;
@@ -331,134 +238,79 @@
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
+      font-size: 0.9rem;
       font-weight: 500;
-      font-size: 0.95rem;
       transition: color 0.3s ease;
-      position: relative;
     }
 
-    .nav-links a:hover {
-      color: #fff;
-    }
+    .nav-links a:hover { color: #fff; }
 
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent);
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .mobile-toggle {
+    .menu-btn {
       display: none;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 5px;
     }
 
-    .hamburger {
-      width: 25px;
+    .menu-btn span {
+      display: block;
+      width: 24px;
       height: 2px;
       background: #fff;
-      position: relative;
-      transition: all 0.3s ease;
+      margin: 5px 0;
+      transition: 0.3s;
     }
 
-    .hamburger::before,
-    .hamburger::after {
-      content: '';
-      position: absolute;
-      width: 25px;
-      height: 2px;
-      background: #fff;
-      transition: all 0.3s ease;
-    }
-
-    .hamburger::before { top: -8px; }
-    .hamburger::after { top: 8px; }
-
-    /* Hamburger active state */
-    .mobile-toggle.active .hamburger {
-      background: transparent;
-    }
-    .mobile-toggle.active .hamburger::before {
-      transform: rotate(45deg);
-      top: 0;
-    }
-    .mobile-toggle.active .hamburger::after {
-      transform: rotate(-45deg);
-      top: 0;
-    }
-
-    /* ==========================================================================
-       HERO SECTION
-       ========================================================================== */
+    /* HERO */
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding-top: 120px;
-      padding-bottom: 60px;
-      position: relative;
+      padding-top: 100px;
     }
 
     .hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 50px;
+      gap: 60px;
       align-items: center;
     }
 
-    .hero-content h1 {
+    .hero-text h1 {
       font-size: 3.5rem;
       font-weight: 900;
       line-height: 1.1;
       margin-bottom: 20px;
-      background: linear-gradient(135deg, #ffffff 0%, #d0d0e0 100%);
+    }
+
+    .hero-text h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .hero-content h1 span {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-content p {
-      font-size: 1.2rem;
+    .hero-text p {
+      font-size: 1.1rem;
       color: var(--text-muted);
       margin-bottom: 35px;
       line-height: 1.6;
     }
 
-    .hero-btns {
+    .hero-actions {
       display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    /* 3D PRINTER CANVAS / SVG CONTAINER */
-    .printer-container {
+    /* 3D PRINTER CANVAS DISPLAY */
+    .canvas-wrapper {
       width: 100%;
       height: 420px;
-      background: rgba(12, 12, 18, 0.6);
-      border: 1px solid rgba(157, 78, 221, 0.3);
-      border-radius: 20px;
+      background: rgba(10, 10, 18, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 50px rgba(123, 44, 191, 0.15);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
     }
 
     #printer-canvas {
@@ -466,41 +318,29 @@
       height: 100%;
     }
 
-    /* ==========================================================================
-       PRODUTOS SECTION
-       ========================================================================== */
-    .products-grid {
+    /* PRODUCTS GRID */
+    .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
-
-    .product-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
     }
 
     .product-icon {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 12px;
-      background: rgba(157, 78, 221, 0.1);
-      border: 1px solid rgba(157, 78, 221, 0.3);
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
       color: var(--accent);
+      margin-bottom: 20px;
     }
 
     .product-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #fff;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
     }
 
     .product-desc {
@@ -509,982 +349,781 @@
       line-height: 1.5;
     }
 
-    /* ==========================================================================
-       COMO FUNCIONA
-       ========================================================================== */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 25px;
-      position: relative;
-    }
-
-    .step-card {
-      text-align: center;
-      position: relative;
-    }
-
-    .step-number {
-      font-size: 3rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 15px;
-      opacity: 0.8;
-    }
-
-    .step-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-
-    /* ==========================================================================
-       PERSONALIZAÇÃO
-       ========================================================================== */
-    .custom-box {
-      background: linear-gradient(135deg, rgba(20, 10, 35, 0.8) 0%, rgba(10, 10, 18, 0.9) 100%);
-      border: 1px solid var(--primary);
-      border-radius: 24px;
-      padding: 50px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(157, 78, 221, 0.2);
-    }
-
-    .custom-tags {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 35px 0;
-    }
-
-    .tag {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--accent);
-      backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
-    }
-
-    .tag:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-      transform: translateY(-2px);
-    }
-
-    /* ==========================================================================
-       GALERIA
-       ========================================================================== */
-    .gallery-grid {
+    /* STEPS */
+    .grid-4 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
-    .gallery-item {
-      height: 220px;
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .step-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    /* CUSTOMIZATION BOX */
+    .custom-card {
+      background: linear-gradient(135deg, rgba(30, 15, 50, 0.6), rgba(10, 10, 20, 0.8));
+      border: 1px solid var(--primary);
+      text-align: center;
+      padding: 60px 30px;
+      border-radius: 24px;
+    }
+
+    .pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 30px 0 40px 0;
+    }
+
+    .pill {
+      padding: 8px 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* GALLERY */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-box {
+      height: 180px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      gap: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: 0.3s;
     }
 
-    .gallery-item:hover {
-      transform: scale(1.03);
+    .gallery-box:hover {
       border-color: var(--accent);
+      background: rgba(0, 240, 255, 0.03);
     }
 
-    .gallery-svg {
-      width: 80px;
-      height: 80px;
-      opacity: 0.7;
-      transition: all 0.3s ease;
+    .gallery-box svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--primary);
     }
 
-    .gallery-item:hover .gallery-svg {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-
-    .gallery-label {
-      margin-top: 15px;
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* ==========================================================================
-       FAQ (ACCORDION)
-       ========================================================================== */
-    .faq-container {
-      max-width: 800px;
+    /* FAQ */
+    .faq-list {
+      max-width: 750px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
 
     .faq-item {
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      background: var(--card-bg);
       overflow: hidden;
-      transition: all 0.3s ease;
     }
 
-    .faq-header {
-      padding: 20px 25px;
+    .faq-head {
+      padding: 20px;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
       font-weight: 600;
-      font-size: 1.05rem;
-      color: #fff;
-      user-select: none;
     }
 
-    .faq-icon {
-      font-size: 1.2rem;
-      transition: transform 0.3s ease;
-      color: var(--accent);
-    }
-
-    .faq-content {
+    .faq-body {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 20px;
       color: var(--text-muted);
+      transition: all 0.3s ease;
       line-height: 1.6;
-      padding: 0 25px;
     }
 
-    .faq-item.active .faq-icon {
-      transform: rotate(45deg);
+    .faq-item.open .faq-body {
+      max-height: 150px;
+      padding-bottom: 20px;
     }
 
-    .faq-item.active .faq-content {
-      padding: 0 25px 20px 25px;
-      max-height: 200px;
-    }
-
-    /* ==========================================================================
-       ORÇAMENTO (FORM)
-       ========================================================================== */
-    .form-container {
-      max-width: 700px;
+    /* FORM */
+    .form-wrap {
+      max-width: 650px;
       margin: 0 auto;
     }
 
     .form-group {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      margin-bottom: 16px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 16px;
     }
 
     label {
-      font-size: 0.9rem;
-      font-weight: 600;
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
       color: var(--text-muted);
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 14px 18px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
       color: #fff;
-      font-family: inherit;
-      font-size: 1rem;
       outline: none;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-family: inherit;
     }
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
     }
 
     textarea {
+      min-height: 100px;
       resize: vertical;
-      min-height: 120px;
     }
 
-    .form-success {
+    .success-alert {
       display: none;
+      padding: 16px;
       background: rgba(0, 240, 255, 0.1);
       border: 1px solid var(--accent);
-      color: #fff;
-      padding: 20px;
       border-radius: 8px;
       text-align: center;
-      margin-top: 20px;
+      margin-top: 16px;
+      color: #fff;
     }
 
-    /* ==========================================================================
-       WHATSAPP FLOATING BUTTON
-       ========================================================================== */
-    .whatsapp-btn {
+    /* WHATSAPP FLOAT */
+    .wa-float {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      background-color: #25d366;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: #25d366;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
       z-index: 999;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-decoration: none;
+      transition: transform 0.3s;
     }
 
-    .whatsapp-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+    .wa-float:hover { transform: scale(1.1); }
+    .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* REVEAL ANIMATION */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .whatsapp-btn svg {
-      width: 32px;
-      height: 32px;
-      fill: #fff;
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* ==========================================================================
-       FOOTER
-       ========================================================================== */
-    footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 40px 0;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* ==========================================================================
-       RESPONSIVENESS
-       ========================================================================== */
-    @media (max-width: 992px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .hero-content h1 {
-        font-size: 2.8rem;
-      }
-      .hero-btns {
-        justify-content: center;
-      }
-      .printer-container {
-        height: 350px;
-      }
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-text h1 { font-size: 2.5rem; }
+      .hero-actions { justify-content: center; }
+      .canvas-wrapper { height: 350px; }
     }
 
     @media (max-width: 768px) {
       .nav-links {
         position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        height: 100vh;
-        background: rgba(10, 10, 15, 0.98);
+        inset: 0 -100% 0 auto;
+        width: 70%;
+        background: rgba(5, 5, 8, 0.98);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: right 0.4s ease;
-        z-index: 999;
+        transition: 0.3s;
       }
-
-      .nav-links.active {
-        right: 0;
-      }
-
-      .mobile-toggle {
-        display: block;
-        z-index: 1000;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .custom-box {
-        padding: 30px 20px;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-    }
-
-    /* Reduced Motion */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
-      }
+      .nav-links.open { right: 0; }
+      .menu-btn { display: block; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div id="loader-wrapper">
-    <div class="loader-title">Conexao3D</div>
-    <div class="loader-bar">
-      <div class="loader-progress"></div>
-    </div>
+  <div id="loader">
+    <div class="loader-brand">Conexao3D</div>
+    <div class="loader-bar"><div class="loader-line"></div></div>
   </div>
 
-  <canvas id="particle-canvas"></canvas>
-  <div class="bg-grid"></div>
+  <canvas id="bg-canvas"></canvas>
+  <div class="grid-pattern"></div>
 
-  <div class="viewport-perspective">
-    <div class="curved-screen curved-wrapper" id="curved-screen">
-
-      <nav class="navbar" id="navbar">
-        <div class="container nav-container">
-          <a href="#" class="logo">Conexao<span>3D</span></a>
-          <button class="mobile-toggle" id="menu-toggle" aria-label="Abrir Menu">
-            <div class="hamburger"></div>
-          </button>
-          <ul class="nav-links" id="nav-links">
-            <li><a href="#inicio">Início</a></li>
-            <li><a href="#produtos">Produtos</a></li>
-            <li><a href="#como-funciona">Como funciona</a></li>
-            <li><a href="#personalizacao">Personalização</a></li>
-            <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#orcamento">Contato</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <section class="hero" id="inicio">
-        <div class="container hero-grid">
-          <div class="hero-content">
-            <h1>Transformamos ideias em <span>objetos reais.</span></h1>
-            <p>Brinquedos, chaveiros, miniaturas e produtos personalizados criados através da tecnologia avançada de impressão 3D.</p>
-            <div class="hero-btns">
-              <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
-              <a href="#orcamento" class="btn btn-outline">FAZER ORÇAMENTO</a>
-            </div>
-          </div>
-          <div class="printer-container">
-            <canvas id="printer-canvas"></canvas>
-          </div>
-        </div>
-      </section>
-
-      <section id="produtos">
-        <div class="container">
-          <h2 class="section-title reveal">Nossos Produtos</h2>
-          <p class="section-subtitle reveal">Modelagem e impressão de alta precisão para dar vida à sua imaginação.</p>
-          
-          <div class="products-grid">
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-              </div>
-              <h3 class="product-title">Brinquedos 3D</h3>
-              <p class="product-desc">Articulados, colecionáveis e peças divertidas fabricadas com segurança e cores vibrantes.</p>
-            </div>
-
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="7.5" r="4.5"></circle><path d="m21 21-4.3-4.3"></path><path d="M9 11 20 2"></path></svg>
-              </div>
-              <h3 class="product-title">Chaveiros</h3>
-              <p class="product-desc">Logotipos, nomes, símbolos de jogos e designs exclusivos em pequenos formatos resistentes.</p>
-            </div>
-
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              </div>
-              <h3 class="product-title">Bonecos</h3>
-              <p class="product-desc">Action figures e estátuas de personagens com riqueza de detalhes e acabamento diferenciado.</p>
-            </div>
-
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              </div>
-              <h3 class="product-title">Miniaturas</h3>
-              <p class="product-desc">Modelos para RPG, cenários, arquitetura e colecionáveis detalhados em alta resolução.</p>
-            </div>
-
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-              </div>
-              <h3 class="product-title">Decoração</h3>
-              <p class="product-desc">Luminárias, vasos futuristas, suportes e peças estéticas modernas para o seu ambiente.</p>
-            </div>
-
-            <div class="glass-card product-card reveal">
-              <div class="product-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              </div>
-              <h3 class="product-title">Produtos Personalizados</h3>
-              <p class="product-desc">Projetos customizados conforme a sua exata necessidade, presente único ou protótipo.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="como-funciona">
-        <div class="container">
-          <h2 class="section-title reveal">Como Funciona</h2>
-          <p class="section-subtitle reveal">Do conceito digital ao objeto físico nas suas mãos em 4 passos simples.</p>
-
-          <div class="steps-grid">
-            <div class="glass-card step-card reveal">
-              <div class="step-number">01</div>
-              <h3 class="step-title">Escolha sua ideia</h3>
-              <p class="product-desc">Envie uma referência, foto, modelo 3D ou descreva o que você deseja criar.</p>
-            </div>
-
-            <div class="glass-card step-card reveal">
-              <div class="step-number">02</div>
-              <h3 class="step-title">Personalizamos</h3>
-              <p class="product-desc">Ajustamos dimensões, cores, nomes e detalhes do projeto para aprovação.</p>
-            </div>
-
-            <div class="glass-card step-card reveal">
-              <div class="step-number">03</div>
-              <h3 class="step-title">Imprimimos em 3D</h3>
-              <p class="product-desc">Produção de alta precisão camada por camada com filamentos premium.</p>
-            </div>
-
-            <div class="glass-card step-card reveal">
-              <div class="step-number">04</div>
-              <h3 class="step-title">Produto pronto</h3>
-              <p class="product-desc">Realizamos o acabamento final, inspeção de qualidade e envio imediato.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="personalizacao">
-        <div class="container">
-          <div class="custom-box reveal">
-            <h2 class="section-title" style="margin-bottom: 15px;">Sua ideia. Do seu jeito.</h2>
-            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Crie peças totalmente exclusivas ajustando cada detalhe conforme o seu gosto ou marca.</p>
-
-            <div class="custom-tags">
-              <span class="tag">Nome</span>
-              <span class="tag">Cor</span>
-              <span class="tag">Tamanho</span>
-              <span class="tag">Personagem</span>
-              <span class="tag">Formato</span>
-              <span class="tag">Design Exclusivo</span>
-            </div>
-
-            <a href="#orcamento" class="btn btn-primary">SOLICITAR ORÇAMENTO</a>
-          </div>
-        </div>
-      </section>
-
-      <section id="galeria">
-        <div class="container">
-          <h2 class="section-title reveal">Galeria de Exemplos</h2>
-          <p class="section-subtitle reveal">Amostras visuais do padrão de acabamento das nossas peças 3D.</p>
-
-          <div class="gallery-grid">
-            <div class="gallery-item reveal">
-              <svg class="gallery-svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              <span class="gallery-label">Bonecos Articulados</span>
-            </div>
-            <div class="gallery-item reveal">
-              <svg class="gallery-svg" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="4.5"></circle><path d="m21 21-4.3-4.3"></path></svg>
-              <span class="gallery-label">Chaveiros Geek</span>
-            </div>
-            <div class="gallery-item reveal">
-              <svg class="gallery-svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span class="gallery-label">Miniaturas RPG</span>
-            </div>
-            <div class="gallery-item reveal">
-              <svg class="gallery-svg" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-              <span class="gallery-label">Brinquedos Flexíveis</span>
-            </div>
-            <div class="gallery-item reveal">
-              <svg class="gallery-svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-              <span class="gallery-label">Decoração Futurista</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sobre">
-        <div class="container">
-          <div class="glass-card reveal" style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h2 class="section-title" style="margin-bottom: 20px;">Criatividade que ganha forma.</h2>
-            <p style="color: var(--text-muted); line-height: 1.8; font-size: 1.05rem;">
-              A <strong>Conexao3D</strong> é especializada em transformação digital e produção através de impressão 3D. Combinamos tecnologia de manufatura aditiva com atenção minuciosa aos detalhes para transformar projetos digitais, ideias e solicitações personalizadas em objetos físicos tangíveis de alta qualidade.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section id="faq">
-        <div class="container">
-          <h2 class="section-title reveal">Perguntas Frequentes</h2>
-          <p class="section-subtitle reveal">Tire suas dúvidas sobre o processo de impressão e personalização.</p>
-
-          <div class="faq-container">
-            <div class="faq-item reveal">
-              <div class="faq-header">
-                O que posso personalizar?
-                <span class="faq-icon">+</span>
-              </div>
-              <div class="faq-content">
-                Você pode personalizar cores, dimensões, nomes gravados, detalhes estruturais e até mesmo criar um modelo a partir de uma ideia original ou arquivo 3D fornecido por você.
-              </div>
-            </div>
-
-            <div class="faq-item reveal">
-              <div class="faq-header">
-                Vocês fazem brinquedos?
-                <span class="faq-icon">+</span>
-              </div>
-              <div class="faq-content">
-                Sim! Produzimos brinquedos articulados, peças divertidas, jogos e itens colecionáveis utilizando materiais seguros e resistentes.
-              </div>
-            </div>
-
-            <div class="faq-item reveal">
-              <div class="faq-header">
-                Posso escolher a cor?
-                <span class="faq-icon">+</span>
-              </div>
-              <div class="faq-content">
-                Com certeza. Dispomos de uma grande variedade de cores e acabamentos, incluindo opções de filamentos reluzentes, foscos, translúcidos e gradientes.
-              </div>
-            </div>
-
-            <div class="faq-item reveal">
-              <div class="faq-header">
-                Posso enviar minha própria ideia?
-                <span class="faq-icon">+</span>
-              </div>
-              <div class="faq-content">
-                Sim. Caso já possua um arquivo em formato STL/OBJ ou apenas um desenho/foto da sua ideia, nós avaliamos a viabilidade e preparamos a produção.
-              </div>
-            </div>
-
-            <div class="faq-item reveal">
-              <div class="faq-header">
-                Quanto tempo demora?
-                <span class="faq-icon">+</span>
-              </div>
-              <div class="faq-content">
-                O tempo de produção varia conforme a complexidade do modelo, tamanho, nível de detalhamento e quantidade solicitada. Durante o orçamento, informamos a estimativa exata.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="orcamento">
-        <div class="container">
-          <h2 class="section-title reveal">Fazer Orçamento</h2>
-          <p class="section-subtitle reveal">Preencha o formulário abaixo para receber um orçamento detalhado.</p>
-
-          <div class="glass-card form-container reveal">
-            <form id="quote-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="nome">Nome Completo</label>
-                  <input type="text" id="nome" required placeholder="Seu nome">
-                </div>
-                <div class="form-group">
-                  <label for="produto">Tipo de Produto</label>
-                  <select id="produto" required>
-                    <option value="">Selecione...</option>
-                    <option value="Brinquedo 3D">Brinquedo 3D</option>
-                    <option value="Chaveiro">Chaveiro</option>
-                    <option value="Boneco">Boneco</option>
-                    <option value="Miniatura">Miniatura</option>
-                    <option value="Decoração">Decoração</option>
-                    <option value="Personalizado">Projeto Personalizado</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="cor">Cor Desejada</label>
-                  <input type="text" id="cor" placeholder="Ex: Roxo, Preto, Dourado">
-                </div>
-                <div class="form-group">
-                  <label for="tamanho">Tamanho Estimado (cm)</label>
-                  <input type="text" id="tamanho" placeholder="Ex: 10cm de altura">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="descricao">Descrição da Ideia / Projeto</label>
-                <textarea id="descricao" required placeholder="Descreva como deseja seu produto..."></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="observacoes">Observações Adicionais</label>
-                <input type="text" id="observacoes" placeholder="Algum detalhe específico?">
-              </div>
-
-              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">ENVIAR SOLICITAÇÃO</button>
-            </form>
-
-            <div class="form-success" id="form-success-msg">
-              <strong>Solicitação enviada com sucesso!</strong><br>
-              Aguarde, redirecionando para atendimento...
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer>
-        <div class="container">
-          <p>&copy; 2026 Conexao3D. Todos os direitos reservados. Impressão 3D e Personalizados.</p>
-        </div>
-      </footer>
-
+  <nav class="nav" id="nav">
+    <div class="container nav-body">
+      <a href="#" class="logo">Conexao<span>3D</span></a>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#produtos">Produtos</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#personalizacao">Personalização</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#orcamento">Contato</a></li>
+      </ul>
     </div>
-  </div>
+  </nav>
 
-  <a href="#" class="whatsapp-btn" id="whatsapp-link" target="_blank" rel="noopener noreferrer" aria-label="Contato via WhatsApp">
+  <section class="hero" id="inicio">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1>Transformamos ideias em <span>objetos reais.</span></h1>
+        <p>Brinquedos, chaveiros, miniaturas e produtos personalizados criados através de tecnologia avançada de impressão 3D.</p>
+        <div class="hero-actions">
+          <a href="#produtos" class="btn btn-primary">VER PRODUTOS</a>
+          <a href="#orcamento" class="btn btn-outline">FAZER ORÇAMENTO</a>
+        </div>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="printer-canvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section id="produtos">
+    <div class="container">
+      <h2 class="section-title reveal">Nossos Produtos</h2>
+      <p class="section-subtitle reveal">Precisão e acabamento impecável em cada peça impresso.</p>
+      
+      <div class="grid-3">
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          </div>
+          <h3 class="product-title">Brinquedos 3D</h3>
+          <p class="product-desc">Modelos articulados, colecionáveis e divertidos com design seguro e resistente.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="7.5" r="4.5"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          </div>
+          <h3 class="product-title">Chaveiros</h3>
+          <p class="product-desc">Logotipos, símbolos de games e itens personalizados para presentes ou empresas.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h3 class="product-title">Bonecos</h3>
+          <p class="product-desc">Figures e personagens icônicos reproduzidos com riquezas de detalhes.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <h3 class="product-title">Miniaturas</h3>
+          <p class="product-desc">Peças super detalhadas para jogos de RPG, protótipos e maquetes.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          </div>
+          <h3 class="product-title">Decoração</h3>
+          <p class="product-desc">Luminárias, vasos e objetos de arte com estéticas futuristas únicas.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="product-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <h3 class="product-title">Produtos Personalizados</h3>
+          <p class="product-desc">Desenvolvemos o produto exatamente da forma que você idealizou.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona">
+    <div class="container">
+      <h2 class="section-title reveal">Como Funciona</h2>
+      <p class="section-subtitle reveal">Passo a passo simplificado do envio à entrega.</p>
+
+      <div class="grid-4">
+        <div class="card reveal">
+          <div class="step-num">01</div>
+          <h3 style="margin-bottom: 8px;">Escolha sua ideia</h3>
+          <p class="product-desc">Envie um modelo 3D, uma referência gráfica ou descreva seu projeto.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="step-num">02</div>
+          <h3 style="margin-bottom: 8px;">Personalizamos</h3>
+          <p class="product-desc">Ajustamos dimensões, cores e detalhes para a sua aprovação final.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="step-num">03</div>
+          <h3 style="margin-bottom: 8px;">Imprimimos em 3D</h3>
+          <p class="product-desc">Manufatura de alta tecnologia com filamentos de máxima qualidade.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="step-num">04</div>
+          <h3 style="margin-bottom: 8px;">Produto pronto</h3>
+          <p class="product-desc">Inspeção de qualidade, acabamento cuidadoso e envio direto para você.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="personalizacao">
+    <div class="container">
+      <div class="custom-card reveal">
+        <h2 class="section-title" style="margin-bottom: 12px;">Sua ideia. Do seu jeito.</h2>
+        <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto;">Crie objetos exclusivos customizando todos os parâmetros de produção.</p>
+
+        <div class="pills">
+          <span class="pill">Nome</span>
+          <span class="pill">Cor</span>
+          <span class="pill">Tamanho</span>
+          <span class="pill">Personagem</span>
+          <span class="pill">Formato</span>
+          <span class="pill">Design Exclusivo</span>
+        </div>
+
+        <a href="#orcamento" class="btn btn-primary">SOLICITAR ORÇAMENTO</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <div class="container">
+      <h2 class="section-title reveal">Galeria de Exemplos</h2>
+      <p class="section-subtitle reveal">Modelos e criações desenvolvidas em impressão 3D.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Bonecos Articulados</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="4.5"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Chaveiros Exclusivos</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Miniaturas RPG</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Brinquedos Flex</span>
+        </div>
+        <div class="gallery-box reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          <span style="font-weight: 600; font-size: 0.9rem;">Decoração Tech</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="container">
+      <div class="card reveal" style="max-width: 750px; margin: 0 auto; text-align: center; padding: 50px 30px;">
+        <h2 class="section-title" style="margin-bottom: 16px;">Criatividade que ganha forma.</h2>
+        <p style="color: var(--text-muted); line-height: 1.7; font-size: 1rem;">
+          A <strong>Conexao3D</strong> é especializada em transformar conceitos digitais em peças físicas de altíssima qualidade através do uso de impressão 3D e manufatura aditiva avançada. Unimos precisão tecnológica e personalização total para dar vida a projetos sob medida.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <h2 class="section-title reveal">Perguntas Frequentes</h2>
+      <p class="section-subtitle reveal">Tire suas dúvidas técnicas e comerciais.</p>
+
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <div class="faq-head">O que posso personalizar? <span>+</span></div>
+          <div class="faq-body">Você pode personalizar cores, dimensões, nomes gravados, estrutura e até mesmo enviar um arquivo STL/OBJ próprio para impressão.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Vocês fazem brinquedos? <span>+</span></div>
+          <div class="faq-body">Sim! Criamos brinquedos articulados, colecionáveis e peças flexíveis produzidas com materiais seguros e de alta durabilidade.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Posso escolher a cor? <span>+</span></div>
+          <div class="faq-body">Com certeza. Trabalhamos com uma extensa paleta de cores, incluindo filamentos foscos, metálicos, brilhantes e translúcidos.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Posso enviar minha própria ideia? <span>+</span></div>
+          <div class="faq-body">Sim! Aceitamos fotos de referência, esboços ou arquivos prontos em 3D. Analisamos a viabilidade técnica e preparamos a produção.</div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-head">Quanto tempo demora? <span>+</span></div>
+          <div class="faq-body">O prazo de produção é variável e depende do tamanho do modelo, nível de detalhamento e quantidade solicitada. Ele é informado no orçamento.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="orcamento">
+    <div class="container">
+      <h2 class="section-title reveal">Fazer Orçamento</h2>
+      <p class="section-subtitle reveal">Envie os dados do seu projeto para receber uma cotação.</p>
+
+      <div class="card form-wrap reveal">
+        <form id="quote-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Seu Nome</label>
+              <input type="text" id="nome" required placeholder="Digite seu nome">
+            </div>
+            <div class="form-group">
+              <label for="produto">Tipo de Produto</label>
+              <select id="produto" required>
+                <option value="">Selecione...</option>
+                <option value="Brinquedo 3D">Brinquedo 3D</option>
+                <option value="Chaveiro">Chaveiro</option>
+                <option value="Boneco">Boneco</option>
+                <option value="Miniatura">Miniatura</option>
+                <option value="Decoração">Decoração</option>
+                <option value="Personalizado">Projeto Personalizado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cor">Cor Preferida</label>
+              <input type="text" id="cor" placeholder="Ex: Roxo Neon, Preto">
+            </div>
+            <div class="form-group">
+              <label for="tamanho">Tamanho Estimado</label>
+              <input type="text" id="tamanho" placeholder="Ex: 12 cm de altura">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição do Projeto</label>
+            <textarea id="descricao" required placeholder="Detalhe como você quer sua peça..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="obs">Observações Adicionais</label>
+            <input type="text" id="obs" placeholder="Outras informações importantes">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">SOLICITAR ORÇAMENTO</button>
+        </form>
+
+        <div class="success-alert" id="success-alert">
+          <strong>Solicitação registrada com sucesso!</strong><br>
+          Redirecionando para o WhatsApp...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-size: 0.85rem;">
+    <div class="container">
+      <p>&copy; 2026 Conexao3D. Todos os direitos reservados. Manufatura Aditiva e Personalizados.</p>
+    </div>
+  </footer>
+
+  <a href="#" class="wa-float" id="wa-link" target="_blank" aria-label="WhatsApp">
     <svg viewBox="0 0 32 32">
       <path d="M16 2a13.94 13.94 0 0 0-12 21.08L2 30l7.16-1.87A13.94 13.94 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.87-1.6l-.42-.25-4.36 1.14 1.16-4.25-.28-.44A11.5 11.5 0 1 1 16 27.5zm6.3-8.62c-.35-.17-2.07-1.02-2.39-1.14s-.55-.17-.79.17-.92 1.14-1.13 1.38-.42.26-.77.09a9.72 9.72 0 0 1-2.86-1.77 10.72 10.72 0 0 1-1.98-2.47c-.2-.35 0-.54.17-.71s.35-.41.52-.61a2.36 2.36 0 0 0 .35-.59.65.65 0 0 0 0-.61c-.08-.17-.79-1.91-1.09-2.61s-.58-.59-.79-.6h-.67a1.29 1.29 0 0 0-.93.43 3.93 3.93 0 0 0-1.23 2.92 6.84 6.84 0 0 0 1.43 3.63c.18.24 2.48 3.79 6 5.31.84.36 1.49.58 2 .74a4.81 4.81 0 0 0 2.21.14 3.61 3.61 0 0 0 2.37-1.67 2.94 2.94 0 0 0 .2-1.67c-.07-.12-.27-.2-.62-.37z"/>
     </svg>
   </a>
 
   <script>
-    /* Configuração do Proprietário */
-    var WHATSAPP_NUMBER = "5500999999999"; // Substituir pelo número real com DDD e DDI
+    // Configuração de WhatsApp
+    var WHATSAPP_NUMBER = "5500999999999";
 
-    /* --------------------------------------------------------------------------
-       1. MECANISMO DE CARREGAMENTO & SEGURANÇA (LOADING GUARDIAN)
-       -------------------------------------------------------------------------- */
-    function dismissLoader() {
-      var loader = document.getElementById('loader-wrapper');
-      if (loader && !loader.classList.contains('loader-hidden')) {
-        loader.classList.add('loader-hidden');
-      }
+    /* 1. LOADING GUARDIAN (FECHA O LOADING COM CERTEZA ABSOLUTA) */
+    function removeLoader() {
+      var loader = document.getElementById('loader');
+      if (loader) loader.classList.add('loader-off');
     }
+    window.addEventListener('load', function() { setTimeout(removeLoader, 1200); });
+    setTimeout(removeLoader, 3000); // Trava de segurança para falhar seguro
 
-    // Tentativa normal de remoção após animação (~1.5s)
-    window.addEventListener('load', function() {
-      setTimeout(dismissLoader, 1500);
-    });
-
-    // TRAVA DE SEGURANÇA: Força o fechamento do loader independente de qualquer falha após 3.5 segundos
-    setTimeout(dismissLoader, 3500);
-
-
-    /* --------------------------------------------------------------------------
-       2. CURVED MONITOR TILT EFFECT (DESKTOP)
-       -------------------------------------------------------------------------- */
-    var curvedScreen = document.getElementById('curved-screen');
-    if (window.innerWidth > 1024) {
-      document.addEventListener('mousemove', function(e) {
-        var xAxis = (window.innerWidth / 2 - e.pageX) / 100;
-        var yAxis = (window.innerHeight / 2 - e.pageY) / 100;
-        curvedScreen.style.transform = "rotateY(" + xAxis + "deg) rotateX(" + (-yAxis) + "deg)";
-      });
-    }
-
-
-    /* --------------------------------------------------------------------------
-       3. NAVBAR SCROLL & MOBILE MENU
-       -------------------------------------------------------------------------- */
-    var navbar = document.getElementById('navbar');
+    /* 2. NAVBAR & MOBILE MENU */
+    var nav = document.getElementById('nav');
     window.addEventListener('scroll', function() {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
+      if (window.scrollY > 40) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
     });
 
-    var menuToggle = document.getElementById('menu-toggle');
+    var menuBtn = document.getElementById('menu-btn');
     var navLinks = document.getElementById('nav-links');
-
-    menuToggle.addEventListener('click', function() {
-      menuToggle.classList.toggle('active');
-      navLinks.classList.toggle('active');
+    menuBtn.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(function(a) {
+      a.addEventListener('click', function() { navLinks.classList.remove('open'); });
     });
 
-    // Fechar menu ao clicar em um link
-    document.querySelectorAll('.nav-links a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        menuToggle.classList.remove('active');
-        navLinks.classList.remove('active');
-      });
-    });
-
-
-    /* --------------------------------------------------------------------------
-       4. ANIMAÇÃO DE IMPRESSORA 3D NO CANVAS (HERO)
-       -------------------------------------------------------------------------- */
+    /* 3. ANIMAÇÃO PRECISE DE IMPRESSORA 3D (BONECO EM 10 SEGUNDOS) */
     var pCanvas = document.getElementById('printer-canvas');
     var pCtx = pCanvas.getContext('2d');
 
-    function resizePrinterCanvas() {
+    function resizePrinter() {
       if (!pCanvas.parentElement) return;
       pCanvas.width = pCanvas.parentElement.clientWidth;
       pCanvas.height = pCanvas.parentElement.clientHeight;
     }
-    resizePrinterCanvas();
-    window.addEventListener('resize', resizePrinterCanvas);
+    resizePrinter();
+    window.addEventListener('resize', resizePrinter);
 
-    // Parâmetros da animação
-    var layerHeight = 0;
-    var maxLayers = 80;
-    var headX = 0;
-    var headDirection = 1;
+    var printDuration = 10000; // Loop exato de 10 segundos
+    var startTime = null;
 
-    function drawPrinter() {
+    function drawPrinterAnimation(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var elapsed = (timestamp - startTime) % printDuration;
+      var progress = elapsed / printDuration; // De 0.0 a 1.0 em 10s
+
       var w = pCanvas.width;
       var h = pCanvas.height;
       pCtx.clearRect(0, 0, w, h);
 
       var cx = w / 2;
-      var cy = h / 2 + 50;
+      var bedY = h - 60;
+      var figureMaxHeight = 220;
+      var currentBuildHeight = progress * figureMaxHeight;
 
-      // Moldura da Impressora 3D (Gantry)
-      pCtx.strokeStyle = 'rgba(157, 78, 221, 0.4)';
-      pCtx.lineWidth = 4;
-      pCtx.strokeRect(cx - 120, cy - 200, 240, 220);
-
-      // Mesa de Impressão (Bed)
-      pCtx.fillStyle = '#12121c';
-      pCtx.strokeStyle = '#00f0ff';
+      // Desenhar Mesa da Impressora (Bed)
+      pCtx.fillStyle = '#0f0f18';
+      pCtx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
       pCtx.lineWidth = 2;
-      pCtx.fillRect(cx - 100, cy, 200, 12);
-      pCtx.strokeRect(cx - 100, cy, 200, 12);
+      pCtx.fillRect(cx - 110, bedY, 220, 10);
+      pCtx.strokeRect(cx - 110, bedY, 220, 10);
 
-      // Atualiza Posição da Cabeça de Impressão (Extrusor)
-      headX += 2 * headDirection;
-      if (headX > 70 || headX < -70) {
-        headDirection *= -1;
-        if (layerHeight < maxLayers) {
-          layerHeight += 0.8;
-        } else {
-          layerHeight = 0; // Reinicia o loop de construção
+      // Hastes da Estrutura
+      pCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      pCtx.lineWidth = 4;
+      pCtx.beginPath();
+      pCtx.moveTo(cx - 100, bedY); pCtx.lineTo(cx - 100, bedY - 240);
+      pCtx.moveTo(cx + 100, bedY); pCtx.lineTo(cx + 100, bedY - 240);
+      pCtx.moveTo(cx - 100, bedY - 240); pCtx.lineTo(cx + 100, bedY - 240);
+      pCtx.stroke();
+
+      // Posição Atual do Trilho Z
+      var currentZ = bedY - currentBuildHeight;
+
+      // Trilho Eixo X
+      pCtx.strokeStyle = 'rgba(168, 85, 247, 0.5)';
+      pCtx.lineWidth = 3;
+      pCtx.beginPath();
+      pCtx.moveTo(cx - 100, currentZ);
+      pCtx.lineTo(cx + 100, currentZ);
+      pCtx.stroke();
+
+      // Calcular Posição X e Largura do Extrusor baseada nas seções do Boneco
+      var currentX = cx;
+      var activeWidth = 10;
+
+      // Definir a anatomia da impressão conforme o progresso vertical (0 a 220px)
+      if (currentBuildHeight <= 80) {
+        // Pernas (Duas colunas)
+        var legSweep = Math.sin(timestamp / 50) * 20;
+        currentX = cx + (legSweep > 0 ? 18 : -18) + legSweep;
+        activeWidth = 40;
+      } else if (currentBuildHeight <= 150) {
+        // Tronco + Braços estendidos
+        var armSweep = Math.sin(timestamp / 40) * 45;
+        currentX = cx + armSweep;
+        activeWidth = 50;
+      } else {
+        // Cabeça
+        var headSweep = Math.sin(timestamp / 60) * 20;
+        currentX = cx + headSweep;
+        activeWidth = 25;
+      }
+
+      // DESENHO DO BONECO IMPRESSO (Camadas fixas)
+      pCtx.fillStyle = '#00f0ff';
+      pCtx.shadowBlur = 12;
+      pCtx.shadowColor = '#00f0ff';
+
+      // 1. Pernas (0px a 80px)
+      if (currentBuildHeight > 0) {
+        var hLegs = Math.min(currentBuildHeight, 80);
+        pCtx.fillRect(cx - 25, bedY - hLegs, 14, hLegs); // Perna Esquerda
+        pCtx.fillRect(cx + 11, bedY - hLegs, 14, hLegs); // Perna Direita
+      }
+
+      // 2. Tronco e Braços (80px a 150px)
+      if (currentBuildHeight > 80) {
+        var hTorso = Math.min(currentBuildHeight - 80, 70);
+        pCtx.fillRect(cx - 20, bedY - 80 - hTorso, 40, hTorso); // Tronco
+
+        // Braços
+        var hArms = Math.min(currentBuildHeight - 90, 50);
+        if (hArms > 0) {
+          pCtx.fillRect(cx - 45, bedY - 140, 20, hArms); // Braço Esquerdo
+          pCtx.fillRect(cx + 25, bedY - 140, 20, hArms); // Braço Direito
         }
       }
 
-      var currentZ = cy - layerHeight;
-
-      // Trilho do Eixo X
-      pCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      pCtx.lineWidth = 3;
-      pCtx.beginPath();
-      pCtx.moveTo(cx - 120, currentZ - 20);
-      pCtx.lineTo(cx + 120, currentZ - 20);
-      pCtx.stroke();
-
-      // Extrusor / Cabeçote
-      var extX = cx + headX;
-      var extY = currentZ - 25;
-
-      pCtx.fillStyle = '#9d4edd';
-      pCtx.fillRect(extX - 15, extY - 15, 30, 20);
-      pCtx.fillStyle = '#00f0ff';
-      pCtx.fillRect(extX - 3, extY + 5, 6, 6); // Bico/Nozzle
-
-      // Boneco Sendo Construído (Layer por Layer)
-      pCtx.fillStyle = '#00f0ff';
-      pCtx.shadowBlur = 10;
-      pCtx.shadowColor = '#00f0ff';
-
-      // Desenha o progresso da figura (Miniatura/Boneco)
-      var buildProgress = layerHeight / maxLayers;
-      if (buildProgress > 0) {
-        // Base / Pés
-        pCtx.fillRect(cx - 30, cy - Math.min(layerHeight, 20), 60, Math.min(layerHeight, 20));
-      }
-      if (buildProgress > 0.25) {
-        // Corpo
-        var bodyH = Math.min(layerHeight - 20, 30);
-        pCtx.fillRect(cx - 20, cy - 20 - bodyH, 40, bodyH);
-      }
-      if (buildProgress > 0.6) {
-        // Cabeça
-        var headH = Math.min(layerHeight - 50, 25);
-        pCtx.fillRect(cx - 15, cy - 50 - headH, 30, headH);
+      // 3. Cabeça (150px a 220px)
+      if (currentBuildHeight > 150) {
+        var hHead = Math.min(currentBuildHeight - 150, 50);
+        pCtx.fillRect(cx - 20, bedY - 150 - hHead, 40, hHead); // Cabeça articulada
       }
 
-      pCtx.shadowBlur = 0; // Reset shadow
+      pCtx.shadowBlur = 0; // Reset sombra
 
-      // Filamento Sendo Depositado
+      // CABEÇOTE EXTRUSOR
+      pCtx.fillStyle = '#a855f7';
+      pCtx.fillRect(currentX - 16, currentZ - 20, 32, 16);
+      pCtx.fillStyle = '#ffffff';
+      pCtx.fillRect(currentX - 3, currentZ - 4, 6, 4); // Nozzle
+
+      // FILAMENTO SAINDO DO BICO
       pCtx.strokeStyle = '#00f0ff';
       pCtx.lineWidth = 2;
       pCtx.beginPath();
-      pCtx.moveTo(extX, extY + 11);
-      pCtx.lineTo(extX, currentZ);
+      pCtx.moveTo(currentX, currentZ);
+      pCtx.lineTo(currentX, currentZ);
       pCtx.stroke();
 
-      // Luz Laser/Luz Tecnológica no ponto de fusão
-      pCtx.fillStyle = '#ffffff';
+      // Ponto incandescente
+      pCtx.fillStyle = '#fff';
       pCtx.beginPath();
-      pCtx.arc(extX, currentZ, 3, 0, Math.PI * 2);
+      pCtx.arc(currentX, currentZ, 3, 0, Math.PI * 2);
       pCtx.fill();
 
-      requestAnimationFrame(drawPrinter);
+      requestAnimationFrame(drawPrinterAnimation);
     }
-    requestAnimationFrame(drawPrinter);
+    requestAnimationFrame(drawPrinterAnimation);
 
-
-    /* --------------------------------------------------------------------------
-       5. BACKGROUND PARTICLES
-       -------------------------------------------------------------------------- */
-    var bgCanvas = document.getElementById('particle-canvas');
+    /* 4. BACKGROUND PARTICLES */
+    var bgCanvas = document.getElementById('bg-canvas');
     var bgCtx = bgCanvas.getContext('2d');
     var particles = [];
 
-    function resizeBgCanvas() {
+    function resizeBg() {
       bgCanvas.width = window.innerWidth;
       bgCanvas.height = window.innerHeight;
     }
-    resizeBgCanvas();
-    window.addEventListener('resize', resizeBgCanvas);
+    resizeBg();
+    window.addEventListener('resize', resizeBg);
 
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 35; i++) {
       particles.push({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        radius: Math.random() * 2,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        alpha: Math.random() * 0.5
+        r: Math.random() * 2,
+        dx: (Math.random() - 0.5) * 0.4,
+        dy: (Math.random() - 0.5) * 0.4
       });
     }
 
-    function renderParticles() {
+    function renderBg() {
       bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-      bgCtx.fillStyle = '#9d4edd';
+      bgCtx.fillStyle = 'rgba(168, 85, 247, 0.4)';
 
-      for (var p = 0; p < particles.length; p++) {
-        var pt = particles[p];
-        pt.x += pt.vx;
-        pt.y += pt.vy;
+      particles.forEach(function(p) {
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0) p.x = bgCanvas.width;
+        if (p.x > bgCanvas.width) p.x = 0;
+        if (p.y < 0) p.y = bgCanvas.height;
+        if (p.y > bgCanvas.height) p.y = 0;
 
-        if (pt.x < 0) pt.x = bgCanvas.width;
-        if (pt.x > bgCanvas.width) pt.x = 0;
-        if (pt.y < 0) pt.y = bgCanvas.height;
-        if (pt.y > bgCanvas.height) pt.y = 0;
-
-        bgCtx.globalAlpha = pt.alpha;
         bgCtx.beginPath();
-        bgCtx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
+        bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         bgCtx.fill();
-      }
-      requestAnimationFrame(renderParticles);
+      });
+      requestAnimationFrame(renderBg);
     }
-    renderParticles();
+    renderBg();
 
-
-    /* --------------------------------------------------------------------------
-       6. INTERSECTION OBSERVER (SCROLL REVEAL)
-       -------------------------------------------------------------------------- */
-    var observerOptions = {
-      threshold: 0.15
-    };
-
+    /* 5. SCROLL REVEAL OBSERVER */
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.reveal').forEach(function(el) {
-      observer.observe(el);
-    });
+    document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 
-
-    /* --------------------------------------------------------------------------
-       7. FAQ ACCORDION
-       -------------------------------------------------------------------------- */
-    document.querySelectorAll('.faq-header').forEach(function(header) {
-      header.addEventListener('click', function() {
+    /* 6. FAQ ACCORDION */
+    document.querySelectorAll('.faq-head').forEach(function(head) {
+      head.addEventListener('click', function() {
         var item = this.parentElement;
-        var isActive = item.classList.contains('active');
-
-        document.querySelectorAll('.faq-item').forEach(function(i) {
-          i.classList.remove('active');
-        });
-
-        if (!isActive) {
-          item.classList.add('active');
-        }
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        if (!isOpen) item.classList.add('open');
       });
     });
 
+    /* 7. FORMULÁRIO DE ORÇAMENTO */
+    var form = document.getElementById('quote-form');
+    var alertMsg = document.getElementById('success-alert');
+    var waLink = document.getElementById('wa-link');
 
-    /* --------------------------------------------------------------------------
-       8. FORMULÁRIO & WHATSAPP INTEGRATION
-       -------------------------------------------------------------------------- */
-    var quoteForm = document.getElementById('quote-form');
-    var successMsg = document.getElementById('form-success-msg');
-    var whatsappLink = document.getElementById('whatsapp-link');
+    waLink.href = "https://wa.me/" + WHATSAPP_NUMBER;
 
-    // Atualiza o link do botão flutuante
-    whatsappLink.href = "https://wa.me/" + WHATSAPP_NUMBER;
-
-    quoteForm.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
+      form.style.display = 'none';
+      alertMsg.style.display = 'block';
 
       var nome = document.getElementById('nome').value;
-      var produto = document.getElementById('produto').value;
+      var prod = document.getElementById('produto').value;
       var cor = document.getElementById('cor').value;
-      var tamanho = document.getElementById('tamanho').value;
-      var descricao = document.getElementById('descricao').value;
-      var obs = document.getElementById('observacoes').value;
+      var tam = document.getElementById('tamanho').value;
+      var desc = document.getElementById('descricao').value;
+      var obs = document.getElementById('obs').value;
 
-      quoteForm.style.display = 'none';
-      successMsg.style.display = 'block';
-
-      // Monta mensagem codificada para o WhatsApp
-      var text = "Olá! Gostaria de um orçamento para Impressão 3D:%0A%0A" +
+      var text = "Olá, gostaria de um orçamento para Impressão 3D:%0A%0A" +
                  "*Nome:* " + encodeURIComponent(nome) + "%0A" +
-                 "*Produto:* " + encodeURIComponent(produto) + "%0A" +
+                 "*Produto:* " + encodeURIComponent(prod) + "%0A" +
                  "*Cor:* " + encodeURIComponent(cor || 'Não informada') + "%0A" +
-                 "*Tamanho:* " + encodeURIComponent(tamanho || 'Não informado') + "%0A" +
-                 "*Descrição:* " + encodeURIComponent(descricao) + "%0A" +
-                 "*Obs:* " + encodeURIComponent(obs || 'Nenhuma');
+                 "*Tamanho:* " + encodeURIComponent(tam || 'Não informado') + "%0A" +
+                 "*Descrição:* " + encodeURIComponent(desc) + "%0A" +
+                 "*Obs:* " + encodeURIComponent(obs || 'Sem observações');
 
       setTimeout(function() {
         window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + text, '_blank');
-      }, 1500);
+      }, 1200);
     });
   </script>
 </body>
