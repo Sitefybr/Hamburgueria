@@ -1,1444 +1,337 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conexao3D — Impressão 3D Personalizada</title>
-    <meta name="description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D. Transforme sua ideia em realidade com a Conexao3D.">
-    
-    <meta property="og:title" content="Conexao3D — Impressão 3D Personalizada">
-    <meta property="og:description" content="Transforme suas ideias em objetos reais com alta precisão e qualidade.">
-    <meta property="og:type" content="website">
-
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'></path><polyline points='3.27 6.96 12 12.01 20.73 6.96'></polyline><line x1='12' y1='22.08' x2='12' y2='12'></line></svg>">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <style>
-        /* ==========================================================================
-           1. VARIÁVEIS E RESET CSS
-           ========================================================================== */
-        :root {
-            --bg-dark: #070709;
-            --bg-card: rgba(18, 16, 26, 0.65);
-            --bg-card-hover: rgba(28, 24, 42, 0.85);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-highlight: rgba(168, 85, 247, 0.4);
-            
-            --primary: #a855f7;
-            --primary-glow: #8b5cf6;
-            --primary-dark: #6b21a8;
-            --secondary: #06b6d4;
-            --secondary-glow: #22d3ee;
-            
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-dim: #64748b;
-
-            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-display: 'Space Grotesk', sans-serif;
-
-            --nav-height: 80px;
-            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            color-scheme: dark;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Focus Style Accesibility */
-        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 4px;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        /* ==========================================================================
-           2. TELA DE CARREGAMENTO (LOADER)
-           ========================================================================== */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--bg-dark);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        #loader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-content {
-            text-align: center;
-        }
-
-        .loader-logo {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .loader-progress-bg {
-            width: 200px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .loader-progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-            border-radius: 3px;
-            transition: width 0.4s ease;
-            box-shadow: 0 0 12px var(--primary);
-        }
-
-        /* ==========================================================================
-           3. BACKGROUND CANVAS & CURSOR FOLLOWER
-           ========================================================================== */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .cursor-follower {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(6, 182, 212, 0.03) 50%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            transition: transform 0.15s ease-out, opacity 0.3s ease;
-            opacity: 0;
-        }
-
-        @media (max-width: 768px) {
-            .cursor-follower { display: none; }
-        }
-
-        /* ==========================================================================
-           4. LAYOUT E COMPONENTES GENÉRICOS
-           ========================================================================== */
-        .container {
-            width: 100%;
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        section {
-            padding: 120px 0;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 64px auto;
-        }
-
-        .tag-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.25);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
-
-        /* Botões */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.55);
-            background: linear-gradient(135deg, #b866ff 0%, #7c22bc 100%);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* ==========================================================================
-           5. NAVBAR
-           ========================================================================== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
-            z-index: 1000;
-            transition: var(--transition-smooth);
-            border-bottom: 1px solid transparent;
-        }
-
-        .navbar.scrolled {
-            background: rgba(7, 7, 9, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom-color: var(--border-color);
-            height: 70px;
-        }
-
-        .navbar .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition-smooth);
-            position: relative;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-main);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition-smooth);
-            border-radius: 2px;
-        }
-
-        .nav-links a:hover::after, .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        /* Mobile Nav Drawer */
-        @media (max-width: 900px) {
-            .mobile-toggle { display: block; }
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 280px;
-                height: 100vh;
-                background: #0d0b14;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 100px 32px 32px 32px;
-                gap: 24px;
-                border-left: 1px solid var(--border-color);
-                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-            }
-            .nav-links.active {
-                right: 0;
-            }
-        }
-
-        /* ==========================================================================
-           6. HERO SECTION
-           ========================================================================== */
-        .hero {
-            padding-top: calc(var(--nav-height) + 60px);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .hero-content {
-            max-width: 580px;
-        }
-
-        .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 3.8rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -1px;
-        }
-
-        .hero-title span {
-            background: linear-gradient(135deg, #fff 20%, var(--primary) 70%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-description {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            margin-bottom: 36px;
-            line-height: 1.7;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        /* 3D Printer Simulation Stage */
-        .printer-stage-wrapper {
-            position: relative;
-            width: 100%;
-            height: 480px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-        }
-
-        .printer-container {
-            width: 100%;
-            max-width: 440px;
-            height: 440px;
-            position: relative;
-            background: rgba(13, 11, 20, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(168, 85, 247, 0.05);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-        }
-
-        .printer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            font-family: var(--font-display);
-            font-size: 0.85rem;
-            color: var(--text-dim);
-        }
-
-        .printer-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--secondary);
-            font-weight: 600;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--secondary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--secondary);
-            animation: pulseDot 1.5s infinite;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        /* Inner Visual Canvas for 3D Printing Simulation */
-        #printer-canvas {
-            width: 100%;
-            height: 320px;
-            border-radius: 12px;
-            display: block;
-        }
-
-        /* ==========================================================================
-           7. PRODUTOS SECTION
-           ========================================================================== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 28px;
-        }
-
-        .product-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 28px;
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(168, 85, 247, 0.12), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .product-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--border-highlight);
-            background: var(--bg-card-hover);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.15);
-        }
-
-        .product-card:hover::before {
-            opacity: 1;
-        }
-
-        .product-icon-wrapper {
-            width: 60px;
-            height: 60px;
-            border-radius: 14px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            margin-bottom: 24px;
-            transition: var(--transition-smooth);
-        }
-
-        .product-card:hover .product-icon-wrapper {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 0 20px var(--primary);
-            transform: scale(1.05);
-        }
-
-        .product-title {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .product-description {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            flex-grow: 1;
-            line-height: 1.6;
-        }
-
-        .product-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: var(--transition-smooth);
-        }
-
-        .product-card:hover .product-link {
-            gap: 12px;
-            color: var(--secondary);
-        }
-
-        /* ==========================================================================
-           8. COMO FUNCIONA (PROCESS) SECTION
-           ========================================================================== */
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            position: relative;
-        }
-
-        .process-line {
-            position: absolute;
-            top: 40px;
-            left: 10%;
-            width: 80%;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 0;
-        }
-
-        .process-line-progress {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 1s ease;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .step-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 32px 24px;
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            transition: var(--transition-smooth);
-        }
-
-        .step-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(6, 182, 212, 0.4);
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #0d0b14;
-            border: 2px solid var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 0 auto 20px auto;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
-        }
-
-        .step-title {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .step-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 900px) {
-            .process-steps { grid-template-columns: repeat(2, 1fr); }
-            .process-line { display: none; }
-        }
-        @media (max-width: 600px) {
-            .process-steps { grid-template-columns: 1fr; }
-        }
-
-        /* ==========================================================================
-           9. PERSONALIZAÇÃO / PIPELINE SECTION
-           ========================================================================== */
-        .customization-box {
-            background: linear-gradient(135deg, rgba(24, 18, 38, 0.8), rgba(10, 15, 30, 0.8));
-            border: 1px solid var(--border-highlight);
-            border-radius: 28px;
-            padding: 60px 40px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .custom-tags-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin: 32px 0 40px 0;
-        }
-
-        .custom-tag {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 100px;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition-smooth);
-        }
-
-        .custom-tag:hover {
-            border-color: var(--secondary);
-            background: rgba(6, 182, 212, 0.1);
-            transform: scale(1.05);
-        }
-
-        /* Interactive Pipeline Visual */
-        .pipeline-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-top: 40px;
-            padding: 24px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .pipeline-node {
-            text-align: center;
-            padding: 16px;
-            position: relative;
-        }
-
-        .pipeline-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px auto;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            transition: var(--transition-smooth);
-        }
-
-        .pipeline-node.active .pipeline-icon {
-            background: var(--secondary);
-            color: #000;
-            box-shadow: 0 0 20px var(--secondary);
-        }
-
-        .pipeline-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 768px) {
-            .pipeline-container { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        /* ==========================================================================
-           10. GALERIA DE PROJETOS
-           ========================================================================== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .gallery-item {
-            height: 260px;
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            background: #12101a;
-            cursor: pointer;
-        }
-
-        /* Abstract SVG Gallery Placeholders to guarantee no broken images */
-        .gallery-svg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(7, 7, 9, 0.95) 0%, rgba(7, 7, 9, 0.2) 60%, transparent 100%);
-            opacity: 0;
-            transition: var(--transition-smooth);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        .gallery-item:hover .gallery-svg {
-            transform: scale(1.08);
-        }
-
-        .gallery-title {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .gallery-category {
-            font-size: 0.8rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ==========================================================================
-           11. STATS / NÚMEROS
-           ========================================================================== */
-        .stats-wrapper {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 4vw, 3.5rem);
-            font-weight: 800;
-            color: var(--text-main);
-            background: linear-gradient(135deg, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 600px) {
-            .stats-wrapper { grid-template-columns: 1fr; }
-        }
-
-        /* ==========================================================================
-           12. FAQ (ACCORDION)
-           ========================================================================== */
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-        }
-
-        .faq-item.active {
-            border-color: var(--border-highlight);
-            background: var(--bg-card-hover);
-        }
-
-        .faq-header {
-            width: 100%;
-            padding: 20px 24px;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-family: var(--font-display);
-            font-size: 1.05rem;
-            font-weight: 600;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .faq-icon {
-            transition: transform 0.3s ease;
-            color: var(--primary);
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(180deg);
-        }
-
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 24px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .faq-item.active .faq-content {
-            padding: 0 24px 20px 24px;
-        }
-
-        /* ==========================================================================
-           13. ORÇAMENTO / FORMULÁRIO
-           ========================================================================== */
-        .quote-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .quote-info {
-            padding-right: 20px;
-        }
-
-        .form-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 36px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .form-input, .form-textarea, .form-select {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-family: var(--font-main);
-            font-size: 0.95rem;
-            transition: var(--transition-smooth);
-        }
-
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Feedback Modal/Notice */
-        .form-notice {
-            display: none;
-            padding: 16px;
-            background: rgba(168, 85, 247, 0.15);
-            border: 1px solid var(--primary);
-            border-radius: 12px;
-            color: #fff;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        @media (max-width: 850px) {
-            .quote-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-        }
-
-        /* ==========================================================================
-           14. FOOTER
-           ========================================================================== */
-        .footer {
-            background: #040405;
-            border-top: 1px solid var(--border-color);
-            padding: 80px 0 32px 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-
-        .footer-brand {
-            max-width: 300px;
-        }
-
-        .footer-brand p {
-            margin-top: 16px;
-            color: var(--text-dim);
-            line-height: 1.6;
-        }
-
-        .footer-title {
-            font-family: var(--font-display);
-            color: var(--text-main);
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: var(--transition-smooth);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .social-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            text-decoration: none;
-            transition: var(--transition-smooth);
-        }
-
-        .social-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 850px) {
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 500px) {
-            .footer-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ==========================================================================
-           15. BOTÃO FLUTUANTE WHATSAPP
-           ========================================================================== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #25d366;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            z-index: 999;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            animation: pulseWhatsapp 2s infinite;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.6);
-        }
-
-        @keyframes pulseWhatsapp {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 18px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
-        /* ==========================================================================
-           16. ANIMAÇÕES DE SCROLL (INTERSECTION OBSERVER)
-           ========================================================================== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-
-        /* Media Queries Accessibility Motion Preference */
-        @media (prefers-reduced-motion: reduce) {
-            *, ::before, ::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-            .reveal { opacity: 1; transform: none; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="loader">
-        <div class="loader-content">
-            <div class="loader-logo">Conexao3D</div>
-            <div class="loader-progress-bg">
-                <div class="loader-progress-bar" id="loader-bar"></div>
-            </div>
-        </div>
-    </div>
-
-    <canvas id="bg-canvas"></canvas>
-
-    <div class="cursor-follower" id="cursor-follower"></div>
-
-    <header class="navbar" id="navbar">
-        <div class="container">
-            <a href="#inicio" class="logo">
-                <div class="logo-icon">
-                    <i data-lucide="box"></i>
-                </div>
-                Conexao3D
-            </a>
-
-            <nav>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#inicio" class="active">Início</a></li>
-                    <li><a href="#produtos">Produtos</a></li>
-                    <li><a href="#como-funciona">Como Funciona</a></li>
-                    <li><a href="#personalizacao">Personalização</a></li>
-                    <li><a href="#sobre">Sobre Nós</a></li>
-                    <li><a href="#orcamento">Contato</a></li>
-                </ul>
-            </nav>
-
-            <button class="mobile-toggle" id="mobile-toggle" aria-label="Abrir Menu">
-                <i data-lucide="menu"></i>
-            </button>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero" id="inicio">
-            <div class="container">
-                <div class="hero-grid">
-                    <div class="hero-content reveal">
-                        <div class="tag-badge">
-                            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
-                            Manufatura Aditiva de Precisão
-                        </div>
-                        <h1 class="hero-title">
-                            Transformamos <span>ideias digitais</span> em objetos reais.
-                        </h1>
-                        <p class="hero-description">
-                            Impressão 3D de alta precisão para dar vida a brinquedos personalizados, colecionáveis, chaveiros, protótipos e presentes exclusivos sob encomenda.
-                        </p>
-                        <div class="hero-cta">
-                            <a href="#produtos" class="btn btn-primary">
-                                Ver Produtos
-                                <i data-lucide="arrow-right"></i>
-                            </a>
-                            <a href="#orcamento" class="btn btn-secondary">
-                                Fazer Orçamento
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="printer-stage-wrapper reveal reveal-delay-2">
-                        <div class="printer-container">
-                            <div class="printer-header">
-                                <span>UNIDADE_IMPRESSAO // 01</span>
-                                <div class="printer-status">
-                                    <div class="status-dot"></div>
-                                    IMPRIMINDO...
-                                </div>
-                            </div>
-                            
-                            <canvas id="printer-canvas"></canvas>
-
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-display);">
-                                <span>CAMADA: <strong id="layer-count" style="color: var(--primary);">000/250</strong></span>
-                                <span>FILAMENTO: <strong style="color: var(--secondary);">PLA PRO</strong></span>
-                                <span>TEMP: <strong style="color: #ef4444;">215°C</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="produtos">
-            <div class="container">
-                <div class="section-header reveal">
-                    <div class="tag-badge">Nosso Catálogo</div>
-                    <h2 class="section-title">Produtos & Soluções 3D</h2>
-                    <p class="section-subtitle">Desenvolvemos peças físicas com acabamento impecável para diversas finalidades.</p>
-                </div>
-
-                <div class="products-grid">
-                    <div class="product-card reveal">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="gamepad-2"></i>
-                        </div>
-                        <h3 class="product-title">Brinquedos 3D</h3>
-                        <p class="product-description">Brinquedos articulados, quebra-cabeças tridimensionais e itens interativos seguros e duráveis.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-
-                    <div class="product-card reveal reveal-delay-1">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="user"></i>
-                        </div>
-                        <h3 class="product-title">Bonecos & Figures</h3>
-                        <p class="product-description">Action figures, bustos e personagens estilizados impressos em alta resolução de detalhes.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-
-                    <div class="product-card reveal reveal-delay-2">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="key-round"></i>
-                        </div>
-                        <h3 class="product-title">Chaveiros Exclusivos</h3>
-                        <p class="product-description">Chaveiros corporativos ou pessoais, com logotipos, nomes em relevo e design sob medida.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-
-                    <div class="product-card reveal">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="shapes"></i>
-                        </div>
-                        <h3 class="product-title">Miniaturas</h3>
-                        <p class="product-description">Miniaturas para RPG, maquetes arquitetônicas e réplicas ricas em detalhes minuciosos.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-
-                    <div class="product-card reveal reveal-delay-1">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="lamp"></i>
-                        </div>
-                        <h3 class="product-title">Decoração Futurista</h3>
-                        <p class="product-description">Luminárias, vasos geométricos e artigos decorativos com estética contemporânea.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-
-                    <div class="product-card reveal reveal-delay-2">
-                        <div class="product-icon-wrapper">
-                            <i data-lucide="gift"></i>
-                        </div>
-                        <h3 class="product-title">Presentes Sob Encomenda</h3>
-                        <p class="product-description">Crie presentes memoráveis e únicos para datas especiais que ninguém mais conseguirá comprar em lojas convencionais.</p>
-                        <a href="#orcamento" class="product-link">Encomendar <i data-lucide="arrow-right" style="width: 16px;"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="como-funciona" style="background: rgba(255,255,255,0.01);">
-            <div class="container">
-                <div class="section-header reveal">
-                    <div class="tag-badge">Passo a Passo</div>
-                    <h2 class="section-title">Como Funciona o Processo</h2>
-                    <p class="section-subtitle">Do conceito inicial até a entrega do seu produto físico em mãos.</p>
-                </div>
-
-                <div class="process-steps">
-                    <div class="process-line">
-                        <div class="process-line-progress" id="process-progress"></div>
-                    </div>
-
-                    <div class="step-card reveal">
-                        <div class="step-number">01</div>
-                        <h3 class="step-title">Você Escolhe</h3>
-                        <p class="step-desc">Selecione um modelo do catálogo ou nos envie sua referência/desenho.</p>
-                    </div>
-
-                    <div class="step-card reveal reveal-delay-1">
-                        <div class="step-number">02</div>
-                        <h3 class="step-title">Personalizamos</h3>
-                        <p class="step-desc">Ajustamos dimensões, cores, materiais e preparamos a modelagem 3D.</p>
-                    </div>
-
-                    <div class="step-card reveal reveal-delay-2">
-                        <div class="step-number">03</div>
-                        <h3 class="step-title">Imprimimos</h3>
-                        <p class="step-desc">Sua peça é impressa camada por camada com controle rigoroso de qualidade.</p>
-                    </div>
-
-                    <div class="step-card reveal reveal-delay-3">
-                        <div class="step-number">04</div>
-                        <h3 class="step-title">Você Recebe</h3>
-                        <p class="step-desc">O produto finalizado e bem embalado é entregue diretamente para você.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="personalizacao">
-            <div class="container">
-                <div class="customization-box reveal">
-                    <div style="text-align: center; max-width: 650px; margin: 0 auto;">
-                        <div class="tag-badge">Customização Total</div>
-                        <h2 class="section-title">Sua Ideia. Do Seu Jeito.</h2>
-                        <p class="section-subtitle">Não fique limitado ao que está nas prateleiras. Adaptamos todos os parâmetros do seu produto.</p>
-                    </div>
-
-                    <div class="custom-tags-grid">
-                        <div class="custom-tag"><i data-lucide="type" style="width: 16px;"></i> Nomes & Iniciais</div>
-                        <div class="custom-tag"><i data-lucide="palette" style="width: 16px;"></i> Cores Especiais</div>
-                        <div class="custom-tag"><i data-lucide="maximize" style="width: 16px;"></i> Escala Sob Medida</div>
-                        <div class="custom-tag"><i data-lucide="smile" style="width: 16px;"></i> Personagens Favoritos</div>
-                        <div class="custom-tag"><i data-lucide="briefcase" style="width: 16px;"></i> Logotipos de Empresas</div>
-                        <div class="custom-tag"><i data-lucide="sparkles" style="width: 16px;"></i> Design Exclusivo</div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <h4 style="font-family: var(--font-display); margin-bottom: 12px; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Fluxo Digital para Físico</h4>
-                        <div class="pipeline-container">
-                            <div class="pipeline-node active">
-                                <div class="pipeline-icon"><i data-lucide="lightbulb"></i></div>
-                                <div class="pipeline-label">1. Ideia / Esboço</div>
-                            </div>
-                            <div class="pipeline-node active">
-                                <div class="pipeline-icon"><i data-lucide="cpu"></i></div>
-                                <div class="pipeline-label">2. Modelo 3D</div>
-                            </div>
-                            <div class="pipeline-node active">
-                                <div class="pipeline-icon"><i data-lucide="layers"></i></div>
-                                <div class="pipeline-label">3. Impressão</div>
-                            </div>
-                            <div class="pipeline-node active">
-                                <div class="pipeline-icon"><i data-lucide="package-check"></i></div>
-                                <div class="pipeline-label">4. Objeto Final</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 40px;">
-                        <a href="#orcamento" class="btn btn-primary">
-                            Quero Personalizar
-                            <i data-lucide="sparkles"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="section-header reveal">
-                    <div class="tag-badge">Portfólio</div>
-                    <h2 class="section-title">Galeria de Criações</h2>
-                    <p class="section-subtitle">Exemplos de projetos físicos produzidos em nossas impressoras.</p>
-                </div>
-
-                <div class="gallery-grid">
-                    <div class="gallery-item reveal">
-                        <svg class="gallery-svg" viewBox="0 0 300 260" preserveAspectRatio="none">
-                            <rect width="100%" height="100%" fill="#120e1f"/>
-                            <circle cx="150" cy="130" r="70" fill="none" stroke="#a855f7" stroke-width="3"/>
-                            <polygon points="150,80 190,150 110,150" fill="none" stroke="#06b6d4" stroke-width="3"/>
-                        </svg>
-                        <div class="gallery-overlay">
-                            <span class="gallery-category">Colecionáveis</span>
-                            <h4 class="gallery-title">Action Figure Customizado</h4>
-                        </div>
-                    </div>
-
-                    <div class="gallery-item reveal reveal-delay-1">
-                        <svg class="gallery-svg" viewBox="0 0 300 260" preserveAspectRatio="none">
-                            <rect width="100%" height="100%" fill="#0d131f"/>
-                            <path d="M100 180 L150 80 L200 180 Z" fill="none" stroke="#a855f7" stroke-width="4"/>
-                            <circle cx="150" cy="130" r="30" fill="rgba(6, 182, 212, 0.2
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conexao3D — Impressão 3D Personalizada</title>
+  <meta name="description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
+  <meta property="og:title" content="Conexao3D — Impressão 3D Personalizada">
+  <meta property="og:description" content="Brinquedos, chaveiros, miniaturas e produtos personalizados feitos com impressão 3D.">
+  <meta property="og:type" content="website">
+
+  <style>
+    /* --- RESETS E VARIÁVEIS --- */
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(18, 20, 29, 0.65);
+      --border: rgba(138, 43, 226, 0.25);
+      --border-glow: rgba(0, 240, 255, 0.4);
+      --primary: #8a2be2;
+      --primary-glow: #9d4edf;
+      --cyan: #00f0ff;
+      --text: #f0f3f8;
+      --text-muted: #a0a5b5;
+      --glass: rgba(255, 255, 255, 0.03);
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* --- BACKGROUND GRID & PARTÍCULAS --- */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .glow-orb {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, rgba(0, 240, 255, 0.05) 50%, transparent 70%);
+      top: -200px;
+      left: -200px;
+      z-index: -1;
+      pointer-events: none;
+      filter: blur(80px);
+    }
+
+    /* --- LOADING SCREEN --- */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #050508;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fff, var(--cyan), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .loader-bar {
+      width: 160px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loader-progress {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--cyan));
+      animation: loadAnim 1.5s infinite linear;
+      transform-origin: 0 50%;
+    }
+
+    @keyframes loadAnim {
+      0% { transform: scaleX(0); }
+      50% { transform: scaleX(0.7); }
+      100% { transform: scaleX(1); }
+    }
+
+    /* --- UI ELEMENTS --- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #5a189a);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff, #b8c1ec);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+
+    section {
+      padding: 5rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* --- NAVBAR --- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      padding: 1.2rem 2rem;
+    }
+
+    header.scrolled {
+      background: rgba(9, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.8rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    /* --- HERO & ANIMAÇÃO IMPRESSORA 3D --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 6rem;
+      gap: 2rem;
+    }
+
+    .hero-content {
+      flex: 1;
+      max-width: 550px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: rgba(138, 43, 226, 0.15);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--cyan);
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--cyan), var(--primary-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .printer-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Canvas / SVG Printer Visual */
+    .printer-card {
+      width: 100%;
+      max-width: 450px;
+      height: 420px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(138, 43, 226, 0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
