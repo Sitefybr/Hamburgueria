@@ -320,7 +320,25 @@
       box-shadow: 0 0 30px var(--neon-glow), inset 0 0 15px rgba(0, 240, 255, 0.2);
     }
 
-    #printer-canvas {
+    
+    /* IMPRESSORA 3D — acabamento físico e realista */
+    .printer-stage {
+      position: relative;
+    }
+    .printer-stage::after {
+      content: "";
+      position: absolute;
+      left: 8%; right: 8%; bottom: 3%;
+      height: 24px;
+      background: radial-gradient(ellipse, rgba(0,0,0,.28), transparent 70%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+    .filament-glow {
+      filter: drop-shadow(0 0 3px rgba(168,85,247,.45));
+    }
+
+#printer-canvas {
       width: 100%;
       height: 100%;
     }
@@ -345,7 +363,7 @@
     }
 
     .neon-card {
-      min-height: 500px;
+      min-height: 555px;
       background: var(--card-dark);
       border: 1px solid rgba(0, 240, 255, 0.3); /* 30% Neon Accent */
       border-radius: 20px;
@@ -377,7 +395,7 @@
 
     .card-img-placeholder {
       width: 100%;
-      height: 245px;
+      height: 235px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px dashed rgba(0, 240, 255, 0.4);
@@ -420,7 +438,7 @@
       margin-top: auto;
       padding-top: 18px;
       color: var(--accent-neon);
-      font-size: 1.35rem;
+      font-size: 1.65rem;
       font-weight: 900;
       letter-spacing: 0.3px;
       text-shadow: 0 0 12px rgba(0, 240, 255, 0.28);
@@ -753,8 +771,8 @@
     }
 
     @media (max-width: 768px) {
-      .neon-card { min-height: 460px; }
-      .card-img-placeholder { height: 220px; }
+      .neon-card { min-height: 510px; }
+      .card-img-placeholder { height: 215px; }
       .hero-grid { grid-template-columns: 1fr; text-align: center; }
       .hero-text h1 { font-size: 2.5rem; }
       .hero-actions { justify-content: center; }
