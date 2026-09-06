@@ -320,28 +320,9 @@
       box-shadow: 0 0 30px var(--neon-glow), inset 0 0 15px rgba(0, 240, 255, 0.2);
     }
 
-    
-    /* IMPRESSORA 3D — visual físico, branco e robusto */
-    .printer-stage { position: relative; }
-    .printer-stage::after {
-      content: "";
-      position: absolute;
-      left: 6%; right: 6%; bottom: 2%; height: 28px;
-      background: radial-gradient(ellipse, rgba(0,0,0,.30), transparent 70%);
-      filter: blur(9px); pointer-events: none;
-    }
-    #printer-canvas { width: 100%; height: 100%; display: block; }
-    .printer-labels {
-      position:absolute; left:16px; bottom:14px; z-index:3;
-      display:flex; gap:7px; flex-wrap:wrap; pointer-events:none;
-    }
-    .printer-labels span {
-      padding:6px 9px; border-radius:999px;
-      background:rgba(255,255,255,.86);
-      border:1px solid rgba(15,23,42,.12);
-      color:#334155; font-size:.66rem; font-weight:800;
-      box-shadow:0 5px 16px rgba(15,23,42,.08);
-      backdrop-filter:blur(8px);
+    #printer-canvas {
+      width: 100%;
+      height: 100%;
     }
 
     .anchor-target {
@@ -359,16 +340,16 @@
 
     .grid-3x3 {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
 
     .neon-card {
-      min-height: 590px;
+      min-height: 500px;
       background: var(--card-dark);
       border: 1px solid rgba(0, 240, 255, 0.3); /* 30% Neon Accent */
       border-radius: 20px;
-      padding: 18px;
+      padding: 20px;
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
@@ -439,7 +420,7 @@
       margin-top: auto;
       padding-top: 18px;
       color: var(--accent-neon);
-      font-size: 1.95rem;
+      font-size: 1.35rem;
       font-weight: 900;
       letter-spacing: 0.3px;
       text-shadow: 0 0 12px rgba(0, 240, 255, 0.28);
@@ -772,8 +753,8 @@
     }
 
     @media (max-width: 768px) {
-      .neon-card { min-height: 560px; }
-      .card-img-placeholder { height: 215px; }
+      .neon-card { min-height: 460px; }
+      .card-img-placeholder { height: 220px; }
       .hero-grid { grid-template-columns: 1fr; text-align: center; }
       .hero-text h1 { font-size: 2.5rem; }
       .hero-actions { justify-content: center; }
@@ -838,10 +819,7 @@
         </div>
       </div>
       <div class="canvas-wrapper">
-        <canvas id="printer-canvas" aria-label="Impressora 3D branca com rolo de filamento e filamento saindo do bico"></canvas>
-        <div class="printer-labels" aria-hidden="true">
-          <span>Estrutura branca</span><span>PLA premium</span><span>Extrusão ativa</span>
-        </div>
+        <canvas id="printer-canvas"></canvas>
       </div>
     </div>
   </section>
@@ -849,6 +827,7 @@
   <!-- PRODUTOS SECTION (9 CARDS NEON 3x3 - Metade Escura) -->
   <span id="servicos" class="anchor-target" aria-hidden="true"></span>
   <section class="products-section" id="produtos" data-section="servicos" aria-label="Serviços e produtos">
+    <span id="servicos" aria-hidden="true"></span>
     <div class="container">
       <h2 class="section-title title-dark reveal">Nossos Produtos</h2>
       <p class="section-subtitle sub-dark reveal">Precisão e acabamento impecável em cada peça impressa.</p>
@@ -1324,311 +1303,235 @@
     }
 
     /* ---------------------------------------------------------
-       3. IMPRESSORA 3D — CANVAS 2D REALISTA E SEGURO
-       Sem bibliotecas externas: evita erros de carregamento.
-       A máquina é branca, tem bobina no alto, filamento visível
-       e o filamento sai do bico até a peça.
+       3. IMPRESSORA 3D
+       O nozzle usa EXATAMENTE a mesma altura usada pela peça.
     --------------------------------------------------------- */
     try {
       var pCanvas = document.getElementById("printer-canvas");
+
       if (pCanvas && pCanvas.getContext) {
         var pCtx = pCanvas.getContext("2d");
-        if (pCtx) {
-          var pDpr = 1;
-          var pW = 1;
-          var pH = 1;
-          var printerStart = performance.now();
-          var printerRunning = true;
 
+        if (pCtx) {
           function resizePrinter() {
-            var box = pCanvas.parentElement;
-            if (!box) return;
-            var rect = box.getBoundingClientRect();
-            pW = Math.max(320, Math.floor(rect.width));
-            pH = Math.max(320, Math.floor(rect.height));
-            pDpr = Math.min(window.devicePixelRatio || 1, 2);
-            pCanvas.width = Math.floor(pW * pDpr);
-            pCanvas.height = Math.floor(pH * pDpr);
-            pCanvas.style.width = pW + "px";
-            pCanvas.style.height = pH + "px";
+            if (!pCanvas.parentElement) return;
+
+            var rect = pCanvas.parentElement.getBoundingClientRect();
+            var width = Math.max(1, Math.floor(rect.width));
+            var height = Math.max(1, Math.floor(rect.height));
+            var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            pCanvas.width = Math.floor(width * dpr);
+            pCanvas.height = Math.floor(height * dpr);
+            pCanvas.style.width = width + "px";
+            pCanvas.style.height = height + "px";
+
+            pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
           }
 
           resizePrinter();
           window.addEventListener("resize", resizePrinter, { passive: true });
 
-          var printDuration = 10000;
-          var pauseAfterPrint = 3000;
+          /*
+             CONFIGURAÇÃO DA IMPRESSÃO
+             Você pode mudar estes números facilmente.
+          */
+          var printDuration = 10000;   // tempo construindo o boneco (10s)
+          var pauseAfterPrint = 3000;  // espera após finalizar (3s)
           var cycleDuration = printDuration + pauseAfterPrint;
+          var startTime = null;
 
-          function rr(ctx, x, y, w, h, r) {
-            var radius = Math.min(r, w / 2, h / 2);
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + w, y, x + w, y + h, radius);
-            ctx.arcTo(x + w, y + h, x, y + h, radius);
-            ctx.arcTo(x, y + h, x, y, radius);
-            ctx.arcTo(x, y, x + w, y, radius);
-            ctx.closePath();
-          }
-
-          function gradient(ctx, x1, y1, x2, y2, stops) {
-            var g = ctx.createLinearGradient(x1, y1, x2, y2);
-            stops.forEach(function(st) { g.addColorStop(st[0], st[1]); });
-            return g;
-          }
-
-          function drawSpool(ctx, cx, cy, r, time) {
-            /* suporte da bobina */
-            ctx.save();
-            ctx.fillStyle = "#20242a";
-            rr(ctx, cx - 9, cy + r * .65, 18, 70, 5);
-            ctx.fill();
-            rr(ctx, cx - 38, cy + r * .65 + 62, 76, 13, 6);
-            ctx.fill();
-
-            /* disco traseiro */
-            var disc = ctx.createRadialGradient(cx-r*.2, cy-r*.25, r*.1, cx, cy, r);
-            disc.addColorStop(0, "#4b5563");
-            disc.addColorStop(.65, "#1f2937");
-            disc.addColorStop(1, "#0b0f14");
-            ctx.fillStyle = disc;
-            ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
-
-            /* filamento enrolado */
-            ctx.save();
-            ctx.beginPath(); ctx.arc(cx, cy, r*.72, 0, Math.PI*2); ctx.clip();
-            var coil = ctx.createLinearGradient(cx-r, cy-r, cx+r, cy+r);
-            coil.addColorStop(0, "#5b21b6");
-            coil.addColorStop(.25, "#a855f7");
-            coil.addColorStop(.5, "#c084fc");
-            coil.addColorStop(.75, "#7c3aed");
-            coil.addColorStop(1, "#4c1d95");
-            ctx.fillStyle = coil;
-            ctx.beginPath(); ctx.arc(cx, cy, r*.73, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = "rgba(255,255,255,.22)";
-            ctx.lineWidth = 2;
-            for (var i=0;i<13;i++) {
-              ctx.beginPath();
-              ctx.arc(cx + Math.sin(i*.8)*2, cy, r*.52 + i*1.25, -Math.PI*.85, Math.PI*.85);
-              ctx.stroke();
-            }
-            ctx.restore();
-
-            /* disco frontal */
-            ctx.fillStyle = "#151a20";
-            ctx.beginPath(); ctx.arc(cx, cy, r*.84, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = "#303741";
-            ctx.beginPath(); ctx.arc(cx, cy, r*.66, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = "#11151a";
-            ctx.beginPath(); ctx.arc(cx, cy, r*.24, 0, Math.PI*2); ctx.fill();
-            ctx.strokeStyle = "rgba(255,255,255,.14)";
-            ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.arc(cx, cy, r*.82, 0, Math.PI*2); ctx.stroke();
-            ctx.beginPath(); ctx.arc(cx, cy, r*.60, 0, Math.PI*2); ctx.stroke();
-
-            /* movimento sutil da bobina */
-            var tick = Math.sin(time*.004) * .7;
-            ctx.fillStyle = "rgba(168,85,247,.18)";
-            ctx.beginPath(); ctx.arc(cx, cy, r*.93 + tick, 0, Math.PI*2); ctx.fill();
-            ctx.restore();
-          }
-
-          function drawFilament(ctx, points, width) {
-            if (!points || points.length < 2) return;
-            ctx.save();
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            ctx.strokeStyle = "rgba(76,29,149,.28)";
-            ctx.lineWidth = width + 5;
-            ctx.beginPath();
-            ctx.moveTo(points[0][0], points[0][1]);
-            for (var i=1;i<points.length;i++) ctx.lineTo(points[i][0], points[i][1]);
-            ctx.stroke();
-            ctx.strokeStyle = "#8b5cf6";
-            ctx.lineWidth = width;
-            ctx.beginPath();
-            ctx.moveTo(points[0][0], points[0][1]);
-            for (var j=1;j<points.length;j++) ctx.lineTo(points[j][0], points[j][1]);
-            ctx.stroke();
-            ctx.strokeStyle = "rgba(255,255,255,.35)";
-            ctx.lineWidth = Math.max(1, width*.22);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          function drawMachine(timestamp) {
+          function drawPrinterAnimation(timestamp) {
             try {
-              if (!printerRunning) return;
-              var elapsed = (timestamp - printerStart) % cycleDuration;
+              if (!startTime) startTime = timestamp;
+
+              var elapsed = (timestamp - startTime) % cycleDuration;
               var buildElapsed = Math.min(elapsed, printDuration);
               var progress = buildElapsed / printDuration;
-              var t = timestamp * .001;
 
-              pCtx.setTransform(pDpr,0,0,pDpr,0,0);
-              pCtx.clearRect(0,0,pW,pH);
+              /*
+                 Durante os últimos 3 segundos o boneco fica 100% pronto.
+                 Só depois disso o ciclo volta para 0.
+              */
 
-              /* fundo de estúdio */
-              var bg = pCtx.createLinearGradient(0,0,0,pH);
-              bg.addColorStop(0,"#ffffff");
-              bg.addColorStop(.58,"#f4f6f8");
-              bg.addColorStop(1,"#e4e8ed");
-              pCtx.fillStyle = bg;
-              pCtx.fillRect(0,0,pW,pH);
+              var rect = pCanvas.getBoundingClientRect();
+              var w = Math.max(1, rect.width);
+              var h = Math.max(1, rect.height);
 
-              var scale = Math.min(pW/900, pH/520);
-              var ox = pW*.56;
-              var oy = pH*.08;
-              function X(v){ return ox + v*scale; }
-              function Y(v){ return oy + v*scale; }
+              pCtx.clearRect(0, 0, w, h);
 
-              /* sombra no chão */
-              pCtx.save();
-              pCtx.fillStyle = "rgba(15,23,42,.16)";
-              pCtx.filter = "blur(12px)";
-              pCtx.beginPath(); pCtx.ellipse(X(0),Y(445),260*scale,28*scale,0,0,Math.PI*2); pCtx.fill();
-              pCtx.restore();
+              var cx = w / 2;
+              var bedY = h - 50;
+              var figureMaxHeight = Math.min(220, Math.max(120, h * 0.42));
+              var currentBuildHeight = progress * figureMaxHeight;
 
-              /* base branca */
-              pCtx.fillStyle = gradient(pCtx,X(-320),Y(390),X(320),Y(440),[[0,"#d8dde3"],[.25,"#ffffff"],[.55,"#eef1f4"],[1,"#bfc6ce"]]);
-              rr(pCtx,X(-330),Y(375),660*scale,76*scale,18*scale); pCtx.fill();
-              pCtx.strokeStyle = "rgba(15,23,42,.25)"; pCtx.lineWidth=1.5*scale; pCtx.stroke();
+              /* A altura do nozzle nasce da MESMA variável da peça. */
+              var currentZ = bedY - currentBuildHeight;
 
-              /* tampa/mesa de impressão */
-              pCtx.fillStyle="#222831";
-              rr(pCtx,X(-260),Y(335),520*scale,35*scale,8*scale); pCtx.fill();
-              pCtx.fillStyle=gradient(pCtx,X(-250),Y(337),X(250),Y(365),[[0,"#303944"],[.5,"#11161c"],[1,"#343c46"]]);
-              rr(pCtx,X(-245),Y(340),490*scale,22*scale,4*scale); pCtx.fill();
-              pCtx.fillStyle="rgba(139,92,246,.15)";
-              rr(pCtx,X(-235),Y(344),470*scale,12*scale,3*scale); pCtx.fill();
+              /* -------------------------------------------------
+                 MESA
+              ------------------------------------------------- */
+              pCtx.fillStyle = "#0a0a14";
+              pCtx.fillRect(cx - 120, bedY, 240, 12);
+              pCtx.strokeStyle = "#00f0ff";
+              pCtx.lineWidth = 2;
+              pCtx.strokeRect(cx - 120, bedY, 240, 12);
 
-              /* colunas brancas */
-              var colTop=45, colBottom=380;
-              [-285,285].forEach(function(x){
-                pCtx.fillStyle=gradient(pCtx,X(x-18),Y(colTop),X(x+18),Y(colBottom),[[0,"#ffffff"],[.42,"#e8ebee"],[.78,"#c8cdd3"],[1,"#f8f9fa"]]);
-                rr(pCtx,X(x-18),Y(colTop),36*scale,(colBottom-colTop)*scale,8*scale); pCtx.fill();
-                pCtx.strokeStyle="rgba(15,23,42,.18)"; pCtx.stroke();
-                /* barras Z */
-                pCtx.strokeStyle="#555d66"; pCtx.lineWidth=3*scale;
-                pCtx.beginPath(); pCtx.moveTo(X(x),Y(colTop+20)); pCtx.lineTo(X(x),Y(colBottom-12)); pCtx.stroke();
-                for(var zz=0;zz<10;zz++){
-                  pCtx.strokeStyle="rgba(255,255,255,.3)"; pCtx.lineWidth=1*scale;
-                  pCtx.beginPath(); pCtx.moveTo(X(x-5),Y(colTop+35+zz*30)); pCtx.lineTo(X(x+5),Y(colTop+35+zz*30)); pCtx.stroke();
-                }
-              });
+              pCtx.fillStyle = "#00f0ff";
+              pCtx.beginPath();
+              pCtx.arc(cx - 105, bedY + 6, 3, 0, Math.PI * 2);
+              pCtx.arc(cx + 105, bedY + 6, 3, 0, Math.PI * 2);
+              pCtx.fill();
 
-              /* travessa superior */
-              pCtx.fillStyle=gradient(pCtx,X(-305),Y(25),X(305),Y(82),[[0,"#d9dde1"],[.18,"#ffffff"],[.5,"#eef1f3"],[.82,"#c4cad0"],[1,"#f8fafb"]]);
-              rr(pCtx,X(-305),Y(25),610*scale,58*scale,10*scale); pCtx.fill();
-              pCtx.strokeStyle="rgba(15,23,42,.24)"; pCtx.stroke();
+              /* -------------------------------------------------
+                 ESTRUTURA DA IMPRESSORA
+              ------------------------------------------------- */
+              pCtx.strokeStyle = "rgba(20, 20, 30, 0.35)";
+              pCtx.lineWidth = 12;
+              pCtx.beginPath();
+              pCtx.moveTo(cx - 110, bedY);
+              pCtx.lineTo(cx - 110, bedY - 260);
+              pCtx.moveTo(cx + 110, bedY);
+              pCtx.lineTo(cx + 110, bedY - 260);
+              pCtx.moveTo(cx - 110, bedY - 260);
+              pCtx.lineTo(cx + 110, bedY - 260);
+              pCtx.stroke();
 
-              /* gantry X */
-              var z = 92 + Math.sin(t*1.7)*3;
-              pCtx.fillStyle=gradient(pCtx,X(-285),Y(z),X(285),Y(z+38),[[0,"#c9cfd5"],[.3,"#ffffff"],[.65,"#e2e6e9"],[1,"#b7bec6"]]);
-              rr(pCtx,X(-278),Y(z),556*scale,38*scale,8*scale); pCtx.fill();
-              pCtx.strokeStyle="rgba(15,23,42,.22)"; pCtx.stroke();
-              pCtx.fillStyle="#242a31"; rr(pCtx,X(-265),Y(z+10),530*scale,9*scale,4*scale); pCtx.fill();
+              pCtx.strokeStyle = "rgba(255,255,255,.16)";
+              pCtx.lineWidth = 5;
+              pCtx.beginPath();
+              pCtx.moveTo(cx - 110, bedY);
+              pCtx.lineTo(cx - 110, bedY - 260);
+              pCtx.moveTo(cx + 110, bedY);
+              pCtx.lineTo(cx + 110, bedY - 260);
+              pCtx.moveTo(cx - 110, bedY - 260);
+              pCtx.lineTo(cx + 110, bedY - 260);
+              pCtx.stroke();
 
-              /* carrinho + hotend */
-              var travel = Math.sin(t*2.1)*165;
-              var nozzleX = travel;
-              pCtx.fillStyle="#f4f5f6"; rr(pCtx,X(nozzleX-55),Y(z-12),110*scale,62*scale,9*scale); pCtx.fill();
-              pCtx.strokeStyle="rgba(15,23,42,.24)"; pCtx.stroke();
-              pCtx.fillStyle="#262c33"; rr(pCtx,X(nozzleX-37),Y(z+32),74*scale,62*scale,8*scale); pCtx.fill();
-              pCtx.fillStyle="#11161c"; rr(pCtx,X(nozzleX-24),Y(z+83),48*scale,42*scale,6*scale); pCtx.fill();
-              pCtx.fillStyle="#c6cbd0"; rr(pCtx,X(nozzleX-10),Y(z+113),20*scale,20*scale,4*scale); pCtx.fill();
-              pCtx.fillStyle="#f59e0b";
-              pCtx.beginPath(); pCtx.moveTo(X(nozzleX-8),Y(z+132)); pCtx.lineTo(X(nozzleX+8),Y(z+132)); pCtx.lineTo(X(nozzleX),Y(z+150)); pCtx.closePath(); pCtx.fill();
+              /* -------------------------------------------------
+                 EIXO X — SEMPRE PRESO ÀS COLUNAS Z
+              ------------------------------------------------- */
+              pCtx.strokeStyle = "#a855f7";
+              pCtx.lineWidth = 5;
+              pCtx.beginPath();
+              pCtx.moveTo(cx - 110, currentZ);
+              pCtx.lineTo(cx + 110, currentZ);
+              pCtx.stroke();
 
-              /* ventilador */
-              pCtx.fillStyle="#11161c"; pCtx.beginPath(); pCtx.arc(X(nozzleX),Y(z+54),17*scale,0,Math.PI*2); pCtx.fill();
-              pCtx.strokeStyle="#5c6570"; pCtx.lineWidth=2*scale; pCtx.beginPath(); pCtx.arc(X(nozzleX),Y(z+54),11*scale,0,Math.PI*2); pCtx.stroke();
-              pCtx.fillStyle="#8b5cf6"; pCtx.beginPath(); pCtx.arc(X(nozzleX),Y(z+54),3*scale,0,Math.PI*2); pCtx.fill();
+              /* Movimento X limitado ao volume da peça. */
+              var sweep = Math.sin(timestamp / 330) * 28;
+              var currentX = Math.max(cx - 38, Math.min(cx + 38, cx + sweep));
 
-              /* bobina no alto, à esquerda */
-              var spoolX=-405, spoolY=120, spoolR=82;
-              drawSpool(pCtx,X(spoolX),Y(spoolY),spoolR*scale,timestamp);
+              /* -------------------------------------------------
+                 PEÇA VOXEL / STEVE
+              ------------------------------------------------- */
+              var legHeight = 80;
+              var torsoHeight = 70;
+              var headHeight = 70;
 
-              /* filamento do rolo até o extrusor */
-              var guideX=nozzleX;
-              drawFilament(pCtx,[
-                [X(spoolX+58),Y(spoolY-38)],
-                [X(-330),Y(42)],
-                [X(-100),Y(42)],
-                [X(guideX),Y(z+22)],
-                [X(guideX),Y(z+120)]
-              ],Math.max(2,3*scale));
+              if (currentBuildHeight > 0) {
+                var hLegs = Math.min(currentBuildHeight, legHeight);
+                pCtx.fillStyle = "#1e3a8a";
+                pCtx.fillRect(cx - 20, bedY - hLegs, 18, hLegs);
+                pCtx.fillRect(cx + 2, bedY - hLegs, 18, hLegs);
+              }
 
-              /* peça crescendo na mesa */
-              var figureH=205*scale;
-              var built=figureH*progress;
-              var baseY=Y(338);
-              var fx=X(0), fw=44*scale;
-              if(built>0){
-                var legH=Math.min(built,52*scale);
-                pCtx.fillStyle="#1d4ed8";
-                pCtx.fillRect(fx-18*scale,baseY-legH,15*scale,legH);
-                pCtx.fillRect(fx+3*scale,baseY-legH,15*scale,legH);
-                if(built>50*scale){
-                  var torso=Math.min(built-50*scale,60*scale);
-                  pCtx.fillStyle="#0ea5e9";
-                  pCtx.fillRect(fx-26*scale,baseY-50*scale-torso,52*scale,torso);
-                }
-                if(built>92*scale){
-                  var arms=Math.min(built-92*scale,48*scale);
-                  var ay=baseY-92*scale-arms;
-                  pCtx.fillStyle="#d99a63";
-                  pCtx.fillRect(fx-42*scale,ay,13*scale,arms);
-                  pCtx.fillRect(fx+29*scale,ay,13*scale,arms);
-                }
-                if(built>145*scale){
-                  var head=Math.min(built-145*scale,60*scale);
-                  var hy=baseY-145*scale-head;
-                  pCtx.fillStyle="#d99a63";
-                  pCtx.fillRect(fx-29*scale,hy,58*scale,head);
-                  if(head>34*scale){
-                    pCtx.fillStyle="#4b2f1c"; pCtx.fillRect(fx-29*scale,hy,58*scale,10*scale);
-                    pCtx.fillStyle="#fff"; pCtx.fillRect(fx-20*scale,hy+23*scale,12*scale,7*scale); pCtx.fillRect(fx+8*scale,hy+23*scale,12*scale,7*scale);
-                    pCtx.fillStyle="#2563eb"; pCtx.fillRect(fx-15*scale,hy+23*scale,6*scale,7*scale); pCtx.fillRect(fx+8*scale,hy+23*scale,6*scale,7*scale);
-                  }
+              if (currentBuildHeight > legHeight) {
+                var hTorso = Math.min(currentBuildHeight - legHeight, torsoHeight);
+                pCtx.fillStyle = "#06b6d4";
+                pCtx.fillRect(cx - 20, bedY - legHeight - hTorso, 40, hTorso);
+
+                /*
+                   BRAÇOS SINCRONIZADOS COM O BICO:
+                   o braço só nasce quando a camada chega em 90px.
+                   A parte construída cresce de baixo para cima, então
+                   o bico nunca fica atrás/abaixo do braço.
+                */
+                var armStart = legHeight + 10; // 90px
+                var armHeight = 55;
+                var hArms = Math.min(Math.max(currentBuildHeight - armStart, 0), armHeight);
+                if (hArms > 0) {
+                  pCtx.fillStyle = "#e0a96d";
+                  var armY = bedY - armStart - hArms;
+                  pCtx.fillRect(cx - 36, armY, 14, hArms);
+                  pCtx.fillRect(cx + 22, armY, 14, hArms);
                 }
               }
 
-              /* filamento realmente saindo do bico até a camada */
-              var topY=baseY-built;
-              if(progress>0.005 && progress<1){
-                pCtx.save();
-                pCtx.strokeStyle="#8b5cf6";
-                pCtx.lineWidth=Math.max(2,2.5*scale);
-                pCtx.shadowBlur=7; pCtx.shadowColor="#8b5cf6";
-                pCtx.beginPath(); pCtx.moveTo(X(nozzleX),Y(z+150)); pCtx.lineTo(X(0),topY); pCtx.stroke();
-                pCtx.restore();
-                pCtx.fillStyle="#f59e0b"; pCtx.beginPath(); pCtx.arc(X(0),topY,3.2*scale,0,Math.PI*2); pCtx.fill();
+              if (currentBuildHeight > legHeight + torsoHeight) {
+                var hHead = Math.min(currentBuildHeight - legHeight - torsoHeight, headHeight);
+                var headY = bedY - legHeight - torsoHeight - hHead;
+
+                pCtx.fillStyle = "#e0a96d";
+                pCtx.fillRect(cx - 25, headY, 50, hHead);
+
+                if (hHead > 38) {
+                  /* Cabelo quadrado */
+                  pCtx.fillStyle = "#4a2c11";
+                  pCtx.fillRect(cx - 25, headY, 50, 13);
+
+                  /* Olhos pixelados */
+                  pCtx.fillStyle = "#fff";
+                  pCtx.fillRect(cx - 18, headY + 27, 10, 6);
+                  pCtx.fillRect(cx + 8, headY + 27, 10, 6);
+
+                  pCtx.fillStyle = "#2563eb";
+                  pCtx.fillRect(cx - 13, headY + 27, 5, 6);
+                  pCtx.fillRect(cx + 8, headY + 27, 5, 6);
+
+                  /* Nariz */
+                  pCtx.fillStyle = "#bc804c";
+                  pCtx.fillRect(cx - 4, headY + 35, 8, 6);
+
+                  /* Boca */
+                  pCtx.fillStyle = "#6b3e1e";
+                  pCtx.fillRect(cx - 8, headY + 44, 16, 5);
+                }
               }
 
-              /* mesa/camada final em primeiro plano */
-              pCtx.fillStyle="rgba(255,255,255,.55)";
-              pCtx.fillRect(X(-235),Y(357),470*scale,3*scale);
+              /* -------------------------------------------------
+                 NOZZLE — ALINHADO COM A CAMADA ATUAL
+              ------------------------------------------------- */
+              pCtx.fillStyle = "#334155";
+              pCtx.fillRect(currentX - 18, currentZ - 25, 36, 20);
 
-              /* painel frontal */
-              pCtx.fillStyle="#e7eaed"; rr(pCtx,X(245),Y(360),90*scale,50*scale,7*scale); pCtx.fill();
-              pCtx.fillStyle="#111827"; rr(pCtx,X(258),Y(370),45*scale,27*scale,4*scale); pCtx.fill();
-              pCtx.fillStyle="#60a5fa"; pCtx.fillRect(X(264),Y(376),33*scale,2*scale);
-              pCtx.fillStyle="#60a5fa"; pCtx.fillRect(X(264),Y(383),25*scale,2*scale);
-              pCtx.strokeStyle="#4b5563"; pCtx.lineWidth=3*scale; pCtx.beginPath(); pCtx.arc(X(320),Y(385),7*scale,0,Math.PI*2); pCtx.stroke();
+              pCtx.fillStyle = "#a855f7";
+              pCtx.fillRect(currentX - 10, currentZ - 29, 20, 4);
 
-              /* logo */
-              pCtx.fillStyle="rgba(124,58,237,.95)";
-              pCtx.font="800 "+Math.max(12,18*scale)+"px system-ui, sans-serif";
-              pCtx.fillText("CONEXÃO3D",X(-95),Y(61));
+              pCtx.fillStyle = "#eab308";
+              pCtx.beginPath();
+              pCtx.moveTo(currentX - 5, currentZ - 5);
+              pCtx.lineTo(currentX + 5, currentZ - 5);
+              pCtx.lineTo(currentX, currentZ);
+              pCtx.closePath();
+              pCtx.fill();
 
-              window.requestAnimationFrame(drawMachine);
-            } catch(err){
-              printerRunning=false;
-              console.warn("Animação da impressora pausada:",err);
+              /* Filamento saindo do nozzle até a camada. */
+              if (progress > 0.002) {
+                pCtx.strokeStyle = "#00f0ff";
+                pCtx.lineWidth = 2;
+                pCtx.beginPath();
+                pCtx.moveTo(currentX, currentZ);
+                pCtx.lineTo(currentX, currentZ + 3);
+                pCtx.stroke();
+              }
+
+              pCtx.fillStyle = "#fff";
+              pCtx.shadowBlur = 10;
+              pCtx.shadowColor = "#00f0ff";
+              pCtx.beginPath();
+              pCtx.arc(currentX, currentZ, 3, 0, Math.PI * 2);
+              pCtx.fill();
+              pCtx.shadowBlur = 0;
+
+              window.requestAnimationFrame(drawPrinterAnimation);
+            } catch (error) {
+              /* Se a animação falhar, não bloqueia o resto do site. */
+              console.warn("Animação da impressora interrompida:", error);
             }
           }
 
-          window.requestAnimationFrame(drawMachine);
+          window.requestAnimationFrame(drawPrinterAnimation);
         }
       }
     } catch (error) {
