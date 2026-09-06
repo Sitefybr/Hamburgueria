@@ -3,1271 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conexão3D — Ideias que viram objetos</title>
-  <meta name="description" content="Transformamos conceitos, personagens e projetos em peças impressas em 3D com precisão, personalidade e acabamento cuidadoso.">
-  <style>
-    /* ==========================================================================
-       RESET & VARIAVEIS GLOBAIS
-       ========================================================================== */
-    :root {
-      --bg-light: #FFFFFF;
-      --bg-dark: #07070A;
-      --card-light: #F8F9FA;
-      --card-dark: #121218;
-      --text-dark: #07070A;
-      --text-light: #F3F4F6;
-      --text-muted: #6B7280;
-      --purple-main: #8B5CF6;
-      --purple-light: #B58CFF;
-      --purple-glow: rgba(139, 92, 246, 0.35);
-      --border-light: rgba(0, 0, 0, 0.08);
-      --border-dark: rgba(255, 255, 255, 0.1);
-      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      font-family: var(--font-family);
-      background-color: var(--bg-light);
-      color: var(--text-dark);
-      overflow-x: hidden;
-    }
-
-    body {
-      overflow-x: hidden;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button, input, textarea {
-      font-family: inherit;
-      border: none;
-      outline: none;
-    }
-
-    /* ==========================================================================
-       NAVBAR
-       ========================================================================== */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 72px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-light);
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-    }
-
-    .navbar.dark-theme {
-      background: rgba(7, 7, 10, 0.8);
-      border-bottom: 1px solid var(--border-dark);
-      color: var(--text-light);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand-logo {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .brand-logo span {
-      color: var(--purple-main);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-link a {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--text-dark);
-      transition: var(--transition);
-    }
-
-    .dark-theme .nav-link a {
-      color: var(--text-light);
-    }
-
-    .nav-link a:hover {
-      color: var(--purple-main);
-    }
-
-    .btn-nav {
-      background-color: var(--purple-main);
-      color: #FFFFFF !important;
-      padding: 10px 20px;
-      border-radius: 99px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: var(--transition);
-      box-shadow: 0 4px 14px var(--purple-glow);
-    }
-
-    .btn-nav:hover {
-      background-color: var(--purple-light);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px var(--purple-glow);
-    }
-
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      padding: 5px;
-    }
-
-    .menu-toggle span {
-      width: 24px;
-      height: 2px;
-      background-color: var(--text-dark);
-      transition: var(--transition);
-    }
-
-    .dark-theme .menu-toggle span {
-      background-color: var(--text-light);
-    }
-
-    /* ==========================================================================
-       HERO SECTION (CLARA)
-       ========================================================================== */
-    .hero {
-      min-height: 100vh;
-      padding: 120px 24px 60px;
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 40px;
-    }
-
-    .hero-content {
-      max-width: 540px;
-    }
-
-    .hero-title {
-      font-size: 3.5rem;
-      line-height: 1.1;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-      margin-bottom: 24px;
-    }
-
-    .hero-title .highlight {
-      color: var(--purple-main);
-      display: inline-block;
-    }
-
-    .hero-text {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      margin-bottom: 36px;
-      font-weight: 400;
-      line-height: 1.6;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background-color: var(--purple-main);
-      color: #FFFFFF;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px var(--purple-glow);
-      cursor: pointer;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--purple-light);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--purple-glow);
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--text-dark);
-      border: 1px solid var(--border-light);
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-
-    .btn-secondary:hover {
-      background-color: rgba(0, 0, 0, 0.03);
-      border-color: var(--text-dark);
-    }
-
-    .hero-visual {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      width: 100%;
-    }
-
-    .canvas-container {
-      width: 100%;
-      max-width: 500px;
-      aspect-ratio: 1 / 1;
-      position: relative;
-      background: radial-gradient(circle at center, rgba(139, 92, 246, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
-      border-radius: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #printerCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* ==========================================================================
-       SEÇÃO PRODUTOS (CLARA)
-       ========================================================================== */
-    .products-section {
-      padding: 100px 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 60px;
-    }
-
-    .section-title {
-      font-size: 2.25rem;
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
-    }
-
-    .section-subtitle {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-    }
-
-    .product-card {
-      background: var(--card-light);
-      border: 1px solid var(--border-light);
-      border-radius: 20px;
-      padding: 20px;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-      border-color: rgba(139, 92, 246, 0.3);
-    }
-
-    .product-image-container {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      background: #EAEBED;
-      position: relative;
-    }
-
-    .product-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #9CA3AF;
-      background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      gap: 8px;
-    }
-
-    .product-placeholder svg {
-      width: 32px;
-      height: 32px;
-      opacity: 0.5;
-    }
-
-    .product-info {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .product-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .product-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
-
-    .product-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 16px;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .product-price {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-dark);
-    }
-
-    .btn-card {
-      background-color: var(--text-dark);
-      color: #FFFFFF;
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-
-    .btn-card:hover {
-      background-color: var(--purple-main);
-    }
-
-    /* ==========================================================================
-       TRANSITION BLOCK TO DARK THEME
-       ========================================================================== */
-    .dark-wrapper {
-      background-color: var(--bg-dark);
-      color: var(--text-light);
-      position: relative;
-      transition: background-color 0.5s ease;
-    }
-
-    /* ==========================================================================
-       SEÇÃO SOBRE NÓS (ESCURA)
-       ========================================================================== */
-    .about-section {
-      padding: 120px 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .about-section .section-title {
-      color: var(--text-light);
-    }
-
-    .about-section .section-subtitle {
-      color: #9CA3AF;
-    }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      margin-top: 60px;
-    }
-
-    .step-card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      padding: 40px 30px;
-      border-radius: 20px;
-      position: relative;
-      transition: var(--transition);
-    }
-
-    .step-card:hover {
-      border-color: var(--purple-main);
-      transform: translateY(-4px);
-    }
-
-    .step-number {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--purple-main);
-      opacity: 0.8;
-      margin-bottom: 16px;
-      line-height: 1;
-    }
-
-    .step-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text-light);
-    }
-
-    .step-desc {
-      font-size: 0.95rem;
-      color: #9CA3AF;
-      line-height: 1.6;
-    }
-
-    /* ==========================================================================
-       SEÇÃO ORÇAMENTO (ESCURA)
-       ========================================================================== */
-    .quote-section {
-      padding: 80px 24px 120px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .quote-card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      border-radius: 24px;
-      padding: 48px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
-
-    .form-group {
-      margin-bottom: 24px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--text-light);
-    }
-
-    .form-input, .form-textarea {
-      width: 100%;
-      padding: 14px 16px;
-      background: #1A1A22;
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
-      color: #FFFFFF;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .form-input:focus, .form-textarea:focus {
-      border-color: var(--purple-main);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      background: var(--purple-main);
-      color: #FFFFFF;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 14px var(--purple-glow);
-    }
-
-    .btn-submit:hover {
-      background: var(--purple-light);
-      box-shadow: 0 6px 20px var(--purple-glow);
-    }
-
-    /* ==========================================================================
-       FOOTER (ESCURO)
-       ========================================================================== */
-    .footer {
-      border-top: 1px solid var(--border-dark);
-      padding: 80px 24px 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: var(--bg-dark);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1.5fr;
-      gap: 40px;
-      margin-bottom: 60px;
-    }
-
-    .footer-brand {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .footer-brand span {
-      color: var(--purple-main);
-    }
-
-    .footer-text {
-      color: #9CA3AF;
-      font-size: 0.9rem;
-      line-height: 1.7;
-      max-width: 360px;
-    }
-
-    .footer-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: var(--text-light);
-    }
-
-    .footer-links {
-      list-style: none;
-    }
-
-    .footer-links li {
-      margin-bottom: 12px;
-    }
-
-    .footer-links a {
-      color: #9CA3AF;
-      font-size: 0.9rem;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--purple-main);
-    }
-
-    .footer-bottom {
-      padding-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #6B7280;
-      font-size: 0.85rem;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    /* ==========================================================================
-       MICRO-ANIMAÇÃO & REVELAÇÃO
-       ========================================================================== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ==========================================================================
-       RESPONSIVIDADE (MOBILE & TABLET)
-       ========================================================================== */
-    @media (max-width: 992px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding-top: 100px;
-        text-align: center;
-      }
-
-      .hero-content {
-        max-width: 100%;
-        margin: 0 auto;
-      }
-
-      .hero-buttons {
-        justify-content: center;
-      }
-
-      .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .steps-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: flex;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 72px;
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.98);
-        flex-direction: column;
-        padding: 30px 24px;
-        gap: 20px;
-        border-bottom: 1px solid var(--border-light);
-        transform: translateY(-150%);
-        transition: transform 0.4s ease;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      }
-
-      .dark-theme .nav-links {
-        background: rgba(7, 7, 10, 0.98);
-        border-bottom: 1px solid var(--border-dark);
-      }
-
-      .nav-links.active {
-        transform: translateY(0);
-      }
-
-      .hero-title {
-        font-size: 2.5rem;
-      }
-
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .quote-card {
-        padding: 24px;
-      }
-    }
-  </style>
+  <meta name="description" content="CONEXÃO 3D - Impressão 3D de alta precisão, prototipagem rápida e colecionáveis ultra-detalhados.">
+  <title>CONEXÃO 3D | Impressão & Prototipagem de Alta Performance</title>
+  
+  <!-- Fontes Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="#inicio" class="brand-logo">Conexão<span>3D</span></a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <ul class="nav-links" id="navLinks">
-        <li class="nav-link"><a href="#inicio">Início</a></li>
-        <li class="nav-link"><a href="#produtos">Produtos</a></li>
-        <li class="nav-link"><a href="#sobre">Sobre nós</a></li>
-        <li class="nav-link"><a href="#orcamento">Orçamento</a></li>
-        <li><a href="#orcamento" class="btn-nav">Solicitar orçamento</a></li>
-      </ul>
+  <!-- HERO SECTION (OCUPA 100VH COM BACKGROUND FIXO) -->
+  <header class="hero-section" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-particles" id="particles-js"></div>
+    
+    <div class="hero-content">
+      <div class="brand-container">
+        <h1 class="glitch-logo" data-text="CONEXÃO 3D">CONEXÃO <span class="accent-orange">3D</span></h1>
+      </div>
+      <p class="hero-tagline">MANUFATURA ADITIVA DE ALTA PRECISÃO • MODELAGEM INDUSTRIAL • ARTES ULTRA-DETALHADAS</p>
+      
+      <div class="hero-cta-group">
+        <a href="#catalog" class="btn-primary-hero">EXPLORAR CATÁLOGO</a>
+        <a href="#calculator" class="btn-secondary-hero">ORÇAMENTO INSTANTÂNEO</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>ROLE PARA DESCROBRIR</span>
+      <div class="mouse-icon">
+        <div class="wheel"></div>
+      </div>
     </div>
   </header>
 
-  <section class="hero" id="inicio">
-    <div class="hero-content">
-      <h1 class="hero-title">IDEIAS QUE VIRAM <span class="highlight">OBJETOS.</span></h1>
-      <p class="hero-text">Transformamos conceitos, personagens e projetos em peças impressas em 3D com precisão, personalidade e acabamento cuidadoso.</p>
-      <div class="hero-buttons">
-        <a href="#produtos" class="btn-primary">Ver produtos &rarr;</a>
-        <a href="#orcamento" class="btn-secondary">Criar minha peça</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="canvas-container">
-        <canvas id="printerCanvas"></canvas>
-      </div>
-    </div>
-  </section>
+  <!-- SEÇÃO DE CONTEÚDO PRINCIPAL (SOBREPÕE A HERO AO ROLAR) -->
+  <main class="main-wrapper" id="main-content">
 
-  <section class="products-section" id="produtos">
-    <div class="section-header reveal">
-      <h2 class="section-title">NOSSOS PRODUTOS</h2>
-      <p class="section-subtitle">Precisão e acabamento impecável em cada peça impressa.</p>
-    </div>
-    <div class="products-grid" id="productsGrid">
-      </div>
-  </section>
-
-  <div class="dark-wrapper" id="darkSection">
-    
-    <section class="about-section" id="sobre">
-      <div class="section-header reveal">
-        <h2 class="section-title">DO ARQUIVO PARA O MUNDO REAL.</h2>
-        <p class="section-subtitle">Impressão 3D para quem quer criar algo diferente, funcional ou simplesmente incrível.</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card reveal">
-          <div class="step-number">01</div>
-          <h3 class="step-title">Você envia a ideia</h3>
-          <p class="step-desc">Seja um arquivo 3D pronto, uma foto ou apenas uma ideia desenhada no papel, nós analisamos a viabilidade técnica.</p>
+    <!-- BARRA DE ESTATÍSTICAS DA EMPRESA -->
+    <section class="stats-bar">
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-number" data-target="15000">0</span><span class="plus">+</span>
+          <span class="stat-label">Peças Impressas</span>
         </div>
-        <div class="step-card reveal">
-          <div class="step-number">02</div>
-          <h3 class="step-title">Nós preparamos</h3>
-          <p class="step-desc">Fizemos o fatiamento de alta precisão, escolhemos o filamento ideal e configuramos a máquina para o melhor acabamento.</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="998">0</span><span class="plus">%</span>
+          <span class="stat-label">Precisão Dimensional</span>
         </div>
-        <div class="step-card reveal">
-          <div class="step-number">03</div>
-          <h3 class="step-title">A peça nasce</h3>
-          <p class="step-desc">Sua ideia ganha vida em um processo camada por camada, passa por controle de qualidade e é entregue com perfeição.</p>
+        <div class="stat-item">
+          <span class="stat-number" data-target="48">0</span><span class="plus">h</span>
+          <span class="stat-label">Prazo Médio Envio</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="100">0</span><span class="plus">%</span>
+          <span class="stat-label">Satisfação Garantida</span>
         </div>
       </div>
     </section>
 
-    <section class="quote-section" id="orcamento">
-      <div class="quote-card reveal">
-        <div class="section-header" style="margin-bottom: 32px;">
-          <h2 class="section-title">TEM UMA IDEIA?</h2>
-          <p class="section-subtitle">Conte o que você quer criar.</p>
-        </div>
-        <form id="quoteForm" onsubmit="handleQuoteSubmit(event)">
-          <div class="form-group">
-            <label class="form-label" for="formName">Nome</label>
-            <input type="text" id="formName" class="form-input" placeholder="Seu nome completo" required>
+    <!-- CATÁLOGO DE SERVIÇOS & CARDS -->
+    <section class="catalog-section" id="catalog">
+      <div class="section-header">
+        <span class="badge">PRODUTOS & SERVIÇOS</span>
+        <h2 class="section-title">SOLUÇÕES EM IMPRESSÃO 3D</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <!-- GRID DOS CARDS FINOS E ALTOS -->
+      <div class="cards-grid">
+        
+        <!-- CARD 1 -->
+        <article class="card-tall" data-category="industrial">
+          <div class="card-badge">INDUSTRIAL</div>
+          <div class="card-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Prototipagem Industrial SLA/FDM" loading="lazy">
+            <div class="card-overlay-effect"></div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="formContact">Instagram ou e-mail</label>
-            <input type="text" id="formContact" class="form-input" placeholder="@seuusuario ou email@dominio.com" required>
+          <div class="card-body">
+            <h3 class="card-title">Prototipagem Técnica SLA</h3>
+            <p class="card-description">Desenvolvimento de protótipos em resina engenheirada com tolerância dimensional na escala de mícrons para testes funcionais complexos.</p>
+            <ul class="card-specs">
+              <li><strong>Resolução:</strong> 0.025mm</li>
+              <li><strong>Material:</strong> Resina Tough / ABS-Like</li>
+              <li><strong>Acabamento:</strong> UV Cured + Lixamento</li>
+            </ul>
+            <div class="card-footer">
+              <div class="price-container">
+                <span class="price-label">A partir de</span>
+                <span class="price-value">R$ 189,00</span>
+              </div>
+              <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20Prototipagem%20Técnica%20SLA." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <svg viewBox="0 0 24 24" class="wa-icon"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                SOLICITAR VIA WHATSAPP
+              </a>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="formDesc">Descrição do projeto</label>
-            <textarea id="formDesc" class="form-textarea" placeholder="Descreva tamanhos, cores e detalhes da peça que você deseja criar..." required></textarea>
+        </article>
+
+        <!-- CARD 2 -->
+        <article class="card-tall" data-category="art">
+          <div class="card-badge">COLECIONÁVEIS</div>
+          <div class="card-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=600&q=80" alt="Action Figures Custom" loading="lazy">
+            <div class="card-overlay-effect"></div>
           </div>
-          <button type="submit" class="btn-submit">Solicitar orçamento &rarr;</button>
+          <div class="card-body">
+            <h3 class="card-title">Action Figures & Art 8K</h3>
+            <p class="card-description">Estátuas e figures colecionáveis impressas em ultra-resolução 8K. Detalhes anatômicos e superfícies perfeitamente lisas.</p>
+            <ul class="card-specs">
+              <li><strong>Resolução:</strong> 8K Resin Master</li>
+              <li><strong>Pintura:</strong> Primer ou Aerografia</li>
+              <li><strong>Escala:</strong> 1/6, 1/10 ou Custom</li>
+            </ul>
+            <div class="card-footer">
+              <div class="price-container">
+                <span class="price-label">A partir de</span>
+                <span class="price-value">R$ 320,00</span>
+              </div>
+              <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20Action%20Figures." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <svg viewBox="0 0 24 24" class="wa-icon"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                SOLICITAR VIA WHATSAPP
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 3 -->
+        <article class="card-tall" data-category="replacement">
+          <div class="card-badge">REPOSIÇÃO</div>
+          <div class="card-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80" alt="Peças Mecânicas de Reposição" loading="lazy">
+            <div class="card-overlay-effect"></div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Peças Mecânicas FDM</h3>
+            <p class="card-description">Substituição de peças originais quebradas ou fora de linha. Engrenagens, suportes e gabaritos em polímeros de engenharia.</p>
+            <ul class="card-specs">
+              <li><strong>Polímeros:</strong> PETG, Nylon CF, ABS</li>
+              <li><strong>Preenchimento:</strong> Até 100% Infill</li>
+              <li><strong>Resistência:</strong> Alta Térmica/Mecânica</li>
+            </ul>
+            <div class="card-footer">
+              <div class="price-container">
+                <span class="price-label">A partir de</span>
+                <span class="price-value">R$ 115,00</span>
+              </div>
+              <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20Peças%20Mecânicas." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <svg viewBox="0 0 24 24" class="wa-icon"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                SOLICITAR VIA WHATSAPP
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 4 -->
+        <article class="card-tall" data-category="architecture">
+          <div class="card-badge">ARQUITETURA</div>
+          <div class="card-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" alt="Maquetes Arquitetônicas" loading="lazy">
+            <div class="card-overlay-effect"></div>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">Maquetes Físicas 3D</h3>
+            <p class="card-description">Representação volumétrica precisa para projetos de arquitetura e urbanismo, cortados em múltiplos módulos expansíveis.</p>
+            <ul class="card-specs">
+              <li><strong>Escalas:</strong> 1:50, 1:100, 1:200</li>
+              <li><strong>Acabamento:</strong> Monocromático / Color</li>
+              <li><strong>Precisão:</strong> Laser & 3D Hybrids</li>
+            </ul>
+            <div class="card-footer">
+              <div class="price-container">
+                <span class="price-label">A partir de</span>
+                <span class="price-value">R$ 450,00</span>
+              </div>
+              <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20Maquetes." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <svg viewBox="0 0 24 24" class="wa-icon"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                SOLICITAR VIA WHATSAPP
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CALCULADORA RÁPIDA DE ORÇAMENTO -->
+    <section class="calculator-section" id="calculator">
+      <div class="calc-card">
+        <h2>Simulador de Orçamento Estimado</h2>
+        <p>Selecione a tecnologia e o peso estimado do seu arquivo STL/OBJ</p>
+        
+        <form id="quote-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="tech-select">Tecnologia de Impressão</label>
+            <select id="tech-select" class="form-control">
+              <option value="fdm">FDM (Filamento - Projetos Gerais)</option>
+              <option value="sla">SLA (Resina - Altíssima Precisão)</option>
+              <option value="nylon">SLS (Sinterização a Laser - Industrial)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="weight-range">Peso Estimado (Gramas): <span id="weight-display">50g</span></label>
+            <input type="range" id="weight-range" min="10" max="1000" step="10" value="50" class="slider">
+          </div>
+
+          <div class="calc-result">
+            <span>Estimativa de Investimento:</span>
+            <div id="calc-price-output" class="dynamic-price">R$ 45,00</div>
+          </div>
+
+          <button id="btn-submit-calc" class="btn-primary-block">ENVIAR ARQUIVO PARA ANÁLISE TÉCNICA</button>
         </form>
       </div>
     </section>
 
-    <footer class="footer">
-      <div class="footer-grid">
-        <div>
-          <a href="#inicio" class="footer-brand">Conexão<span>3D</span></a>
-          <p class="footer-text">
-            Especialistas em fabricação digital, prototipagem ágil, miniaturas detalhadas e itens decorativos exclusivos. Transformando conceitos digitais em objetos físicos reais.
-          </p>
-        </div>
-        <div>
-          <h4 class="footer-title">Navegação</h4>
-          <ul class="footer-links">
-            <li><a href="#inicio">Início</a></li>
-            <li><a href="#sobre">Sobre Nós</a></li>
-            <li><a href="#produtos">Serviços</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-title">Serviços</h4>
-          <ul class="footer-links">
-            <li><a href="#produtos">Impressão 3D</a></li>
-            <li><a href="#produtos">Miniaturas</a></li>
-            <li><a href="#produtos">Decoração</a></li>
-            <li><a href="#orcamento">Criação Personalizada</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-title">Contato & Redes</h4>
-          <ul class="footer-links">
-            <li><a href="mailto:Cristvnx577@gmail.com">Cristvnx577@gmail.com</a></li>
-            <li><a href="https://instagram.com/sitefydesign" target="_blank" rel="noopener noreferrer">Instagram: @Conexao3d_</a></li>
-            <li style="color: #6B7280; font-size: 0.85rem; margin-top: 12px;">Atendimento em todo o Brasil</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <div>&copy; 2026 Conexão3D. Todos os direitos reservados.</div>
-        <div>Desenvolvido com excelência técnica.</div>
-      </div>
-    </footer>
+  </main>
 
-  </div>
+  <footer class="main-footer">
+    <div class="footer-content">
+      <p>&copy; 2026 CONEXÃO 3D. Todos os direitos reservados. Tecnologia, Precisão e Design 3D.</p>
+    </div>
+  </footer>
 
-  <script>
-    /* ==========================================================================
-       CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
-       ========================================================================== */
-    const WHATSAPP_NUMBER = "COLOQUE_SEU_NUMERO_AQUI";
-
-    const PRODUCTS = [
-      { id: 1, name: "Brinquedos Articulados", price: "R$ 39,90", desc: "Peças divertidas impressas em uma única etapa com articulações móveis." },
-      { id: 2, name: "Chaveiros Exclusivos", price: "R$ 14,90", desc: "Acessórios personalizados com logotipos, nomes ou formatos especiais." },
-      { id: 3, name: "Bonecos & Figures", price: "R$ 49,90", desc: "Personagens detalhados para colecionadores e fãs de cultura pop." },
-      { id: 4, name: "Miniaturas de RPG", price: "R$ 34,90", desc: "Altíssima resolução de detalhes para enriquecer suas mesas de jogo." },
-      { id: 5, name: "Decoração Futurista", price: "R$ 59,90", desc: "Luminárias, esculturas geométricas e itens modernos para ambientes." },
-      { id: 6, name: "Projetos Personalizados", price: "R$ 79,90", desc: "Prototipagem técnica e peças funcionais sob medida para sua necessidade." },
-      { id: 7, name: "Vasos & Cachepôs", price: "R$ 44,90", desc: "Design orgânico e geométrico perfeito para plantas e interiores." },
-      { id: 8, name: "Organizadores Setup", price: "R$ 29,90", desc: "Suportes de fone, cabos e acessórios para otimizar sua mesa de trabalho." },
-      { id: 9, name: "Lithophanes & Fotos 3D", price: "R$ 39,90", desc: "Transforme fotografias em relevos 3D incríveis revelados pela luz." }
-    ];
-
-    /* ==========================================================================
-       RENDERIZAÇÃO DE PRODUTOS
-       ========================================================================== */
-    function renderProducts() {
-      const container = document.getElementById('productsGrid');
-      if (!container) return;
-
-      container.innerHTML = PRODUCTS.map(prod => {
-        const msg = encodeURIComponent(`Olá! Tenho interesse no produto: ${prod.name}. Gostaria de saber mais sobre preço e disponibilidade.`);
-        const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-        
-        return `
-          <div class="product-card reveal">
-            <div class="product-image-container">
-              <div class="product-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-                <span>${prod.name}</span>
-              </div>
-            </div>
-            <div class="product-info">
-              <h3 class="product-name">${prod.name}</h3>
-              <p class="product-desc">${prod.desc}</p>
-              <div class="product-footer">
-                <span class="product-price">${prod.price}</span>
-                <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="btn-card">Quero este</a>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    /* ==========================================================================
-       ENVIO DE ORÇAMENTO PARA WHATSAPP
-       ========================================================================== */
-    function handleQuoteSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('formName').value.trim();
-      const contact = document.getElementById('formContact').value.trim();
-      const desc = document.getElementById('formDesc').value.trim();
-
-      const text = `*NOVO ORÇAMENTO - CONEXÃO3D*\n\n*Nome:* ${name}\n*Contato:* ${contact}\n*Descrição do Projeto:* ${desc}`;
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-      
-      window.open(url, '_blank');
-    }
-
-    /* ==========================================================================
-       NAVBAR E TEMAS NA ROLAGEM
-       ========================================================================== */
-    function setupNavigation() {
-      const navbar = document.getElementById('navbar');
-      const darkSection = document.getElementById('darkSection');
-      const menuToggle = document.getElementById('menuToggle');
-      const navLinks = document.getElementById('navLinks');
-
-      // Menu Mobile
-      menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-      });
-
-      // Fechar menu mobile ao clicar no link
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          navLinks.classList.remove('active');
-        });
-      });
-
-      // Detecção da seção escura para alteração de tema da Navbar
-      window.addEventListener('scroll', () => {
-        if (!darkSection || !navbar) return;
-        const rect = darkSection.getBoundingClientRect();
-        if (rect.top <= 72) {
-          navbar.classList.add('dark-theme');
-        } else {
-          navbar.classList.remove('dark-theme');
-        }
-      });
-    }
-
-    /* ==========================================================================
-       ANIMAÇÃO AO ROLAR (REVEAL)
-       ========================================================================== */
-    function setupScrollObserver() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      }, { threshold: 0.1 });
-
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }
-
-    /* ==========================================================================
-       CANVAS DA IMPRESSORA 3D REALISTA
-       ========================================================================== */
-    function initPrinterAnimation() {
-      const canvas = document.getElementById('printerCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      // Ajuste de DPI
-      function resizeCanvas() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-      }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
-      // Parâmetros de Tempo do Ciclo
-      const PRINT_DURATION = 10000; // 10 segundos imprimindo
-      const PAUSE_DURATION = 3000;  // 3 segundos parada
-      const TOTAL_CYCLE = PRINT_DURATION + PAUSE_DURATION;
-      let startTime = null;
-
-      // Geometria da Impressora
-      const p = {
-        width: 320,
-        height: 380,
-        x: 0,
-        y: 0,
-        bedY: 310,
-        topY: 50,
-        leftX: 50,
-        rightX: 270,
-        spoolX: 160,
-        spoolY: 30,
-        spoolRadius: 26
-      };
-
-      // Cálculo Unificado de Progresso e Posição
-      function getPrinterState(time) {
-        if (!startTime) startTime = time;
-        const elapsed = (time - startTime) % TOTAL_CYCLE;
-        
-        let progress = 0; // 0.0 até 1.0 (altura do boneco)
-        let isPrinting = false;
-
-        if (elapsed < PRINT_DURATION) {
-          progress = elapsed / PRINT_DURATION;
-          isPrinting = true;
-        } else {
-          progress = 1.0;
-          isPrinting = false;
-        }
-
-        // Variável centralizada para altura atual da impressão
-        const maxFigureHeight = 110;
-        const currentPrintHeight = progress * maxFigureHeight;
-        
-        // Posição vertical do Bico (sobe do leito para cima)
-        const nozzleY = p.bedY - currentPrintHeight;
-
-        // Movimento Horizontal Rasterizado do Bico (Sinergia com a camada)
-        let nozzleX = 160;
-        if (isPrinting) {
-          const scanFrequency = 35; // Frequência do movimento x
-          const currentWidthAtHeight = getFigureWidthAt(progress) * 0.8;
-          const sweep = Math.sin(progress * scanFrequency * Math.PI * 2);
-          nozzleX = 160 + sweep * (currentWidthAtHeight / 2);
-        }
-
-        return { progress, isPrinting, nozzleX, nozzleY, currentPrintHeight };
-      }
-
-      // Geometria da Peça (Boneco Estilizado)
-      function getFigureWidthAt(progress) {
-        // Retorna a largura estimada da camada para limitar o sweep do bico
-        if (progress < 0.25) return 36; // Pernas
-        if (progress < 0.65) return 44; // Tronco & Braços
-        if (progress < 0.75) return 18; // Pescoço
-        return 38;                     // Cabeça
-      }
-
-      function drawFigure(progress) {
-        const centerX = 160;
-        const baseY = p.bedY;
-
-        ctx.save();
-        ctx.fillStyle = '#8B5CF6';
-        ctx.strokeStyle = '#7C3AED';
-        ctx.lineWidth = 1;
-
-        // Molda a renderização conforme a camada atual (Crescimento de baixo para cima)
-        
-        // 1. Pernas (0% a 25%)
-        if (progress > 0) {
-          const legH = Math.min(progress / 0.25, 1) * 30;
-          // Perna Esquerda
-          ctx.fillRect(centerX - 16, baseY - legH, 10, legH);
-          ctx.strokeRect(centerX - 16, baseY - legH, 10, legH);
-          // Perna Direita
-          ctx.fillRect(centerX + 6, baseY - legH, 10, legH);
-          ctx.strokeRect(centerX + 6, baseY - legH, 10, legH);
-        }
-
-        // 2. Tronco Contínuo (25% a 60%)
-        if (progress > 0.25) {
-          const torsoProgress = Math.min((progress - 0.25) / 0.35, 1);
-          const torsoH = torsoProgress * 40;
-          const torsoY = baseY - 30 - torsoH;
-          ctx.fillRect(centerX - 18, torsoY, 36, torsoH);
-          ctx.strokeRect(centerX - 18, torsoY, 36, torsoH);
-        }
-
-        // 3. Braços (40% a 65%)
-        if (progress > 0.40) {
-          const armProgress = Math.min((progress - 0.40) / 0.25, 1);
-          const armH = armProgress * 32;
-          const armY = baseY - 48 - armH;
-          // Braço Esquerdo
-          ctx.fillRect(centerX - 26, armY, 7, armH);
-          ctx.strokeRect(centerX - 26, armY, 7, armH);
-          // Braço Direito
-          ctx.fillRect(centerX + 19, armY, 7, armH);
-          ctx.strokeRect(centerX + 19, armY, 7, armH);
-        }
-
-        // 4. Pescoço (65% a 75%)
-        if (progress > 0.65) {
-          const neckProgress = Math.min((progress - 0.65) / 0.10, 1);
-          const neckH = neckProgress * 10;
-          const neckY = baseY - 70 - neckH;
-          ctx.fillRect(centerX - 6, neckY, 12, neckH);
-          ctx.strokeRect(centerX - 6, neckY, 12, neckH);
-        }
-
-        // 5. Cabeça e Detalhes (75% a 100%)
-        if (progress > 0.75) {
-          const headProgress = Math.min((progress - 0.75) / 0.25, 1);
-          const headH = headProgress * 30;
-          const headY = baseY - 80 - headH;
-          ctx.fillRect(centerX - 16, headY, 32, headH);
-          ctx.strokeRect(centerX - 16, headY, 32, headH);
-
-          // Olhos (Surgem no final da cabeça)
-          if (headProgress > 0.6) {
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(centerX - 10, headY + 10, 6, 6);
-            ctx.fillRect(centerX + 4, headY + 10, 6, 6);
-          }
-        }
-
-        ctx.restore();
-      }
-
-      // Loop de Desenho Principal
-      function drawFrame(time) {
-        const state = getPrinterState(time);
-
-        // Limpar tela
-        const rect = canvas.parentElement.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-
-        // Centralizar máquina no canvas
-        ctx.save();
-        ctx.translate((rect.width - p.width) / 2, (rect.height - p.height) / 2);
-
-        // --- 1. MESA DE IMPRESSÃO (BASE) ---
-        // Sombra da mesa
-        ctx.fillStyle = 'rgba(0,0,0,0.06)';
-        ctx.fillRect(p.leftX - 10, p.bedY + 12, (p.rightX - p.leftX) + 20, 10);
-
-        // Mesa preta
-        ctx.fillStyle = '#18181B';
-        ctx.fillRect(p.leftX - 10, p.bedY, (p.rightX - p.leftX) + 20, 10);
-        ctx.fillStyle = '#27272A';
-        ctx.fillRect(p.leftX - 10, p.bedY, (p.rightX - p.leftX) + 20, 2);
-
-        // --- 2. PEÇA SENDO IMPRESSA ---
-        drawFigure(state.progress);
-
-        // --- 3. ESTRUTURA VERTICAL DA IMPRESSORA ( Open-Frame ) ---
-        // Pilar Esquerdo
-        ctx.fillStyle = '#E4E4E7';
-        ctx.fillRect(p.leftX, p.topY, 16, p.bedY - p.topY);
-        ctx.fillStyle = '#D4D4D8';
-        ctx.fillRect(p.leftX + 12, p.topY, 4, p.bedY - p.topY);
-
-        // Pilar Direito
-        ctx.fillStyle = '#E4E4E7';
-        ctx.fillRect(p.rightX - 16, p.topY, 16, p.bedY - p.topY);
-        ctx.fillStyle = '#D4D4D8';
-        ctx.fillRect(p.rightX - 4, p.topY, 4, p.bedY - p.topY);
-
-        // Travessa Superior
-        ctx.fillStyle = '#E4E4E7';
-        ctx.fillRect(p.leftX - 10, p.topY, (p.rightX - p.leftX) + 20, 16);
-
-        // Trilho de Guia Horizontal
-        ctx.fillStyle = '#A1A1AA';
-        ctx.fillRect(p.leftX + 16, state.nozzleY - 4, p.rightX - p.leftX - 32, 8);
-
-        // --- 4. CARRETEL DE FILAMENTO (PARTE SUPERIOR) ---
-        ctx.save();
-        ctx.translate(p.spoolX, p.spoolY);
-        
-        // Rotação Lenta vinculada ao tempo
-        const spoolAngle = state.isPrinting ? (time * 0.0005) : 0;
-        ctx.rotate(spoolAngle);
-
-        // Flange traseira
-        ctx.fillStyle = '#27272A';
-        ctx.beginPath();
-        ctx.arc(0, 0, p.spoolRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Rolo de Filamento Roxo Enrolado
-        ctx.fillStyle = '#8B5CF6';
-        ctx.beginPath();
-        ctx.arc(0, 0, p.spoolRadius - 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Flange frontal (Eixo e furos)
-        ctx.fillStyle = '#09090B';
-        ctx.beginPath();
-        ctx.arc(0, 0, 10, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#E4E4E7';
-        for (let i = 0; i < 4; i++) {
-          ctx.rotate(Math.PI / 2);
-          ctx.beginPath();
-          ctx.arc(14, 0, 3, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-
-        // --- 5. FILAMENTO (TENSÃO E CONEXÃO) ---
-        // Do carretel até o extrusor
-        ctx.strokeStyle = '#8B5CF6';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(p.spoolX - p.spoolRadius + 4, p.spoolY);
-        ctx.bezierCurveTo(
-          p.spoolX - 40, p.spoolY + 20,
-          state.nozzleX - 15, state.nozzleY - 30,
-          state.nozzleX - 8, state.nozzleY - 18
-        );
-        ctx.stroke();
-
-        // --- 6. EXTRUSOR E BICO METÁLICO ---
-        const exX = state.nozzleX;
-        const exY = state.nozzleY;
-
-        // Bloco do Extrusor
-        ctx.fillStyle = '#18181B';
-        ctx.fillRect(exX - 18, exY - 20, 36, 22);
-        ctx.fillStyle = '#3F3F46';
-        ctx.fillRect(exX - 18, exY - 20, 36, 4);
-
-        // LED / Luz do Extrusor
-        ctx.fillStyle = state.isPrinting ? '#10B981' : '#EF4444';
-        ctx.fillRect(exX + 10, exY - 14, 4, 4);
-
-        // Bloco aquecedor & Bico de Latão
-        ctx.fillStyle = '#D97706'; // Latão
-        ctx.beginPath();
-        ctx.moveTo(exX - 5, exY + 2);
-        ctx.lineTo(exX + 5, exY + 2);
-        ctx.lineTo(exX + 2, exY + 8);
-        ctx.lineTo(exX - 2, exY + 8);
-        ctx.closePath();
-        ctx.fill();
-
-        // Brilho no bico (Luz quente de extrusão)
-        if (state.isPrinting) {
-          ctx.fillStyle = '#FBBF24';
-          ctx.beginPath();
-          ctx.arc(exX, exY + 8, 2, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Filamento Extrudado Saindo do Bico para a Camada
-          ctx.strokeStyle = '#B58CFF';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.moveTo(exX, exY + 8);
-          ctx.lineTo(exX, exY + 10);
-          ctx.stroke();
-        }
-
-        ctx.restore();
-        requestAnimationFrame(drawFrame);
-      }
-
-      requestAnimationFrame(drawFrame);
-    }
-
-    /* ==========================================================================
-       INICIALIZAÇÃO GERAL
-       ========================================================================== */
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProducts();
-      setupNavigation();
-      setupScrollObserver();
-      initPrinterAnimation();
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
