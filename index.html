@@ -11,34 +11,37 @@
     <meta property="og:description" content="Prompts inteligentes para potencializar seus resultados com Inteligência Artificial.">
     <meta property="og:type" content="website">
 
-    <!-- Favicon (Data URI SVG) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050608'/><path d='M30 25 H70 V38 H45 V48 H65 V60 H45 V75 H30 Z' fill='%23164DFF'/></svg>">
 
     <!-- Fonts Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* ==========================================================================
-           RESET & CORE VARIABLES
+           RESET & CORE VARIABLES (ESCALA AUMENTADA 1.7X)
            ========================================================================== */
         :root {
+            --bg-light: #f8fafc;
             --bg-dark: #050608;
-            --bg-card: #080a0f;
-            --bg-card-hover: #0b0f17;
+            --bg-card: #090c12;
+            --bg-card-hover: #0e131d;
             --navy-dark: #061a3a;
-            --navy-glow: rgba(11, 59, 255, 0.25);
+            --navy-glow: rgba(11, 59, 255, 0.3);
             --blue-accent: #0b3bff;
             --blue-bright: #164dff;
             --blue-light: #5282ff;
             
-            --text-primary: #ffffff;
-            --text-secondary: #a7afbf;
+            --text-dark-primary: #0f172a;
+            --text-dark-secondary: #475569;
+            --text-light-primary: #ffffff;
+            --text-light-secondary: #a7afbf;
             --text-muted: #687184;
 
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-active: rgba(22, 77, 255, 0.5);
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --border-active: rgba(22, 77, 255, 0.6);
 
             --font-main: 'Inter', system-ui, -apple-system, sans-serif;
             --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
@@ -54,32 +57,16 @@
 
         html {
             scroll-behavior: smooth;
-            font-size: 16px;
+            font-size: 18px; /* Proporção geral aumentada */
         }
 
         body {
             background-color: var(--bg-dark);
-            color: var(--text-primary);
+            color: var(--text-light-primary);
             font-family: var(--font-main);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             position: relative;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(11, 59, 255, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 100% 60%, rgba(6, 26, 58, 0.4) 0%, transparent 40%);
-            background-attachment: fixed;
-        }
-
-        /* Ambient Noise Grid Effect */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
         }
 
         a {
@@ -89,9 +76,9 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
             position: relative;
             z-index: 1;
         }
@@ -101,52 +88,52 @@
            ========================================================================== */
         h1, h2, h3, h4, .brand-font {
             font-family: var(--font-display);
-            letter-spacing: -0.02em;
+            letter-spacing: -0.025em;
         }
 
         .section-header {
             text-align: center;
-            max-width: 700px;
-            margin: 0 auto 60px auto;
+            max-width: 850px;
+            margin: 0 auto 80px auto;
         }
 
         .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.15;
         }
 
         .section-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.125rem;
+            font-size: 1.3rem;
+            line-height: 1.6;
         }
 
         .highlight-blue {
             color: var(--blue-bright);
-            background: linear-gradient(135deg, #ffffff 30%, var(--blue-light) 100%);
+            background: linear-gradient(135deg, var(--blue-bright) 30%, var(--blue-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .badge {
             display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 30px;
             background: rgba(11, 59, 255, 0.1);
             border: 1px solid rgba(22, 77, 255, 0.3);
-            color: var(--blue-light);
-            font-size: 0.85rem;
-            font-weight: 600;
+            color: var(--blue-bright);
+            font-size: 0.95rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
         }
 
         /* Linha Tripla Tricolor (Azul, Branco, Preto) */
         .tri-border-line {
             position: relative;
-            padding-left: 20px;
+            padding-left: 24px;
         }
 
         .tri-border-line::before {
@@ -155,10 +142,10 @@
             left: 0;
             top: 0;
             bottom: 0;
-            width: 5px;
+            width: 6px;
             border-radius: 4px;
             background: linear-gradient(180deg, var(--blue-bright) 0%, #ffffff 50%, #000000 100%);
-            box-shadow: 0 0 10px rgba(22, 77, 255, 0.4);
+            box-shadow: 0 0 12px rgba(22, 77, 255, 0.5);
         }
 
         /* Buttons */
@@ -166,52 +153,58 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.95rem;
+            padding: 18px 36px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
             transition: all 0.3s var(--transition-smooth);
             cursor: pointer;
             border: none;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--blue-accent), var(--blue-bright));
             color: #fff;
-            box-shadow: 0 4px 20px rgba(11, 59, 255, 0.35);
+            box-shadow: 0 6px 25px rgba(11, 59, 255, 0.4);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(22, 77, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(22, 77, 255, 0.6);
             background: linear-gradient(135deg, var(--blue-bright), var(--blue-light));
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-primary);
-            border: 1px solid var(--border-subtle);
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark-primary);
+            border: 1px solid rgba(0, 0, 0, 0.15);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
         }
 
         /* ==========================================================================
-           NAVBAR
+           1. TOP HALF: LIGHT THEME (INÍCIO DO SITE BRANCO)
            ========================================================================== */
+        .light-wrapper {
+            background-color: var(--bg-light);
+            color: var(--text-dark-primary);
+            position: relative;
+            padding-bottom: 80px;
+        }
+
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(5, 6, 8, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(248, 250, 252, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
         }
 
@@ -219,50 +212,50 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 76px;
+            height: 90px;
         }
 
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.25rem;
+            gap: 14px;
+            font-weight: 800;
+            font-size: 1.4rem;
             letter-spacing: 0.05em;
+            color: var(--text-dark-primary);
         }
 
         .logo-box {
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--navy-dark), var(--blue-accent));
-            border: 1px solid var(--blue-bright);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             font-family: var(--font-display);
             font-weight: 800;
-            font-size: 1.2rem;
-            box-shadow: 0 0 12px var(--navy-glow);
+            font-size: 1.4rem;
+            box-shadow: 0 4px 15px rgba(11, 59, 255, 0.3);
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 32px;
+            gap: 40px;
             list-style: none;
         }
 
         .nav-links a {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: var(--text-dark-secondary);
+            font-size: 1rem;
+            font-weight: 600;
             transition: color 0.2s;
         }
 
         .nav-links a:hover {
-            color: var(--text-primary);
+            color: var(--blue-bright);
         }
 
         .hamburger {
@@ -276,165 +269,144 @@
 
         .hamburger span {
             display: block;
-            width: 24px;
-            height: 2px;
-            background-color: var(--text-primary);
-            margin: 5px 0;
+            width: 28px;
+            height: 3px;
+            background-color: var(--text-dark-primary);
+            margin: 6px 0;
             transition: all 0.3s ease;
         }
 
-        /* ==========================================================================
-           HERO SECTION
-           ========================================================================== */
+        /* Hero Light */
         .hero {
-            padding: 160px 0 100px 0;
-            position: relative;
+            padding: 200px 0 120px 0;
         }
 
         .hero-grid {
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
-            gap: 60px;
+            gap: 80px;
             align-items: center;
         }
 
         .hero-title {
-            font-size: 3.25rem;
-            line-height: 1.15;
-            font-weight: 800;
-            margin-bottom: 24px;
+            font-size: 4.2rem;
+            line-height: 1.1;
+            font-weight: 900;
+            margin-bottom: 28px;
+            color: var(--text-dark-primary);
         }
 
         .hero-description {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            margin-bottom: 36px;
-            max-width: 540px;
+            font-size: 1.3rem;
+            color: var(--text-dark-secondary);
+            margin-bottom: 44px;
+            max-width: 620px;
         }
 
         .hero-actions {
             display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
+            gap: 20px;
+            margin-bottom: 50px;
             flex-wrap: wrap;
         }
 
         .hero-metrics {
             display: flex;
-            gap: 24px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-subtle);
+            gap: 32px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .metric-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark-secondary);
         }
 
         .metric-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: var(--blue-bright);
-            box-shadow: 0 0 8px var(--blue-bright);
+            box-shadow: 0 0 10px var(--blue-bright);
         }
 
-        /* Visual AI Card Showcase com Animação Flutuante */
         .hero-visual {
-            position: relative;
             animation: floatAnimation 5s ease-in-out infinite;
         }
 
         @keyframes floatAnimation {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-12px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-16px); }
         }
 
         .ai-card {
-            background: rgba(8, 10, 15, 0.8);
-            border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 24px;
-            position: relative;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px var(--navy-glow);
-            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08), 0 0 30px rgba(11, 59, 255, 0.1);
         }
 
         .ai-card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .ai-card-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .ai-prompt-box {
-            background: rgba(5, 6, 8, 0.6);
+            background: #f1f5f9;
             border: 1px solid rgba(22, 77, 255, 0.2);
-            border-radius: 10px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 20px;
             font-family: monospace;
-            font-size: 0.85rem;
-            color: #d1d5db;
-            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: var(--text-dark-primary);
+            margin-bottom: 20px;
             position: relative;
         }
 
         .ai-prompt-box::before {
             content: "PROMPT";
             position: absolute;
-            top: -9px;
-            right: 12px;
-            background: var(--blue-accent);
+            top: -10px;
+            right: 16px;
+            background: var(--blue-bright);
             color: #fff;
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 4px;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 6px;
             font-weight: bold;
         }
 
         .ai-response-sim {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .sim-line {
-            height: 8px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.1);
+            height: 10px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.08);
             width: 100%;
         }
 
         .sim-line.short { width: 60%; }
-        .sim-line.blue { background: rgba(22, 77, 255, 0.3); width: 85%; }
+        .sim-line.blue { background: rgba(22, 77, 255, 0.4); width: 85%; }
 
-        /* ==========================================================================
-           STATS BAR
-           ========================================================================== */
+        /* Stats Bar Light */
         .stats-bar {
-            padding: 30px 0;
-            background: rgba(8, 10, 15, 0.5);
-            border-y: 1px solid var(--border-subtle);
-            margin-bottom: 100px;
+            padding: 40px 0;
+            background: #ffffff;
+            border-y: 1px solid rgba(0, 0, 0, 0.06);
+            margin-bottom: 60px;
         }
 
         .stats-flex {
@@ -442,125 +414,186 @@
             justify-content: space-around;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .stat-item {
-            text-align: center;
+            gap: 30px;
         }
 
         .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark-primary);
             font-family: var(--font-display);
         }
 
         .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-dark-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            font-weight: 600;
         }
 
-        /* ==========================================================================
-           BENEFITS
-           ========================================================================== */
+        /* Benefícios Light */
         .benefits {
-            padding: 60px 0 100px 0;
+            padding: 80px 0 120px 0;
         }
 
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 32px;
         }
 
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 32px;
+        .card-light {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 22px;
+            padding: 40px;
             transition: all 0.3s var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--border-active);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(11, 59, 255, 0.15);
-            background: var(--bg-card-hover);
+        .card-light:hover {
+            transform: translateY(-6px);
+            border-color: var(--blue-bright);
+            box-shadow: 0 20px 40px rgba(11, 59, 255, 0.12);
         }
 
         .card-number {
             font-family: var(--font-display);
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             color: var(--blue-bright);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: block;
         }
 
         .card-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(11, 59, 255, 0.1);
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            background: rgba(11, 59, 255, 0.08);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            color: var(--blue-light);
+            margin-bottom: 24px;
+            color: var(--blue-bright);
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-dark-primary);
         }
 
         .card-desc {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+            color: var(--text-dark-secondary);
+            font-size: 1.05rem;
         }
 
         /* ==========================================================================
-           TIMELINE VERTICAL - PROCESSO (ESTILO SITEFY COM 7 PASSOS)
+           2. PÍLULA DIVISORA VERTICAL ("FLAN" / "shAI") EXACTAMENTE IGUAL À FOTO
            ========================================================================== */
+        .divider-section {
+            position: relative;
+            height: 240px;
+            background: linear-gradient(180deg, var(--bg-light) 50%, var(--bg-dark) 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .split-pill {
+            width: 90px;
+            height: 220px;
+            background: transparent;
+            border-radius: 45px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3), 0 0 25px rgba(11, 59, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Parte de Cima (Branca com Texto Preto "FLAN") */
+        .pill-top {
+            flex: 1;
+            background: #ffffff;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            line-height: 1.1;
+            padding-top: 15px;
+        }
+
+        /* Parte de Baixo (Preta com Texto Branco "shAI") */
+        .pill-bottom {
+            flex: 1;
+            background: #050608;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 0.1em;
+            line-height: 1.1;
+            padding-bottom: 15px;
+            text-shadow: 0 0 10px var(--blue-bright);
+        }
+
+        /* ==========================================================================
+           3. BOTTOM HALF: DARK THEME (METADE PRETA DO SITE)
+           ========================================================================== */
+        .dark-wrapper {
+            background-color: var(--bg-dark);
+            color: var(--text-light-primary);
+            padding-top: 100px;
+            position: relative;
+        }
+
+        /* TIMELINE DO PROCESSO (AUMENTADA 1.7X, CARDS GORDINHOS, LINHA TRANSPARENTE) */
         .process {
-            padding: 100px 0;
-            background: rgba(6, 26, 58, 0.1);
+            padding: 80px 0 160px 0;
             position: relative;
         }
 
         .timeline-container {
             position: relative;
-            max-width: 900px;
-            margin: 60px auto 0 auto;
+            max-width: 1050px;
+            margin: 80px auto 0 auto;
         }
 
-        /* Linha Vertical Central */
+        /* Linha Central Transparente e Discreta */
         .timeline-line {
             position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
-            width: 2px;
+            width: 3px;
             background: linear-gradient(180deg, 
-                rgba(11, 59, 255, 0.1) 0%, 
-                var(--blue-bright) 20%, 
-                var(--blue-bright) 80%, 
-                rgba(11, 59, 255, 0.1) 100%);
+                rgba(11, 59, 255, 0.05) 0%, 
+                rgba(22, 77, 255, 0.18) 20%, 
+                rgba(22, 77, 255, 0.18) 80%, 
+                rgba(11, 59, 255, 0.05) 100%);
             transform: translateX(-50%);
         }
 
         .timeline-step {
             position: relative;
             display: flex;
-            justify-content: flex-between;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             width: 100%;
         }
 
@@ -568,95 +601,95 @@
             margin-bottom: 0;
         }
 
-        /* Ponto de Brilho Central (Bolinha) */
+        /* Bolinha Iluminada Pulsante */
         .timeline-node {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: var(--blue-bright);
-            border: 4px solid var(--bg-dark);
-            box-shadow: 0 0 12px var(--blue-bright);
+            border: 5px solid var(--bg-dark);
+            box-shadow: 0 0 16px var(--blue-bright);
             z-index: 2;
         }
 
         .timeline-card-wrapper {
-            width: 45%;
+            width: 44%;
         }
 
         .timeline-step:nth-child(odd) .timeline-card-wrapper {
             margin-right: auto;
-            text-align: right;
         }
 
         .timeline-step:nth-child(even) .timeline-card-wrapper {
             margin-left: auto;
-            text-align: left;
         }
 
+        /* Cards Gordinhos e Legíveis com Bordas Arredondadas */
         .process-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 24px;
+            padding: 36px 40px; /* Padding Gordinho */
             position: relative;
             transition: all 0.3s var(--transition-smooth);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
         .process-card:hover {
             border-color: var(--border-active);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(11, 59, 255, 0.2);
+            background: var(--bg-card-hover);
         }
 
         .process-step-num {
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.85rem;
+            font-weight: 800;
             color: var(--blue-light);
             letter-spacing: 0.1em;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             display: block;
         }
 
         .process-title {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .process-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            font-size: 1.05rem;
+            color: var(--text-light-secondary);
+            line-height: 1.6;
         }
 
-        /* Ajustes das Linhas Tricolor nos cards ímpares/pares */
         .timeline-step:nth-child(odd) .process-card {
-            border-right: 3px solid var(--blue-bright);
+            border-right: 4px solid var(--blue-bright);
         }
         .timeline-step:nth-child(even) .process-card {
-            border-left: 3px solid var(--blue-bright);
+            border-left: 4px solid var(--blue-bright);
         }
 
-        /* ==========================================================================
-           PLANOS / PRICING
-           ========================================================================== */
+        /* PLANOS / PRICING */
         .pricing {
-            padding: 100px 0;
+            padding: 120px 0;
         }
 
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            gap: 36px;
             align-items: center;
         }
 
         .plan-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 20px;
-            padding: 40px 32px;
+            border-radius: 24px;
+            padding: 48px 36px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -665,80 +698,78 @@
 
         .plan-card:hover {
             border-color: var(--border-active);
-            transform: translateY(-5px);
+            transform: translateY(-6px);
         }
 
         .plan-card.featured {
-            background: linear-gradient(180deg, rgba(8, 10, 15, 0.95) 0%, rgba(6, 26, 58, 0.4) 100%);
+            background: linear-gradient(180deg, rgba(14, 19, 29, 0.95) 0%, rgba(6, 26, 58, 0.5) 100%);
             border: 2px solid var(--blue-bright);
-            box-shadow: 0 0 30px rgba(11, 59, 255, 0.2);
-            transform: scale(1.03);
+            box-shadow: 0 0 40px rgba(11, 59, 255, 0.25);
+            transform: scale(1.04);
         }
 
         .plan-card.featured:hover {
-            transform: scale(1.03) translateY(-5px);
+            transform: scale(1.04) translateY(-6px);
         }
 
         .featured-tag {
             position: absolute;
-            top: -14px;
+            top: -16px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, var(--blue-accent), var(--blue-bright));
             color: #fff;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 16px;
-            border-radius: 12px;
-            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 6px 20px;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
         }
 
         .plan-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
         }
 
         .plan-desc {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 24px;
-            min-height: 42px;
+            color: var(--text-light-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            min-height: 48px;
         }
 
         .plan-price {
-            font-size: 2.25rem;
-            font-weight: 800;
+            font-size: 2.6rem;
+            font-weight: 900;
             font-family: var(--font-display);
-            margin-bottom: 24px;
-            color: var(--text-primary);
+            margin-bottom: 28px;
+            color: var(--text-light-primary);
         }
 
         .plan-features {
             list-style: none;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
             flex-grow: 1;
         }
 
         .plan-features li {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
+            gap: 12px;
+            font-size: 1rem;
+            color: var(--text-light-secondary);
+            margin-bottom: 14px;
         }
 
-        .plan-features li check {
+        .plan-features li span.check {
             color: var(--blue-bright);
             font-weight: bold;
         }
 
-        /* ==========================================================================
-           TESTIMONIALS (INFINITE MARQUEE)
-           ========================================================================== */
+        /* DEPOIMENTOS (MARQUEE INFINITO) */
         .testimonials {
-            padding: 100px 0;
+            padding: 120px 0;
             overflow: hidden;
             position: relative;
         }
@@ -751,13 +782,12 @@
             padding: 20px 0;
         }
 
-        /* Fading mask nas bordas */
         .marquee-wrapper::before,
         .marquee-wrapper::after {
             content: "";
             position: absolute;
             top: 0;
-            width: 150px;
+            width: 200px;
             height: 100%;
             z-index: 2;
             pointer-events: none;
@@ -775,7 +805,7 @@
 
         .marquee-track {
             display: inline-flex;
-            gap: 24px;
+            gap: 30px;
             animation: marquee 40s linear infinite;
         }
 
@@ -789,11 +819,11 @@
         }
 
         .testimonial-card {
-            width: 320px;
+            width: 380px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 20px;
+            padding: 32px;
             white-space: normal;
             flex-shrink: 0;
             transition: border-color 0.3s ease;
@@ -804,132 +834,123 @@
         }
 
         .testimonial-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
+            font-size: 1.05rem;
+            color: var(--text-light-secondary);
+            margin-bottom: 20px;
             font-style: italic;
         }
 
         .testimonial-author {
-            font-weight: 600;
-            font-size: 0.875rem;
+            font-weight: 700;
+            font-size: 1rem;
         }
 
         .testimonial-role {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
-        /* ==========================================================================
-           ABOUT SECTION
-           ========================================================================== */
-        .about {
+        /* COMPARATIVO DE IMPACTO (CONTEÚDO ADICIONAL) */
+        .comparison {
             padding: 100px 0;
         }
 
-        .about-grid {
+        .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .about-text {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .node-flow {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .comp-card {
+            border-radius: 20px;
+            padding: 40px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 30px;
-            position: relative;
         }
 
-        .node-box {
-            background: rgba(11, 59, 255, 0.08);
-            border: 1px solid rgba(22, 77, 255, 0.2);
-            border-radius: 10px;
-            padding: 12px 20px;
-            text-align: center;
-            font-size: 0.85rem;
+        .comp-card.bad {
+            border-left: 4px solid #ef4444;
+        }
+
+        .comp-card.good {
+            border-left: 4px solid var(--blue-bright);
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(6, 26, 58, 0.3) 100%);
+        }
+
+        .comp-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
             font-weight: 700;
-            color: var(--text-primary);
         }
 
-        .node-arrow {
-            color: var(--blue-bright);
-            font-size: 1.2rem;
-            font-weight: bold;
+        .comp-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 1rem;
+            color: var(--text-light-secondary);
         }
 
-        /* ==========================================================================
-           FAQ ACCORDION INTERATIVO FLUIDO
-           ========================================================================== */
+        /* FAQ ACCORDION INTERATIVO */
         .faq {
-            padding: 100px 0;
+            padding: 120px 0;
         }
 
         .faq-accordion {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .faq-item {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
+            border-radius: 18px;
             overflow: hidden;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
+            transition: all 0.3s ease;
         }
 
         .faq-item.active {
             border-color: var(--border-active);
-            box-shadow: 0 4px 20px rgba(11, 59, 255, 0.15);
+            box-shadow: 0 6px 25px rgba(11, 59, 255, 0.18);
         }
 
-        /* Borda Tripla Tricolor nas perguntas FAQ */
         .faq-header {
             width: 100%;
-            padding: 20px 24px;
+            padding: 24px 30px;
             background: transparent;
             border: none;
-            color: var(--text-primary);
-            font-size: 1.05rem;
-            font-weight: 600;
+            color: var(--text-light-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
             text-align: left;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            outline: none;
             font-family: var(--font-display);
         }
 
         .faq-header-content {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
 
         .faq-icon {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--blue-light);
             transition: transform 0.4s var(--transition-smooth);
-            flex-shrink: 0;
+            font-size: 1.4rem;
         }
 
         .faq-item.active .faq-icon {
@@ -941,7 +962,7 @@
             display: grid;
             grid-template-rows: 0fr;
             transition: grid-template-rows 0.4s var(--transition-smooth);
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
         }
 
         .faq-item.active .faq-body {
@@ -950,772 +971,629 @@
 
         .faq-content-inner {
             overflow: hidden;
-            padding: 0 24px 20px 48px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            padding: 0 30px 28px 58px;
+            color: var(--text-light-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
         }
 
-        /* ==========================================================================
-           CTA FINAL
-           ========================================================================== */
+        /* CTA FINAL */
         .cta-final {
-            padding: 100px 0;
+            padding: 120px 0;
             text-align: center;
         }
 
         .cta-box {
-            background: linear-gradient(180deg, rgba(8, 10, 15, 0.9) 0%, rgba(6, 26, 58, 0.5) 100%);
+            background: linear-gradient(180deg, rgba(9, 12, 18, 0.95) 0%, rgba(6, 26, 58, 0.6) 100%);
             border: 1px solid var(--border-active);
-            border-radius: 24px;
-            padding: 80px 40px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(11, 59, 255, 0.2);
+            border-radius: 28px;
+            padding: 100px 50px;
+            box-shadow: 0 0 60px rgba(11, 59, 255, 0.25);
         }
 
         .cta-title {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
+            font-size: 3.2rem;
+            margin-bottom: 20px;
         }
 
         .cta-desc {
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 32px auto;
-            font-size: 1.1rem;
+            color: var(--text-light-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            font-size: 1.25rem;
         }
 
-        /* ==========================================================================
-           FOOTER
-           ========================================================================== */
+        /* FOOTER */
         footer {
-            background: rgba(5, 6, 8, 0.95);
+            background: rgba(5, 6, 8, 0.98);
             border-top: 1px solid var(--border-subtle);
-            padding: 80px 0 40px 0;
+            padding: 100px 0 50px 0;
         }
 
         .footer-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
+            gap: 50px;
+            margin-bottom: 80px;
         }
 
         .footer-brand-desc {
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 16px;
-            max-width: 300px;
+            font-size: 1rem;
+            margin-top: 20px;
+            max-width: 320px;
         }
 
         .footer-title {
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 20px;
-            color: var(--text-primary);
+            letter-spacing: 0.08em;
+            margin-bottom: 24px;
+            color: var(--text-light-primary);
         }
 
         .footer-links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
         }
 
         .footer-links a {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
+            color: var(--text-light-secondary);
+            font-size: 0.95rem;
             transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            color: var(--text-primary);
+            color: var(--text-light-primary);
         }
 
         .footer-bottom {
-            padding-top: 30px;
+            padding-top: 40px;
             border-top: 1px solid var(--border-subtle);
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
         }
 
         /* ==========================================================================
            RESPONSIVIDADE (MOBILE BREAKPOINTS)
            ========================================================================== */
         @media (max-width: 1024px) {
-            .hero-grid, .about-grid {
+            .hero-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 50px;
             }
-            
-            .benefits-grid, .pricing-grid {
+            .benefits-grid, .pricing-grid, .comparison-grid {
                 grid-template-columns: 1fr;
             }
-
-            .plan-card.featured {
-                transform: none;
-            }
-
-            .plan-card.featured:hover {
-                transform: translateY(-5px);
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            /* Adaptação da Timeline para telas menores */
-            .timeline-line {
-                left: 20px;
-            }
-            .timeline-node {
-                left: 20px;
-            }
+            .timeline-line { left: 24px; }
+            .timeline-node { left: 24px; }
             .timeline-card-wrapper {
-                width: calc(100% - 50px);
-                margin-left: 50px !important;
-                text-align: left !important;
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
             }
             .timeline-step:nth-child(odd) .process-card {
                 border-right: 1px solid var(--border-subtle);
-                border-left: 3px solid var(--blue-bright);
+                border-left: 4px solid var(--blue-bright);
             }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-
+            .hamburger { display: block; }
             .nav-links {
                 position: fixed;
-                top: 76px;
+                top: 90px;
                 left: 0;
                 width: 100%;
-                background: rgba(5, 6, 8, 0.98);
+                background: rgba(248, 250, 252, 0.98);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 40px 24px;
-                gap: 24px;
-                border-bottom: 1px solid var(--border-subtle);
+                padding: 40px 32px;
+                gap: 28px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                 transform: translateY(-150%);
                 transition: transform 0.4s var(--transition-smooth);
             }
-
-            .nav-links.active {
-                transform: translateY(0);
-            }
-
-            .hero-title {
-                font-size: 2.25rem;
-            }
-
-            .section-title {
-                font-size: 1.85rem;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .node-flow {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .node-arrow {
-                transform: rotate(90deg);
-            }
-        }
-
-        /* Accessibilidade: Respeitar redução de movimento */
-        @media (prefers-reduced-motion: reduce) {
-            *, ::before, ::after {
-                animation-delay: -1ms !important;
-                animation-duration: 1ms !important;
-                animation-iteration-count: 1 !important;
-                background-attachment: initial !important;
-                scroll-behavior: auto !important;
-                transition-duration: 0s !important;
-            }
+            .nav-links.active { transform: translateY(0); }
+            .hero-title { font-size: 2.8rem; }
+            .section-title { font-size: 2.2rem; }
+            .footer-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar" role="navigation" aria-label="Navegação Principal">
-        <div class="container nav-container">
-            <a href="#" class="brand-logo" aria-label="Página Inicial FlanshAI">
-                <div class="logo-box">F</div>
-                <span>FLANSHAI</span>
-            </a>
+    <!-- METADE 1: PARTE CLARA DO SITE (BRANCA/PRATA) -->
+    <div class="light-wrapper">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="navigation">
+            <div class="container nav-container">
+                <a href="#" class="brand-logo">
+                    <div class="logo-box">F</div>
+                    <span>FLANSHAI</span>
+                </a>
 
-            <button class="hamburger" id="hamburger" aria-label="Abrir Menu de Navegação" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+                <button class="hamburger" id="hamburger" aria-label="Abrir Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#beneficios">Benefícios</a></li>
-                <li><a href="#como-funciona">Processo</a></li>
-                <li><a href="#planos">Planos</a></li>
-                <li><a href="#depoimentos">Depoimentos</a></li>
-                <li><a href="#faq">FAQ</a></li>
-            </ul>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#beneficios">Benefícios</a></li>
+                    <li><a href="#como-funciona">Processo</a></li>
+                    <li><a href="#planos">Planos</a></li>
+                    <li><a href="#depoimentos">Depoimentos</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
 
-            <a href="#planos" class="btn btn-primary" style="display: none; @media(min-width: 769px){display: inline-flex;}">Explorar Prompts</a>
-        </div>
-    </nav>
-
-    <!-- HERO SECTION -->
-    <section id="inicio" class="hero">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <span class="badge">Prompts para IA</span>
-                <h1 class="hero-title">Transforme a IA em uma ferramenta <span class="highlight-blue">realmente poderosa.</span></h1>
-                <p class="hero-description">Prompts inteligentes para criar, estudar, vender, pesquisar, programar e extrair muito mais das ferramentas de Inteligência Artificial.</p>
-                <div class="hero-actions">
-                    <a href="#planos" class="btn btn-primary">Explorar Prompts</a>
-                    <a href="#planos" class="btn btn-secondary">Conhecer os Planos</a>
-                </div>
-                <div class="hero-metrics">
-                    <div class="metric-item"><div class="metric-dot"></div> +30 prompts</div>
-                    <div class="metric-item"><div class="metric-dot"></div> 3 níveis</div>
-                    <div class="metric-item"><div class="metric-dot"></div> Acesso digital</div>
-                </div>
+                <a href="#planos" class="btn btn-primary" style="display: none; @media(min-width: 769px){display: inline-flex;}">Explorar Prompts</a>
             </div>
+        </nav>
 
-            <div class="hero-visual">
-                <div class="ai-card">
-                    <div class="ai-card-header">
-                        <div class="ai-card-title">
-                            <div class="logo-box" style="width: 24px; height: 24px; font-size: 0.8rem;">F</div>
-                            <span>FLANSHAI AI ENGINE</span>
+        <!-- HERO SECTION -->
+        <section id="inicio" class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <span class="badge">Prompts para IA</span>
+                    <h1 class="hero-title">Transforme a IA em uma ferramenta <span class="highlight-blue">realmente poderosa.</span></h1>
+                    <p class="hero-description">Prompts inteligentes para criar, estudar, vender, pesquisar, programar e extrair muito mais das ferramentas de Inteligência Artificial.</p>
+                    <div class="hero-actions">
+                        <a href="#planos" class="btn btn-primary">Explorar Prompts</a>
+                        <a href="#planos" class="btn btn-secondary">Conhecer os Planos</a>
+                    </div>
+                    <div class="hero-metrics">
+                        <div class="metric-item"><div class="metric-dot"></div> +30 prompts</div>
+                        <div class="metric-item"><div class="metric-dot"></div> 3 níveis</div>
+                        <div class="metric-item"><div class="metric-dot"></div> Acesso digital</div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="ai-card">
+                        <div class="ai-card-header">
+                            <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:0.95rem;">
+                                <div class="logo-box" style="width:28px; height:28px; font-size:0.9rem;">F</div>
+                                <span>FLANSHAI AI ENGINE</span>
+                            </div>
+                            <span style="font-size: 0.8rem; color: var(--text-dark-secondary);">v2.4 Ready</span>
                         </div>
-                        <span style="font-size: 0.75rem; color: var(--text-muted);">v2.4 Ready</span>
-                    </div>
-                    <div class="ai-prompt-box">
-                        "Crie uma estratégia completa de conteúdo e alta conversão para lançamento de produto digital..."
-                    </div>
-                    <div class="ai-response-sim">
-                        <div class="sim-line blue"></div>
-                        <div class="sim-line"></div>
-                        <div class="sim-line short"></div>
-                        <div class="sim-line"></div>
+                        <div class="ai-prompt-box">
+                            "Crie uma estratégia completa de conteúdo e alta conversão para lançamento de produto digital..."
+                        </div>
+                        <div class="ai-response-sim">
+                            <div class="sim-line blue"></div>
+                            <div class="sim-line"></div>
+                            <div class="sim-line short"></div>
+                            <div class="sim-line"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- PROVA VISUAL / STATS -->
-    <div class="stats-bar">
-        <div class="container stats-flex">
-            <div class="stat-item">
-                <div class="stat-value">30+</div>
-                <div class="stat-label">Prompts</div>
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="container stats-flex">
+                <div class="stat-item"><div class="stat-value">30+</div><div class="stat-label">Prompts</div></div>
+                <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Níveis</div></div>
+                <div class="stat-item"><div class="stat-value">24/7</div><div class="stat-label">Acesso Digital</div></div>
+                <div class="stat-item"><div class="stat-value">IA</div><div class="stat-label">Focada em Resultados</div></div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Níveis</div>
+        </div>
+
+        <!-- BENEFÍCIOS (LIGHT) -->
+        <section id="beneficios" class="benefits">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Mais do que prompts.</h2>
+                    <p class="section-subtitle">Uma maneira mais inteligente de aproveitar a inteligência artificial.</p>
+                </div>
+
+                <div class="benefits-grid">
+                    <div class="card-light">
+                        <span class="card-number">01</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </div>
+                        <h3 class="card-title">Criação de Conteúdo</h3>
+                        <p class="card-desc">Gere posts, artigos, scripts de vídeo e copys persuasivas rapidamente.</p>
+                    </div>
+
+                    <div class="card-light">
+                        <span class="card-number">02</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                        </div>
+                        <h3 class="card-title">Produtividade</h3>
+                        <p class="card-desc">Automatize tarefas diárias e economize horas de trabalho repetitivo.</p>
+                    </div>
+
+                    <div class="card-light">
+                        <span class="card-number">03</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                        </div>
+                        <h3 class="card-title">Marketing</h3>
+                        <p class="card-desc">Estratégias completas de vendas, funis e posicionamento de mercado.</p>
+                    </div>
+
+                    <div class="card-light">
+                        <span class="card-number">04</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h3 class="card-title">Estudos</h3>
+                        <p class="card-desc">Resumos, explicações didáticas e estruturação de cronogramas de aprendizado.</p>
+                    </div>
+
+                    <div class="card-light">
+                        <span class="card-number">05</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7h-7L10 3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>
+                        </div>
+                        <h3 class="card-title">Negócios</h3>
+                        <p class="card-desc">Planos de negócios, análise de dados e tomada de decisão estratégica.</p>
+                    </div>
+
+                    <div class="card-light">
+                        <span class="card-number">06</span>
+                        <div class="card-icon">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                        </div>
+                        <h3 class="card-title">Criatividade</h3>
+                        <p class="card-desc">Superação de bloqueio criativo e geração contínua de novas ideias.</p>
+                    </div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">24/7</div>
-                <div class="stat-label">Acesso Digital</div>
+        </section>
+    </div>
+
+    <!-- PÍLULA DIVISORA VERTICAL EXATAMENTE IGUAL À FOTO -->
+    <div class="divider-section">
+        <div class="split-pill">
+            <div class="pill-top">
+                <span>F</span>
+                <span>L</span>
+                <span>A</span>
+                <span>N</span>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">IA</div>
-                <div class="stat-label">Focada em Resultados</div>
+            <div class="pill-bottom">
+                <span>S</span>
+                <span>H</span>
+                <span>A</span>
+                <span>I</span>
             </div>
         </div>
     </div>
 
-    <!-- BENEFÍCIOS -->
-    <section id="beneficios" class="benefits">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Mais do que prompts.</h2>
-                <p class="section-subtitle">Uma maneira mais inteligente de aproveitar a inteligência artificial.</p>
-            </div>
-
-            <div class="benefits-grid">
-                <!-- Card 1 -->
-                <div class="card">
-                    <span class="card-number">01</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </div>
-                    <h3 class="card-title">Criação de Conteúdo</h3>
-                    <p class="card-desc">Gere posts, artigos, scripts de vídeo e copys persuasivas rapidamente.</p>
+    <!-- METADE 2: PARTE ESCURA DO SITE (PRETO) -->
+    <div class="dark-wrapper">
+        <!-- PROCESS (TIMELINE COM 7 PASSOS, NÓS ILUMINADOS E CARDS GORDINHOS) -->
+        <section id="como-funciona" class="process">
+            <div class="container">
+                <div class="section-header">
+                    <span class="badge">ETAPAS</span>
+                    <h2 class="section-title">Nosso processo de <span class="highlight-blue">trabalho</span></h2>
+                    <p class="section-subtitle">Trabalho transparente e estruturado em etapas simples.</p>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="card">
-                    <span class="card-number">02</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-                    </div>
-                    <h3 class="card-title">Produtividade</h3>
-                    <p class="card-desc">Automatize tarefas diárias e economize horas de trabalho repetitivo.</p>
-                </div>
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
 
-                <!-- Card 3 -->
-                <div class="card">
-                    <span class="card-number">03</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                    </div>
-                    <h3 class="card-title">Marketing</h3>
-                    <p class="card-desc">Estratégias completas de vendas, funis e posicionamento de mercado.</p>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="card">
-                    <span class="card-number">04</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    </div>
-                    <h3 class="card-title">Estudos</h3>
-                    <p class="card-desc">Resumos, explicações didáticas e estruturação de cronogramas de aprendizado.</p>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="card">
-                    <span class="card-number">05</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7h-7L10 3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>
-                    </div>
-                    <h3 class="card-title">Negócios</h3>
-                    <p class="card-desc">Planos de negócios, análise de dados e tomada de decisão estratégica.</p>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="card">
-                    <span class="card-number">06</span>
-                    <div class="card-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
-                    </div>
-                    <h3 class="card-title">Criatividade</h3>
-                    <p class="card-desc">Superação de bloqueio criativo e geração contínua de novas ideias.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- COMO FUNCIONA (TIMELINE COM 7 PASSOS E NÓS ILUMINADOS) -->
-    <section id="como-funciona" class="process">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Use. Adapte. Crie.</h2>
-                <p class="section-subtitle">Acompanhe o passo a passo completo para transformar ideias em resultados extraordinários.</p>
-            </div>
-
-            <div class="timeline-container">
-                <div class="timeline-line"></div>
-
-                <!-- Passo 1 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">01 — ESCOLHA</span>
-                            <h3 class="process-title">Encontre o prompt ideal</h3>
-                            <p class="process-desc">Navegue pelas categorias organizadas e selecione a instrução exata para o seu objetivo.</p>
+                    <!-- Passo 1 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">01 — ESCOLHA</span>
+                                <h3 class="process-title">Encontre o prompt ideal</h3>
+                                <p class="process-desc">Navegue pelas categorias organizadas e selecione a instrução exata para o seu objetivo.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 2 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">02 — COPIE</span>
-                            <h3 class="process-title">Copie com um único clique</h3>
-                            <p class="process-desc">Transfira a estrutura otimizada direto para a sua área de transferência instantaneamente.</p>
+                    <!-- Passo 2 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">02 — COPIE</span>
+                                <h3 class="process-title">Copie com um único clique</h3>
+                                <p class="process-desc">Transfira a estrutura otimizada direto para a sua área de transferência instantaneamente.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 3 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">03 — ADAPTE</span>
-                            <h3 class="process-title">Personalize as variáveis</h3>
-                            <p class="process-desc">Preencha os campos marcados com os dados específicos do seu nicho ou projeto.</p>
+                    <!-- Passo 3 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">03 — ADAPTE</span>
+                                <h3 class="process-title">Personalize as variáveis</h3>
+                                <p class="process-desc">Preencha os campos marcados com os dados específicos do seu nicho ou projeto.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 4 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">04 — ENVIE</span>
-                            <h3 class="process-title">Insira na sua IA favorita</h3>
-                            <p class="process-desc">Funciona com ChatGPT, Claude, Gemini ou qualquer outra ferramenta de Inteligência Artificial.</p>
+                    <!-- Passo 4 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">04 — ENVIE</span>
+                                <h3 class="process-title">Insira na sua IA favorita</h3>
+                                <p class="process-desc">Funciona com ChatGPT, Claude, Gemini ou qualquer outra ferramenta de Inteligência Artificial.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 5 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">05 — CRIE</span>
-                            <h3 class="process-title">Gere respostas perfeitas</h3>
-                            <p class="process-desc">Receba um resultado extremamente refinado, sem alucinações e pronto para uso imediato.</p>
+                    <!-- Passo 5 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">05 — CRIE</span>
+                                <h3 class="process-title">Gere respostas perfeitas</h3>
+                                <p class="process-desc">Receba um resultado extremamente refinado, sem alucinações e pronto para uso imediato.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 6 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">06 — REFINE</span>
-                            <h3 class="process-title">Ajuste o tom de voz</h3>
-                            <p class="process-desc">Utilize os comandos secundários incluídos para refinar o formato e o estilo da resposta.</p>
+                    <!-- Passo 6 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">06 — REFINE</span>
+                                <h3 class="process-title">Ajuste o tom de voz</h3>
+                                <p class="process-desc">Utilize os comandos secundários incluídos para refinar o formato e o estilo da resposta.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Passo 7 -->
-                <div class="timeline-step">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card-wrapper">
-                        <div class="process-card">
-                            <span class="process-step-num">07 — ESCALE</span>
-                            <h3 class="process-title">Assuma o controle total</h3>
-                            <p class="process-desc">Multiplique sua produtividade diária e conquiste resultados profissionais com rapidez.</p>
+                    <!-- Passo 7 -->
+                    <div class="timeline-step">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-card-wrapper">
+                            <div class="process-card">
+                                <span class="process-step-num">07 — ESCALE</span>
+                                <h3 class="process-title">Assuma o controle total</h3>
+                                <p class="process-desc">Multiplique sua produtividade diária e conquiste resultados profissionais com rapidez.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- PLANOS / PRODUTOS -->
-    <section id="planos" class="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Escolha o plano ideal</h2>
-                <p class="section-subtitle">Acesso imediato à melhor biblioteca de prompts para alavancar sua produtividade.</p>
-            </div>
-
-            <div class="pricing-grid">
-                <!-- CARD 1 -->
-                <div class="plan-card">
-                    <h3 class="plan-name">PROMPTS BÁSICO</h3>
-                    <p class="plan-desc">Para quem quer começar a explorar o poder dos prompts.</p>
-                    <div class="plan-price" id="preco-basico">R$ XX,XX</div>
-                    <ul class="plan-features">
-                        <li><span class="check">✓</span> Biblioteca de prompts básicos</li>
-                        <li><span class="check">✓</span> Categorias organizadas</li>
-                        <li><span class="check">✓</span> Acesso digital</li>
-                        <li><span class="check">✓</span> Prompts prontos para copiar</li>
-                    </ul>
-                    <a href="#" id="btn-basico" class="btn btn-secondary" style="width: 100%;">QUERO O BÁSICO</a>
+        <!-- COMPARATIVO DE IMPACTO (CONTEÚDO ADICIONAL) -->
+        <section class="comparison">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Por que usar prompts profissionais?</h2>
+                    <p class="section-subtitle">Veja a diferença entre tentar criar comandos do zero e usar a FlanshAI.</p>
                 </div>
 
-                <!-- CARD 2 (DESTACADO) -->
-                <div class="plan-card featured">
-                    <span class="featured-tag">MAIS POPULAR</span>
-                    <h3 class="plan-name">PROMPTS ESSENCIAL</h3>
-                    <p class="plan-desc">Para quem quer usar IA de forma mais estratégica no dia a dia.</p>
-                    <div class="plan-price" id="preco-essencial">R$ XX,XX</div>
-                    <ul class="plan-features">
-                        <li><span class="check">✓</span> Tudo do Básico</li>
-                        <li><span class="check">✓</span> Prompts essenciais</li>
-                        <li><span class="check">✓</span> Marketing e Conteúdo</li>
-                        <li><span class="check">✓</span> Produtividade e Estudos</li>
-                        <li><span class="check">✓</span> Negócios</li>
-                    </ul>
-                    <a href="#" id="btn-essencial" class="btn btn-primary" style="width: 100%;">QUERO O ESSENCIAL</a>
-                </div>
+                <div class="comparison-grid">
+                    <div class="comp-card bad">
+                        <h3 class="comp-title">Sem os Prompts da FlanshAI</h3>
+                        <ul class="comp-list">
+                            <li>❌ Respostas genéricas e superficiais da IA</li>
+                            <li>❌ Horas perdidas tentando ajustar o comando</li>
+                            <li>❌ Alucinações e erros frequentes de contexto</li>
+                            <li>❌ Sensação de que a IA não funciona para você</li>
+                        </ul>
+                    </div>
 
-                <!-- CARD 3 -->
-                <div class="plan-card">
-                    <h3 class="plan-name">PROMPTS AVANÇADO</h3>
-                    <p class="plan-desc">Para quem quer explorar estratégias mais avançadas com IA.</p>
-                    <div class="plan-price" id="preco-avancado">R$ XX,XX</div>
-                    <ul class="plan-features">
-                        <li><span class="check">✓</span> Tudo do Essencial</li>
-                        <li><span class="check">✓</span> Prompts avançados</li>
-                        <li><span class="check">✓</span> Estratégias profissionais</li>
-                        <li><span class="check">✓</span> Prompts especializados</li>
-                        <li><span class="check">✓</span> Fluxos de trabalho com IA</li>
-                    </ul>
-                    <a href="#" id="btn-avancado" class="btn btn-secondary" style="width: 100%;">QUERO O AVANÇADO</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DEPOIMENTOS (MARQUEE INFINITO) -->
-    <section id="depoimentos" class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">O que nossos clientes estão dizendo</h2>
-                <p class="section-subtitle">Feedback de pessoas que já transformaram a forma de trabalhar com IA.</p>
-            </div>
-        </div>
-
-        <div class="marquee-wrapper">
-            <div class="marquee-track" id="marqueeTrack">
-                <!-- Renderizado via JS para Loop Infinito Perfeito -->
-            </div>
-        </div>
-    </section>
-
-    <!-- SOBRE A FLANSHAI -->
-    <section id="sobre" class="about">
-        <div class="container about-grid">
-            <div>
-                <span class="badge">Sobre a FlanshAI</span>
-                <h2 class="section-title">IA sem complicação.</h2>
-                <p class="about-text">A FlanshAI nasceu para tornar o uso da inteligência artificial mais simples, estratégico e acessível.</p>
-                <p class="about-text">Desenvolvemos estruturas de comando testadas e validadas para que você obtenha os melhores resultados possíveis das ferramentas de IA sem precisar perder horas tentando descobrir as instruções corretas.</p>
-            </div>
-
-            <div class="node-flow">
-                <div class="node-box">IDEIA</div>
-                <div class="node-arrow">→</div>
-                <div class="node-box" style="border-color: var(--blue-bright);">PROMPT</div>
-                <div class="node-arrow">→</div>
-                <div class="node-box">IA</div>
-                <div class="node-arrow">→</div>
-                <div class="node-box" style="background: rgba(11, 59, 255, 0.2);">RESULTADO</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ (ACCORDION INTERATIVO FLUIDO COM BORDA AZUL-BRANCA-PRETA) -->
-    <section id="faq" class="faq">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Perguntas Frequentes</h2>
-                <p class="section-subtitle">Tire suas dúvidas de forma rápida e transparente.</p>
-            </div>
-
-            <div class="faq-accordion" id="faqAccordion">
-                <!-- Item 1 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>O que é um prompt?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Um prompt é a instrução ou texto que você envia para uma Inteligência Artificial (como o ChatGPT) para obter uma resposta. Quanto mais bem estruturado for o prompt, melhor e mais precisa será a resposta gerada.
-                        </div>
+                    <div class="comp-card good">
+                        <h3 class="comp-title">Com a FlanshAI</h3>
+                        <ul class="comp-list">
+                            <li>⚡ Respostas cirúrgicas e prontas para uso</li>
+                            <li>⚡ Cópia e cola instantâneo em segundos</li>
+                            <li>⚡ Estrutura profissional de alta conversão</li>
+                            <li>⚡ Domínio total das melhores ferramentas de IA</li>
+                        </ul>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Item 2 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Para quais IAs posso usar os prompts?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Os prompts da FlanshAI são universais e funcionam perfeitamente no ChatGPT, Claude, Gemini, Microsoft Copilot e diversas outras ferramentas baseadas em texto.
-                        </div>
-                    </div>
+        <!-- PLANOS / PRICING -->
+        <section id="planos" class="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Escolha o plano ideal</h2>
+                    <p class="section-subtitle">Acesso imediato à melhor biblioteca de prompts para alavancar sua produtividade.</p>
                 </div>
 
-                <!-- Item 3 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Posso editar os prompts?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Sim! Todos os prompts contêm variáveis simples entre colchetes onde você pode personalizar com suas informações específicas.
-                        </div>
+                <div class="pricing-grid">
+                    <div class="plan-card">
+                        <h3 class="plan-name">PROMPTS BÁSICO</h3>
+                        <p class="plan-desc">Para quem quer começar a explorar o poder dos prompts.</p>
+                        <div class="plan-price" id="preco-basico">R$ XX,XX</div>
+                        <ul class="plan-features">
+                            <li><span class="check">✓</span> Biblioteca de prompts básicos</li>
+                            <li><span class="check">✓</span> Categorias organizadas</li>
+                            <li><span class="check">✓</span> Acesso digital</li>
+                            <li><span class="check">✓</span> Prompts prontos para copiar</li>
+                        </ul>
+                        <a href="#" id="btn-basico" class="btn btn-secondary" style="width: 100%;">QUERO O BÁSICO</a>
+                    </div>
+
+                    <div class="plan-card featured">
+                        <span class="featured-tag">MAIS POPULAR</span>
+                        <h3 class="plan-name">PROMPTS ESSENCIAL</h3>
+                        <p class="plan-desc">Para quem quer usar IA de forma mais estratégica no dia a dia.</p>
+                        <div class="plan-price" id="preco-essencial">R$ XX,XX</div>
+                        <ul class="plan-features">
+                            <li><span class="check">✓</span> Tudo do Básico</li>
+                            <li><span class="check">✓</span> Prompts essenciais</li>
+                            <li><span class="check">✓</span> Marketing e Conteúdo</li>
+                            <li><span class="check">✓</span> Produtividade e Estudos</li>
+                            <li><span class="check">✓</span> Negócios</li>
+                        </ul>
+                        <a href="#" id="btn-essencial" class="btn btn-primary" style="width: 100%;">QUERO O ESSENCIAL</a>
+                    </div>
+
+                    <div class="plan-card">
+                        <h3 class="plan-name">PROMPTS AVANÇADO</h3>
+                        <p class="plan-desc">Para quem quer explorar estratégias mais avançadas com IA.</p>
+                        <div class="plan-price" id="preco-avancado">R$ XX,XX</div>
+                        <ul class="plan-features">
+                            <li><span class="check">✓</span> Tudo do Essencial</li>
+                            <li><span class="check">✓</span> Prompts avançados</li>
+                            <li><span class="check">✓</span> Estratégias profissionais</li>
+                            <li><span class="check">✓</span> Prompts especializados</li>
+                            <li><span class="check">✓</span> Fluxos de trabalho com IA</li>
+                        </ul>
+                        <a href="#" id="btn-avancado" class="btn btn-secondary" style="width: 100%;">QUERO O AVANÇADO</a>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Item 4 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Como recebo meu acesso?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Após a confirmação da compra, você receberá o link de acesso imediato diretamente no seu e-mail ou WhatsApp cadastrado.
-                        </div>
-                    </div>
+        <!-- DEPOIMENTOS (MARQUEE INFINITO) -->
+        <section id="depoimentos" class="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">O que nossos clientes estão dizendo</h2>
+                    <p class="section-subtitle">Feedback de pessoas que já transformaram a forma de trabalhar com IA.</p>
+                </div>
+            </div>
+
+            <div class="marquee-wrapper">
+                <div class="marquee-track" id="marqueeTrack"></div>
+            </div>
+        </section>
+
+        <!-- FAQ (ACCORDION INTERATIVO) -->
+        <section id="faq" class="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Perguntas Frequentes</h2>
+                    <p class="section-subtitle">Tire suas dúvidas de forma rápida e transparente.</p>
                 </div>
 
-                <!-- Item 5 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Qual a diferença entre Básico, Essencial e Avançado?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            O Básico cobre tarefas diárias simples. O Essencial é focado em produtividade diária e criação de conteúdo. O Avançado entrega frameworks estratégicos profundos e fluxos complexos de trabalho com IA.
+                <div class="faq-accordion" id="faqAccordion">
+                    <div class="faq-item">
+                        <button class="faq-header">
+                            <div class="faq-header-content tri-border-line"><span>O que é um prompt?</span></div>
+                            <div class="faq-icon">+</div>
+                        </button>
+                        <div class="faq-body">
+                            <div class="faq-content-inner">Um prompt é a instrução que você envia para uma Inteligência Artificial para obter respostas precisas.</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Item 6 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Os prompts funcionam para qualquer pessoa?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Sim, eles foram pensados tanto para iniciantes que estão conhecendo a IA agora quanto para profissionais experientes que precisam economizar tempo.
+                    <div class="faq-item">
+                        <button class="faq-header">
+                            <div class="faq-header-content tri-border-line"><span>Para quais IAs posso usar os prompts?</span></div>
+                            <div class="faq-icon">+</div>
+                        </button>
+                        <div class="faq-body">
+                            <div class="faq-content-inner">Funcionam no ChatGPT, Claude, Gemini, Copilot e em qualquer ferramenta baseada em texto.</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Item 7 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Posso usar os prompts profissionalmente?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Com certeza! Você pode utilizar os resultados para prestar serviços, criar conteúdos para clientes, criar novos produtos digitais e muito mais.
+                    <div class="faq-item">
+                        <button class="faq-header">
+                            <div class="faq-header-content tri-border-line"><span>Posso editar os prompts?</span></div>
+                            <div class="faq-icon">+</div>
+                        </button>
+                        <div class="faq-body">
+                            <div class="faq-content-inner">Sim, todos possuem campos fáceis para você preencher com os seus dados específicos.</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Item 8 -->
-                <div class="faq-item">
-                    <button class="faq-header" aria-expanded="false">
-                        <div class="faq-header-content tri-border-line">
-                            <span>Como entro em contato com a FlanshAI?</span>
-                        </div>
-                        <div class="faq-icon">+</div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-content-inner">
-                            Você pode entrar em contato através do nosso suporte direto ou mensagem no Instagram oficial da marca.
+                    <div class="faq-item">
+                        <button class="faq-header">
+                            <div class="faq-header-content tri-border-line"><span>Como recebo meu acesso?</span></div>
+                            <div class="faq-icon">+</div>
+                        </button>
+                        <div class="faq-body">
+                            <div class="faq-content-inner">O acesso é liberado imediatamente após a confirmação no e-mail ou WhatsApp.</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CTA FINAL -->
-    <section class="cta-final">
-        <div class="container">
-            <div class="cta-box">
-                <h2 class="cta-title">Pronto para usar melhor a Inteligência Artificial?</h2>
-                <p class="cta-desc">Escolha o nível de prompts que combina com você e comece a transformar suas ideias em resultados.</p>
-                <a href="#planos" class="btn btn-primary btn-cta">EXPLORAR PROMPTS</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <a href="#" class="brand-logo">
-                        <div class="logo-box">F</div>
-                        <span>FLANSHAI</span>
-                    </a>
-                    <p class="footer-brand-desc">Prompts inteligentes para uma nova era de criação.</p>
-                </div>
-
-                <div>
-                    <h4 class="footer-title">Navegação</h4>
-                    <ul class="footer-links">
-                        <li><a href="#inicio">Início</a></li>
-                        <li><a href="#beneficios">Benefícios</a></li>
-                        <li><a href="#planos">Planos</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="footer-title">Produtos</h4>
-                    <ul class="footer-links">
-                        <li><a href="#planos">Básico</a></li>
-                        <li><a href="#planos">Essencial</a></li>
-                        <li><a href="#planos">Avançado</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="footer-title">Contato</h4>
-                    <ul class="footer-links">
-                        <li><a href="#" id="link-instagram" target="_blank" rel="noopener">Instagram</a></li>
-                        <li><a href="#" id="link-suporte">Suporte</a></li>
-                    </ul>
+        <!-- CTA FINAL -->
+        <section class="cta-final">
+            <div class="container">
+                <div class="cta-box">
+                    <h2 class="cta-title">Pronto para usar melhor a Inteligência Artificial?</h2>
+                    <p class="cta-desc">Escolha o nível de prompts que combina com você e comece a transformar suas ideias em resultados.</p>
+                    <a href="#planos" class="btn btn-primary">EXPLORAR PROMPTS</a>
                 </div>
             </div>
+        </section>
 
-            <div class="footer-bottom">
-                &copy; 2026 FlanshAI. Todos os direitos reservados.
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <a href="#" class="brand-logo" style="color:#fff;">
+                            <div class="logo-box">F</div>
+                            <span>FLANSHAI</span>
+                        </a>
+                        <p class="footer-brand-desc">Prompts inteligentes para uma nova era de criação.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-title">Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="#inicio">Início</a></li>
+                            <li><a href="#beneficios">Benefícios</a></li>
+                            <li><a href="#planos">Planos</a></li>
+                            <li><a href="#faq">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-title">Produtos</h4>
+                        <ul class="footer-links">
+                            <li><a href="#planos">Básico</a></li>
+                            <li><a href="#planos">Essencial</a></li>
+                            <li><a href="#planos">Avançado</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="footer-title">Contato</h4>
+                        <ul class="footer-links">
+                            <li><a href="#" id="link-instagram" target="_blank">Instagram</a></li>
+                            <li><a href="#" id="link-suporte">Suporte</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    &copy; 2026 FlanshAI. Todos os direitos reservados.
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <!-- JAVASCRIPT PRINCIPAL -->
     <script>
-        /* ==========================================================================
-           CONFIGURAÇÕES DA FLANSHAI
-           EDITE SOMENTE ESTA ÁREA PARA CONFIGURAR O SITE
-           ========================================================================== */
-
         const LINKS = {
             instagram: "https://www.instagram.com/flanshAI/",
             suporte: "#"
         };
 
         const PLANOS = {
-            basico: {
-                preco: "R$ 29,90",
-                checkout: LINKS.instagram
-            },
-            essencial: {
-                preco: "R$ 49,90",
-                checkout: LINKS.instagram
-            },
-            avancado: {
-                preco: "R$ 89,90",
-                checkout: LINKS.instagram
-            }
+            basico: { preco: "R$ 29,90", checkout: LINKS.instagram },
+            essencial: { preco: "R$ 49,90", checkout: LINKS.instagram },
+            avancado: { preco: "R$ 89,90", checkout: LINKS.instagram }
         };
 
         const depoimentos = [
@@ -1731,12 +1609,8 @@
             { nome: "DEPOIMENTO 10", texto: "Texto do depoimento será inserido aqui.", cargo: "Cliente FlanshAI" }
         ];
 
-        /* ==========================================================================
-           LÓGICA E INICIALIZAÇÃO
-           ========================================================================== */
-
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Injetar Preços e Links de Checkout
+            // Injetar Preços e Links
             document.getElementById('preco-basico').textContent = PLANOS.basico.preco;
             document.getElementById('preco-essencial').textContent = PLANOS.essencial.preco;
             document.getElementById('preco-avancado').textContent = PLANOS.avancado.preco;
@@ -1745,65 +1619,30 @@
             document.getElementById('btn-essencial').href = PLANOS.essencial.checkout;
             document.getElementById('btn-avancado').href = PLANOS.avancado.checkout;
 
-            // Links de Rodapé
-            const instLink = document.getElementById('link-instagram');
-            if (instLink) instLink.href = LINKS.instagram;
-            
-            const supLink = document.getElementById('link-suporte');
-            if (supLink) supLink.href = LINKS.suporte;
+            document.getElementById('link-instagram').href = LINKS.instagram;
 
-            // 2. Menu Mobile Hamburger
+            // Hamburger Menu
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-            hamburger.addEventListener('click', () => {
-                const isActive = navLinks.classList.toggle('active');
-                hamburger.setAttribute('aria-expanded', isActive);
-            });
-
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    hamburger.setAttribute('aria-expanded', 'false');
-                });
-            });
-
-            // 3. Gerar Marquee Infinito de Depoimentos
+            // Marquee
             const marqueeTrack = document.getElementById('marqueeTrack');
-            
-            function buildTestimonialsHTML(list) {
-                return list.map(item => `
-                    <div class="testimonial-card">
-                        <p class="testimonial-text">"${item.texto}"</p>
-                        <div class="testimonial-author">${item.nome}</div>
-                        <div class="testimonial-role">${item.cargo}</div>
-                    </div>
-                `).join('');
-            }
+            const html = depoimentos.map(item => `
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"${item.texto}"</p>
+                    <div class="testimonial-author">${item.nome}</div>
+                    <div class="testimonial-role">${item.cargo}</div>
+                </div>
+            `).join('');
+            marqueeTrack.innerHTML = html + html;
 
-            // Duplicar conteúdo para criar o efeito contínuo sem saltos
-            marqueeTrack.innerHTML = buildTestimonialsHTML(depoimentos) + buildTestimonialsHTML(depoimentos);
-
-            // 4. FAQ Accordion Interativo Fluido
-            const faqItems = document.querySelectorAll('.faq-item');
-
-            faqItems.forEach(item => {
-                const header = item.querySelector('.faq-header');
-                
-                header.addEventListener('click', () => {
+            // FAQ Accordion
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.querySelector('.faq-header').addEventListener('click', () => {
                     const isOpen = item.classList.contains('active');
-
-                    // Fechar todos os outros
-                    faqItems.forEach(i => {
-                        i.classList.remove('active');
-                        i.querySelector('.faq-header').setAttribute('aria-expanded', 'false');
-                    });
-
-                    // Alternar o atual
-                    if (!isOpen) {
-                        item.classList.add('active');
-                        header.setAttribute('aria-expanded', 'true');
-                    }
+                    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                    if (!isOpen) item.classList.add('active');
                 });
             });
         });
