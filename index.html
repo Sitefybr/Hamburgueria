@@ -1,1120 +1,1129 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptVault — O E-book Definitivo de IA</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-:root{
-    --bg:#06070b;
-    --card:#0d1018;
-    --card2:#111520;
-    --text:#f5f7ff;
-    --muted:#8e96aa;
-    --purple:#8b5cf6;
-    --purple2:#6d28d9;
-    --cyan:#22d3ee;
-    --border:rgba(255,255,255,.08);
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:Inter,sans-serif;
-    background:
-        radial-gradient(circle at 15% 10%,rgba(139,92,246,.15),transparent 28%),
-        radial-gradient(circle at 85% 20%,rgba(34,211,238,.08),transparent 25%),
-        var(--bg);
-    color:var(--text);
-    overflow-x:hidden;
-}
-
-/* ---------- LOGIN ---------- */
-
-#loginScreen{
-    position:fixed;
-    inset:0;
-    z-index:9999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(circle at 50% 20%,rgba(139,92,246,.2),transparent 35%),
-        #05060a;
-    transition:.6s ease;
-}
-
-.login-box{
-    width:min(430px,92%);
-    padding:42px;
-    border:1px solid var(--border);
-    background:rgba(13,16,24,.78);
-    backdrop-filter:blur(25px);
-    border-radius:28px;
-    box-shadow:0 30px 100px rgba(0,0,0,.6);
-    text-align:center;
-}
-
-.logo{
-    font-family:"Space Grotesk";
-    font-weight:800;
-    font-size:27px;
-    letter-spacing:-1.5px;
-}
-
-.logo span{
-    color:var(--purple);
-}
-
-.login-icon{
-    width:70px;
-    height:70px;
-    margin:25px auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:22px;
-    background:linear-gradient(135deg,var(--purple),var(--cyan));
-    box-shadow:0 15px 40px rgba(139,92,246,.3);
-    font-size:30px;
-}
-
-.login-box h1{
-    font-size:30px;
-    margin-bottom:10px;
-}
-
-.login-box p{
-    color:var(--muted);
-    line-height:1.6;
-    font-size:14px;
-    margin-bottom:28px;
-}
-
-.input{
-    width:100%;
-    padding:16px;
-    margin-bottom:12px;
-    background:#080a10;
-    border:1px solid var(--border);
-    color:white;
-    border-radius:13px;
-    outline:none;
-    transition:.25s;
-}
-
-.input:focus{
-    border-color:var(--purple);
-    box-shadow:0 0 0 3px rgba(139,92,246,.12);
-}
-
-.login-btn{
-    width:100%;
-    border:0;
-    padding:16px;
-    border-radius:13px;
-    background:linear-gradient(135deg,var(--purple),var(--purple2));
-    color:white;
-    font-weight:800;
-    cursor:pointer;
-    font-size:15px;
-    box-shadow:0 10px 30px rgba(109,40,217,.25);
-    transition:.25s;
-}
-
-.login-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 15px 40px rgba(109,40,217,.4);
-}
-
-.login-small{
-    margin-top:18px;
-    font-size:12px!important;
-    margin-bottom:0!important;
-}
-
-/* ---------- APP ---------- */
-
-#app{
-    display:none;
-}
-
-nav{
-    height:76px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 6%;
-    border-bottom:1px solid var(--border);
-    background:rgba(6,7,11,.72);
-    backdrop-filter:blur(20px);
-    position:sticky;
-    top:0;
-    z-index:100;
-}
-
-.nav-links{
-    display:flex;
-    gap:8px;
-}
-
-.nav-links button{
-    background:none;
-    border:0;
-    color:#aeb5c7;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:600;
-    transition:.2s;
-}
-
-.nav-links button:hover,
-.nav-links button.active{
-    color:white;
-    background:rgba(255,255,255,.06);
-}
-
-.logout{
-    background:#fff!important;
-    color:#08090d!important;
-}
-
-/* ---------- HERO ---------- */
-
-.hero{
-    max-width:1200px;
-    margin:auto;
-    min-height:620px;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    align-items:center;
-    gap:70px;
-    padding:80px 25px;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    border:1px solid rgba(139,92,246,.3);
-    background:rgba(139,92,246,.08);
-    color:#c4b5fd;
-    padding:8px 13px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:700;
-    margin-bottom:22px;
-}
-
-.badge i{
-    width:7px;
-    height:7px;
-    background:#34d399;
-    border-radius:50%;
-    box-shadow:0 0 10px #34d399;
-}
-
-.hero h1{
-    font-family:"Space Grotesk";
-    font-size:clamp(44px,6vw,76px);
-    line-height:.98;
-    letter-spacing:-4px;
-    margin-bottom:25px;
-}
-
-.gradient{
-    background:linear-gradient(90deg,#fff,#a78bfa,#22d3ee);
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-.hero p{
-    color:var(--muted);
-    font-size:18px;
-    line-height:1.7;
-    max-width:650px;
-}
-
-.hero-buttons{
-    display:flex;
-    gap:12px;
-    margin-top:32px;
-}
-
-.btn{
-    border:0;
-    padding:15px 21px;
-    border-radius:12px;
-    font-weight:800;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.primary{
-    color:white;
-    background:linear-gradient(135deg,var(--purple),#5b21b6);
-    box-shadow:0 15px 40px rgba(109,40,217,.25);
-}
-
-.secondary{
-    color:white;
-    background:#11141c;
-    border:1px solid var(--border);
-}
-
-.btn:hover{
-    transform:translateY(-3px);
-}
-
-/* BOOK */
-
-.book-wrap{
-    position:relative;
-    display:flex;
-    justify-content:center;
-    perspective:1000px;
-}
-
-.book{
-    width:310px;
-    height:410px;
-    border-radius:7px 18px 18px 7px;
-    padding:35px;
-    background:
-        linear-gradient(135deg,#151027,#080912);
-    border-left:6px solid #5b21b6;
-    border-top:1px solid rgba(255,255,255,.1);
-    border-right:1px solid rgba(255,255,255,.1);
-    box-shadow:
-        30px 35px 80px rgba(0,0,0,.65),
-        0 0 80px rgba(139,92,246,.15);
-    transform:rotateY(-13deg) rotateX(4deg);
-    transition:.5s;
-}
-
-.book:hover{
-    transform:rotateY(-3deg) rotateX(1deg) translateY(-8px);
-}
-
-.book-top{
-    color:#a78bfa;
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:2px;
-}
-
-.book h2{
-    font-family:"Space Grotesk";
-    font-size:39px;
-    line-height:1;
-    margin-top:50px;
-}
-
-.book h2 span{
-    color:#8b5cf6;
-}
-
-.book-line{
-    height:2px;
-    width:60px;
-    background:#22d3ee;
-    margin:25px 0;
-}
-
-.book p{
-    color:#8991a7;
-    font-size:12px;
-    line-height:1.6;
-}
-
-.book-bottom{
-    position:absolute;
-    bottom:28px;
-    font-size:10px;
-    color:#60687a;
-}
-
-/* ---------- SECTIONS ---------- */
-
-.section{
-    max-width:1200px;
-    margin:auto;
-    padding:90px 25px;
-}
-
-.section-title{
-    margin-bottom:35px;
-}
-
-.section-title small{
-    color:#8b5cf6;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    font-size:11px;
-}
-
-.section-title h2{
-    font-family:"Space Grotesk";
-    font-size:42px;
-    margin-top:8px;
-    letter-spacing:-2px;
-}
-
-.section-title p{
-    color:var(--muted);
-    margin-top:10px;
-}
-
-/* STATS */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.stat{
-    padding:27px;
-    border:1px solid var(--border);
-    background:linear-gradient(145deg,#0d1018,#090b11);
-    border-radius:20px;
-}
-
-.stat strong{
-    font-size:34px;
-    font-family:"Space Grotesk";
-}
-
-.stat span{
-    display:block;
-    color:var(--muted);
-    margin-top:7px;
-    font-size:13px;
-}
-
-/* PROMPTS & BUSCA */
-
-.filter-bar{
-    margin-bottom:25px;
-}
-
-.search-input{
-    width:100%;
-    max-width:400px;
-    padding:14px;
-    background:#080a10;
-    border:1px solid var(--border);
-    color:white;
-    border-radius:12px;
-    outline:none;
-    font-size:14px;
-}
-
-.search-input:focus{
-    border-color:var(--purple);
-}
-
-.prompt-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
-}
-
-.prompt-card{
-    position:relative;
-    min-height:220px;
-    padding:21px;
-    border-radius:18px;
-    background:linear-gradient(145deg,#0f131d,#0a0c12);
-    border:1px solid var(--border);
-    transition:.25s;
-    display:flex;
-    flex-direction:column;
-}
-
-.prompt-card:hover{
-    transform:translateY(-4px);
-    border-color:rgba(139,92,246,.45);
-    box-shadow:0 20px 50px rgba(0,0,0,.25);
-}
-
-.prompt-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:8px;
-}
-
-.prompt-number{
-    color:#8b5cf6;
-    font-size:11px;
-    font-weight:900;
-}
-
-.copy-btn{
-    background:rgba(255,255,255,.05);
-    border:1px solid var(--border);
-    color:var(--muted);
-    border-radius:6px;
-    padding:4px 8px;
-    font-size:11px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.copy-btn:hover{
-    color:white;
-    background:var(--purple);
-    border-color:var(--purple);
-}
-
-.prompt-card h3{
-    margin:0 0 13px;
-    font-size:15px;
-}
-
-.prompt-card textarea{
-    width:100%;
-    height:115px;
-    resize:none;
-    background:#07090e;
-    color:#dce0eb;
-    border:1px solid var(--border);
-    border-radius:11px;
-    padding:12px;
-    outline:none;
-    font-family:Inter;
-    font-size:12px;
-    line-height:1.5;
-    flex-grow:1;
-}
-
-.prompt-card textarea:focus{
-    border-color:var(--purple);
-}
-
-/* TIPS */
-
-.tip-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
-}
-
-.tip{
-    padding:28px;
-    border-radius:20px;
-    background:#0d1017;
-    border:1px solid var(--border);
-}
-
-.tip-icon{
-    font-size:28px;
-    margin-bottom:18px;
-}
-
-.tip h3{
-    margin-bottom:9px;
-}
-
-.tip p{
-    color:var(--muted);
-    font-size:13px;
-    line-height:1.7;
-}
-
-/* CTA */
-
-.cta{
-    max-width:1150px;
-    margin:70px auto;
-    padding:70px 30px;
-    border:1px solid rgba(139,92,246,.2);
-    border-radius:30px;
-    text-align:center;
-    background:
-        radial-gradient(circle at center,rgba(139,92,246,.15),transparent 55%),
-        #0b0d14;
-}
-
-.cta h2{
-    font-family:"Space Grotesk";
-    font-size:45px;
-    letter-spacing:-2px;
-}
-
-.cta p{
-    max-width:600px;
-    margin:15px auto 25px;
-    color:var(--muted);
-    line-height:1.6;
-}
-
-footer{
-    border-top:1px solid var(--border);
-    text-align:center;
-    color:#62697a;
-    padding:35px;
-    font-size:12px;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media(max-width:850px){
-
-    nav{
-        padding:0 18px;
-    }
-
-    .nav-links button{
-        padding:8px;
-        font-size:11px;
-    }
-
-    .hero{
-        grid-template-columns:1fr;
-        text-align:center;
-        padding-top:60px;
-    }
-
-    .hero p{
-        margin:auto;
-    }
-
-    .hero-buttons{
-        justify-content:center;
-    }
-
-    .stats,
-    .prompt-grid,
-    .tip-grid{
-        grid-template-columns:1fr;
-    }
-
-    .book{
-        width:270px;
-        height:360px;
-    }
-
-    .section-title h2{
-        font-size:34px;
-    }
-}
-
-@media(max-width:500px){
-
-    .logo{
-        font-size:20px;
-    }
-
-    .nav-links button:nth-child(2),
-    .nav-links button:nth-child(3){
-        display:none;
-    }
-
-    .hero h1{
-        font-size:45px;
-        letter-spacing:-2px;
-    }
-
-    .login-box{
-        padding:30px 22px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<!-- LOGIN -->
-<div id="loginScreen">
-
-    <div class="login-box">
-
-        <div class="logo">
-            Prompt<span>Vault</span>
-        </div>
-
-        <div class="login-icon">✦</div>
-
-        <h1>Entre no seu acesso</h1>
-
-        <p>
-            Desbloqueie seu laboratório de prompts,
-            estratégias e ferramentas para usar IA de forma muito mais inteligente.
-        </p>
-
-        <input
-            id="email"
-            class="input"
-            type="text"
-            placeholder="E-mail ou usuário"
-        >
-
-        <input
-            id="password"
-            class="input"
-            type="password"
-            placeholder="Senha"
-        >
-
-        <button class="login-btn" onclick="login()">
-            ACESSAR MEU E-BOOK →
-        </button>
-
-        <p class="login-small">
-            Seu acesso será liberado imediatamente.
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- APP -->
-<div id="app">
-
-<nav>
-
-    <div class="logo">
-        Prompt<span>Vault</span>
-    </div>
-
-    <div class="nav-links">
-        <button class="active" onclick="scrollToSection('inicio')">Início</button>
-        <button onclick="scrollToSection('prompts')">Prompts</button>
-        <button onclick="scrollToSection('dicas')">Dicas</button>
-        <button class="logout" onclick="logout()">Sair</button>
-    </div>
-
-</nav>
-
-
-<!-- HERO -->
-
-<section class="hero" id="inicio">
-
-    <div>
-
-        <div class="badge">
-            <i></i>
-            E-BOOK DIGITAL • ACESSO IMEDIATO
-        </div>
-
-        <h1>
-            Pare de apenas usar IA.
-            <span class="gradient">Aprenda a comandá-la.</span>
-        </h1>
-
-        <p>
-            Um laboratório digital com prompts estratégicos,
-            técnicas práticas e atalhos para transformar ideias
-            em resultados muito mais rápidos.
-        </p>
-
-        <div class="hero-buttons">
-            <button class="btn primary"
-                onclick="scrollToSection('prompts')">
-                EXPLORAR PROMPTS →
-            </button>
-
-            <button class="btn secondary"
-                onclick="scrollToSection('dicas')">
-                VER DICAS
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="book-wrap">
-
-        <div class="book">
-
-            <div class="book-top">
-                PROMPTVAULT / 01
-            </div>
-
-            <h2>
-                DOMINE<br>
-                A <span>IA.</span>
-            </h2>
-
-            <div class="book-line"></div>
-
-            <p>
-                Prompts • Estratégias • Frameworks
-                • Produtividade • Criação
-            </p>
-
-            <div class="book-bottom">
-                THE AI PROMPT PLAYBOOK
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- STATS -->
-
-<section class="section">
-
-    <div class="stats">
-
-        <div class="stat">
-            <strong>30+</strong>
-            <span>espaços para seus próprios prompts</span>
-        </div>
-
-        <div class="stat">
-            <strong>∞</strong>
-            <span>possibilidades de criação com IA</span>
-        </div>
-
-        <div class="stat">
-            <strong>24/7</strong>
-            <span>seu laboratório digital disponível</span>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- PROMPTS -->
-
-<section class="section" id="prompts">
-
-    <div class="section-title">
-        <small>Seu laboratório</small>
-
-        <h2>Prompt Library</h2>
-
-        <p>
-            Escreva, teste e organize seus melhores prompts.
-            Os campos abaixo são totalmente editáveis.
-        </p>
-    </div>
-
-    <div class="filter-bar">
-        <input 
-            type="text" 
-            id="searchInput" 
-            class="search-input" 
-            placeholder="🔍 Filtrar por título do prompt..."
-            oninput="filterPrompts()"
-        >
-    </div>
-
-    <div class="prompt-grid" id="promptGrid"></div>
-
-</section>
-
-
-<!-- DICAS -->
-
-<section class="section" id="dicas">
-
-    <div class="section-title">
-
-        <small>Conhecimento</small>
-
-        <h2>Como criar prompts melhores</h2>
-
-        <p>
-            Algumas regras simples podem melhorar drasticamente
-            a qualidade das respostas da IA.
-        </p>
-
-    </div>
-
-
-    <div class="tip-grid">
-
-        <div class="tip">
-            <div class="tip-icon">🎯</div>
-
-            <h3>Dê contexto</h3>
-
-            <p>
-                Explique para a IA quem ela deve ser,
-                qual é a situação e qual resultado você deseja.
-            </p>
-        </div>
-
-
-        <div class="tip">
-            <div class="tip-icon">🧠</div>
-
-            <h3>Defina o objetivo</h3>
-
-            <p>
-                Não diga apenas "faça um texto".
-                Especifique finalidade, público, formato e tom.
-            </p>
-        </div>
-
-
-        <div class="tip">
-            <div class="tip-icon">⚡</div>
-
-            <h3>Use restrições</h3>
-
-            <p>
-                Limites de tamanho, estrutura e estilo
-                ajudam a IA a entregar algo mais próximo do esperado.
-            </p>
-        </div>
-
-
-        <div class="tip">
-            <div class="tip-icon">🔄</div>
-
-            <h3>Itere</h3>
-
-            <p>
-                O primeiro resultado não precisa ser o final.
-                Peça ajustes e refine o prompt progressivamente.
-            </p>
-        </div>
-
-
-        <div class="tip">
-            <div class="tip-icon">📋</div>
-
-            <h3>Mostre exemplos</h3>
-
-            <p>
-                Quando possível, mostre à IA um exemplo do
-                resultado que você considera ideal.
-            </p>
-        </div>
-
-
-        <div class="tip">
-            <div class="tip-icon">🚀</div>
-
-            <h3>Crie sistemas</h3>
-
-            <p>
-                Em vez de criar prompts isolados,
-                monte processos reutilizáveis para tarefas recorrentes.
-            </p>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- CTA -->
-
-<div class="cta">
-
-    <h2>Suas ideias. Mais rápidas.</h2>
-
-    <p>
-        Transforme o PromptVault no seu espaço pessoal para
-        armazenar, testar e evoluir seus melhores prompts.
-    </p>
-
-    <button class="btn primary"
-        onclick="scrollToSection('prompts')">
-        COMEÇAR AGORA →
-    </button>
-
-</div>
-
-
-<footer>
-    © 2026 PromptVault • Seu laboratório pessoal de Inteligência Artificial.
-</footer>
-
-</div>
-
-
-<script>
-
-/* LOGIN */
-
-function login(){
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if(email.trim() !== "" && password.trim() !== ""){
-
-        document.getElementById("loginScreen").style.opacity = "0";
-
-        setTimeout(() => {
-
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("app").style.display = "block";
-
-        },500);
-
-    }else{
-
-        alert("Digite seu usuário/e-mail e sua senha.");
-
-    }
-
-}
-
-
-/* LOGOUT */
-
-function logout(){
-
-    document.getElementById("app").style.display = "none";
-
-    document.getElementById("loginScreen").style.display = "flex";
-
-    setTimeout(() => {
-        document.getElementById("loginScreen").style.opacity = "1";
-    },20);
-
-}
-
-
-/* NAVEGAÇÃO */
-
-function scrollToSection(id){
-
-    document.getElementById(id).scrollIntoView({
-        behavior:"smooth"
-    });
-
-}
-
-
-/* GERAR 30 PROMPTS */
-
-const promptGrid = document.getElementById("promptGrid");
-
-const titles = [
-    "Prompt #01 — Criatividade",
-    "Prompt #02 — Conteúdo",
-    "Prompt #03 — Marketing",
-    "Prompt #04 — Copywriting",
-    "Prompt #05 — Estudos",
-    "Prompt #06 — Ideias",
-    "Prompt #07 — Negócios",
-    "Prompt #08 — Organização",
-    "Prompt #09 — Produtividade",
-    "Prompt #10 — Pesquisa",
-    "Prompt #11 — Redes Sociais",
-    "Prompt #12 — YouTube",
-    "Prompt #13 — Instagram",
-    "Prompt #14 — Roteiros",
-    "Prompt #15 — Vendas",
-    "Prompt #16 — E-mails",
-    "Prompt #17 — Análise",
-    "Prompt #18 — Programação",
-    "Prompt #19 — Design",
-    "Prompt #20 — Brainstorm",
-    "Prompt #21 — Planejamento",
-    "Prompt #22 — Estratégia",
-    "Prompt #23 — SEO",
-    "Prompt #24 — Aprendizado",
-    "Prompt #25 — Resumos",
-    "Prompt #26 — Tradução",
-    "Prompt #27 — Automação",
-    "Prompt #28 — Pesquisa Avançada",
-    "Prompt #29 — Prompt Mestre",
-    "Prompt #30 — Meu Prompt Secreto"
-];
-
-
-titles.forEach((title,index)=>{
-
-    const card = document.createElement("div");
-    card.className = "prompt-card";
-    card.dataset.title = title.toLowerCase();
-
-    const saved = localStorage.getItem("prompt_"+index) || "";
-
-    card.innerHTML = `
-        <div class="prompt-header">
-            <span class="prompt-number">${String(index+1).padStart(2,"0")} / 30</span>
-            <button class="copy-btn" onclick="copyPrompt(${index}, this)">Copiar</button>
-        </div>
-
-        <h3>${title}</h3>
-
-        <textarea
-            id="prompt-${index}"
-            placeholder="Digite seu prompt aqui..."
-            oninput="savePrompt(${index}, this.value)"
-        >${saved}</textarea>
-    `;
-
-    promptGrid.appendChild(card);
-
-});
-
-/* COPIAR PROMPT */
-
-function copyPrompt(index, buttonEl){
-    const textarea = document.getElementById(`prompt-${index}`);
-    if(textarea.value.trim() === ""){
-        alert("O campo está vazio.");
-        return;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlanshAI — Prompts para Inteligência Artificial</title>
+    <meta name="description" content="Prompts inteligentes para potencializar seus resultados com Inteligência Artificial. Estratégias prontas para criar, vender, programar e produzir mais.">
+    <meta name="theme-color" content="#050608">
     
-    navigator.clipboard.writeText(textarea.value).then(() => {
-        const originalText = buttonEl.innerText;
-        buttonEl.innerText = "Copiado!";
-        buttonEl.style.background = "#34d399";
-        buttonEl.style.color = "#000";
-        
-        setTimeout(() => {
-            buttonEl.innerText = originalText;
-            buttonEl.style.background = "";
-            buttonEl.style.color = "";
-        }, 1500);
-    });
-}
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FlanshAI — Prompts para Inteligência Artificial">
+    <meta property="og:description" content="Prompts inteligentes para potencializar seus resultados com Inteligência Artificial.">
+    <meta property="og:image" content="https://placehold.co/1200x630/080A0F/0B3BFF?text=FLANSHAI">
 
-/* SALVAR PROMPT LOCALMENTE */
+    <!-- Inline SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080A0F'/><path d='M28 24H72V38H44V46H66V60H44V76H28V24Z' fill='%230B3BFF'/></svg>">
 
-function savePrompt(index, value){
-    localStorage.setItem("prompt_"+index, value);
-}
+    <!-- Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-/* FILTRAR PROMPTS */
-
-function filterPrompts(){
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    const cards = document.querySelectorAll(".prompt-card");
-    
-    cards.forEach(card => {
-        const title = card.dataset.title;
-        if(title.includes(query)){
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#050608',
+                            dark: '#080A0F',
+                            surface: '#0B0F17',
+                            card: '#0F1522',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            navy: '#061A3A',
+                            accent: '#0B3BFF',
+                            hover: '#164DFF',
+                            textMuted: '#687184',
+                            textSub: '#A7AFBF',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
         }
-    });
-}
+    </script>
 
-</script>
+    <!-- Custom Styling & Utility Classes -->
+    <style>
+        :root {
+            --bg-black: #050608;
+            --bg-dark: #080A0F;
+            --bg-surface: #0B0F17;
+            --blue-navy: #061A3A;
+            --blue-accent: #0B3BFF;
+            --blue-hover: #164DFF;
+            --border-glow: rgba(11, 59, 255, 0.25);
+        }
 
+        body {
+            background-color: var(--bg-black);
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Subtle Ambient Grid Background */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: rgba(15, 21, 34, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(11, 59, 255, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(11, 59, 255, 0.15);
+        }
+
+        /* Glowing Effects */
+        .glow-radial {
+            background: radial-gradient(circle at 50% 50%, rgba(11, 59, 255, 0.15) 0%, rgba(6, 26, 58, 0.05) 50%, transparent 100%);
+        }
+
+        .glow-radial-sm {
+            background: radial-gradient(circle at 50% 50%, rgba(11, 59, 255, 0.2) 0%, transparent 70%);
+        }
+
+        /* Primary Glow Button */
+        .btn-primary {
+            background: linear-gradient(135deg, #0B3BFF 0%, #164DFF 100%);
+            box-shadow: 0 4px 20px rgba(11, 59, 255, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 28px rgba(22, 77, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Secondary Outline Button */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.25s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Marquee Continuous Infinite Scroll */
+        .marquee-container {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 35s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050608;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #111827;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0B3BFF;
+        }
+
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track {
+                animation: none;
+            }
+            .glass-card:hover {
+                transform: none;
+            }
+            .btn-primary:hover, .btn-secondary:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-white antialiased bg-grid-pattern selection:bg-brand-accent selection:text-white relative">
+
+    <!-- Ambient Glowing Background Bubbles -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] glow-radial pointer-events-none z-0"></div>
+    <div class="fixed bottom-0 right-0 w-[600px] h-[600px] glow-radial pointer-events-none z-0 opacity-50"></div>
+
+    <!-- 1. NAVBAR -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-black/80 border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-accent rounded-lg p-1" aria-label="FlanshAI Pหน้า inicial">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-brand-navy flex items-center justify-center font-heading font-extrabold text-xl text-white shadow-lg shadow-brand-accent/20 group-hover:shadow-brand-accent/40 transition-all border border-brand-accent/40">
+                    F
+                </div>
+                <span class="font-heading font-bold text-xl tracking-wider text-white group-hover:text-brand-textSub transition-colors">
+                    FLANSHAI
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-textSub">
+                <a href="#inicio" class="hover:text-white transition-colors">Início</a>
+                <a href="#beneficios" class="hover:text-white transition-colors">Benefícios</a>
+                <a href="#planos" class="hover:text-white transition-colors">Planos</a>
+                <a href="#depoimentos" class="hover:text-white transition-colors">Depoimentos</a>
+                <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+            </nav>
+
+            <!-- Navbar Right CTA -->
+            <div class="hidden md:flex items-center">
+                <a href="#planos" class="btn-primary text-sm font-semibold px-5 py-2.5 rounded-xl text-white flex items-center gap-2">
+                    <span>Explorar Prompts</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-brand-textSub hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-accent" aria-label="Abrir menu de navegação" aria-expanded="false">
+                <svg id="menu-icon-open" class="w-6 h-6 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-surface/95 border-b border-white/10 backdrop-blur-xl px-4 pt-4 pb-6 space-y-4">
+            <a href="#inicio" class="mobile-nav-link block px-3 py-2 rounded-lg text-brand-textSub hover:text-white hover:bg-white/5 transition-colors">Início</a>
+            <a href="#beneficios" class="mobile-nav-link block px-3 py-2 rounded-lg text-brand-textSub hover:text-white hover:bg-white/5 transition-colors">Benefícios</a>
+            <a href="#planos" class="mobile-nav-link block px-3 py-2 rounded-lg text-brand-textSub hover:text-white hover:bg-white/5 transition-colors">Planos</a>
+            <a href="#depoimentos" class="mobile-nav-link block px-3 py-2 rounded-lg text-brand-textSub hover:text-white hover:bg-white/5 transition-colors">Depoimentos</a>
+            <a href="#faq" class="mobile-nav-link block px-3 py-2 rounded-lg text-brand-textSub hover:text-white hover:bg-white/5 transition-colors">FAQ</a>
+            <div class="pt-2">
+                <a href="#planos" class="mobile-nav-link w-full btn-primary text-center font-semibold py-3 rounded-xl text-white block">
+                    Explorar Prompts
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+        <!-- 2. HERO SECTION -->
+        <section id="inicio" class="pt-12 pb-20 md:pt-20 md:pb-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left Hero Text -->
+                <div class="lg:col-span-7 space-y-6 text-left">
+                    
+                    <!-- Badge -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-navy/60 border border-brand-accent/30 text-brand-textSub text-xs font-semibold tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                        PROMPTS PARA IA
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight">
+                        Transforme a IA em uma ferramenta <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-blue-400 to-white">realmente poderosa.</span>
+                    </h1>
+
+                    <!-- Description -->
+                    <p class="text-lg text-brand-textSub max-w-2xl leading-relaxed">
+                        Prompts inteligentes para criar, estudar, vender, pesquisar, programar e extrair muito mais das ferramentas de Inteligência Artificial.
+                    </p>
+
+                    <!-- Call to Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                        <a href="#planos" class="btn-primary text-center font-semibold px-7 py-3.5 rounded-xl text-white text-base flex items-center justify-center gap-2">
+                            <span>Explorar Prompts</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                        <a href="#planos" class="btn-secondary text-center font-semibold px-7 py-3.5 rounded-xl text-white text-base">
+                            Conhecer os Planos
+                        </a>
+                    </div>
+
+                    <!-- Metrics Indicators -->
+                    <div class="pt-6 border-t border-white/5 flex flex-wrap gap-8 text-sm text-brand-textSub">
+                        <div class="flex items-center gap-2">
+                            <span class="font-heading font-bold text-white text-base">+30</span> prompts
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-heading font-bold text-white text-base">3</span> níveis
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Acesso digital
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual Element: Dynamic Prompt Visual -->
+                <div class="lg:col-span-5 relative">
+                    <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-brand-accent/20 to-brand-navy blur-xl opacity-70"></div>
+                    
+                    <div class="relative rounded-2xl bg-brand-surface border border-brand-accent/30 p-6 shadow-2xl overflow-hidden">
+                        
+                        <!-- AI Header Bar -->
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                                <span class="ml-2 text-xs font-mono text-brand-textMuted">FLANSHAI AI v2.4</span>
+                            </div>
+                            <span class="text-xs bg-brand-accent/20 text-brand-accent font-semibold px-2.5 py-1 rounded-md border border-brand-accent/30">PROMPT</span>
+                        </div>
+
+                        <!-- Simulated Prompt Content -->
+                        <div class="space-y-4 font-mono text-xs sm:text-sm">
+                            <!-- User Prompt Box -->
+                            <div class="bg-brand-black/60 p-3.5 rounded-xl border border-white/5 space-y-1.5">
+                                <div class="text-brand-accent text-xs font-semibold flex items-center justify-between">
+                                    <span>ENTRADA DE PROMPT</span>
+                                    <span class="text-[10px] text-brand-textMuted">PRONTO PARA USAR</span>
+                                </div>
+                                <p class="text-gray-200 leading-relaxed">
+                                    "Crie uma estratégia completa de conteúdo e oferta para lançar um produto digital em 7 dias..."
+                                </p>
+                            </div>
+
+                            <!-- AI Output Simulation -->
+                            <div class="bg-brand-card p-4 rounded-xl border border-brand-accent/20 space-y-2">
+                                <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <span>RESPOSTA GERADA</span>
+                                </div>
+                                <div class="space-y-2 text-brand-textSub text-xs">
+                                    <div class="h-2 bg-white/10 rounded w-11/12 animate-pulse"></div>
+                                    <div class="h-2 bg-white/10 rounded w-4/5"></div>
+                                    <div class="h-2 bg-brand-accent/30 rounded w-3/4"></div>
+                                </div>
+                                <div class="pt-2 flex items-center justify-between text-[11px] text-brand-textMuted">
+                                    <span>Estrutura otimizada</span>
+                                    <span class="text-brand-accent">100% Personalizável</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Glow Badge -->
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-brand-textMuted">
+                            <span>Compatível com ChatGPT, Claude & Gemini</span>
+                            <span class="flex items-center gap-1 text-emerald-400">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Ativo
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. NÚMEROS / PROVA VISUAL -->
+        <section class="border-y border-white/5 bg-brand-surface/40 py-8 my-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="p-3">
+                        <div class="font-heading text-2xl sm:text-3xl font-bold text-white">30+</div>
+                        <div class="text-xs sm:text-sm text-brand-textMuted uppercase tracking-wider mt-1">Prompts</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="font-heading text-2xl sm:text-3xl font-bold text-white">3</div>
+                        <div class="text-xs sm:text-sm text-brand-textMuted uppercase tracking-wider mt-1">Níveis</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="font-heading text-2xl sm:text-3xl font-bold text-white">24/7</div>
+                        <div class="text-xs sm:text-sm text-brand-textMuted uppercase tracking-wider mt-1">Acesso Digital</div>
+                    </div>
+                    <div class="p-3">
+                        <div class="font-heading text-2xl sm:text-3xl font-bold text-brand-accent">IA</div>
+                        <div class="text-xs sm:text-sm text-brand-textMuted uppercase tracking-wider mt-1">Focada em Resultados</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. BENEFÍCIOS -->
+        <section id="beneficios" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                    Mais do que prompts.
+                </h2>
+                <p class="text-brand-textSub text-base sm:text-lg">
+                    Uma maneira mais inteligente de aproveitar a inteligência artificial.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 01 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">01</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Criação de conteúdo</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Gere ideias, roteiros, artigos e posts com alta qualidade e engajamento em minutos.
+                    </p>
+                </div>
+
+                <!-- Card 02 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">02</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Produtividade</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Automatize tarefas repetitivas e estruture fluxos de trabalho muito mais rápidos.
+                    </p>
+                </div>
+
+                <!-- Card 03 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">03</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Marketing</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Crie copys de vendas persuasivas, anúncios de alto impacto e estratégias de conversão.
+                    </p>
+                </div>
+
+                <!-- Card 04 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">04</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Estudos</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Sintetize materiais complexos, crie resumos estratégicos e acelere seu aprendizado.
+                    </p>
+                </div>
+
+                <!-- Card 05 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">05</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Negócios</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Analise dados, elabore planos operacionais e tome decisões embasadas em IA.
+                    </p>
+                </div>
+
+                <!-- Card 06 -->
+                <div class="glass-card rounded-2xl p-8 space-y-4 relative group">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-brand-navy/60 border border-brand-accent/30 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        </div>
+                        <span class="font-heading font-bold text-2xl text-white/20 group-hover:text-brand-accent/40 transition-colors">06</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-white">Criatividade</h3>
+                    <p class="text-brand-textSub text-sm leading-relaxed">
+                        Desbloqueie novas ideias, brainstormings ricos e abordagens inovadoras rapidamente.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. COMO FUNCIONA -->
+        <section class="py-20 bg-brand-surface/30 border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                    <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                        Use. Adapte. Crie.
+                    </h2>
+                    <p class="text-brand-textSub text-base sm:text-lg">
+                        Um fluxo simples em 4 passos para transformar ideias em resultados práticos.
+                    </p>
+                </div>
+
+                <!-- Process Timeline Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                    
+                    <!-- Desktop Connecting Line -->
+                    <div class="hidden md:block absolute top-12 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-brand-accent/20 via-brand-accent to-brand-accent/20 z-0"></div>
+
+                    <!-- Step 01 -->
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-surface border border-brand-accent/40 flex items-center justify-center font-heading font-bold text-xl text-brand-accent shadow-lg shadow-brand-accent/10">
+                            01
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">ESCOLHA</h3>
+                        <p class="text-brand-textSub text-sm leading-relaxed">
+                            Encontre o prompt ideal para o que você precisa.
+                        </p>
+                    </div>
+
+                    <!-- Step 02 -->
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-surface border border-brand-accent/40 flex items-center justify-center font-heading font-bold text-xl text-brand-accent shadow-lg shadow-brand-accent/10">
+                            02
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">COPIE</h3>
+                        <p class="text-brand-textSub text-sm leading-relaxed">
+                            Copie o prompt com um único clique.
+                        </p>
+                    </div>
+
+                    <!-- Step 03 -->
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-surface border border-brand-accent/40 flex items-center justify-center font-heading font-bold text-xl text-brand-accent shadow-lg shadow-brand-accent/10">
+                            03
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">ADAPTE</h3>
+                        <p class="text-brand-textSub text-sm leading-relaxed">
+                            Personalize as informações de acordo com seu objetivo.
+                        </p>
+                    </div>
+
+                    <!-- Step 04 -->
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-surface border border-brand-accent/40 flex items-center justify-center font-heading font-bold text-xl text-brand-accent shadow-lg shadow-brand-accent/10">
+                            04
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">CRIE</h3>
+                        <p class="text-brand-textSub text-sm leading-relaxed">
+                            Leve o prompt para sua IA e transforme a ideia em resultado.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PLANOS / PRODUTOS -->
+        <section id="planos" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                    Escolha o plano ideal para você
+                </h2>
+                <p class="text-brand-textSub text-base sm:text-lg">
+                    Acesso imediato e direto aos melhores prompts do mercado.
+                </p>
+            </div>
+
+            <!-- 3 Dynamic Product Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                
+                <!-- CARD 1: PROMPTS BÁSICO -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative border border-white/10">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-heading font-bold text-2xl text-white">PROMPTS BÁSICO</h3>
+                            <p class="text-brand-textSub text-xs mt-2 min-h-[32px]">
+                                Para quem quer começar a explorar o poder dos prompts.
+                            </p>
+                        </div>
+
+                        <!-- Price Tag Driven by JS -->
+                        <div class="py-4 border-y border-white/5">
+                            <span class="text-brand-textMuted text-xs font-semibold uppercase block">Investimento</span>
+                            <span id="preco-basico" class="font-heading font-extrabold text-3xl text-white">R$ --,--</span>
+                        </div>
+
+                        <!-- Features Checklist -->
+                        <ul class="space-y-3 text-sm text-brand-textSub">
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Biblioteca de prompts básicos</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Categorias organizadas</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Acesso digital</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Prompts prontos para copiar</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <a id="btn-basico" href="#" target="_blank" rel="noopener" class="btn-secondary w-full text-center font-semibold py-3.5 rounded-xl text-white block text-sm">
+                            QUERO O BÁSICO
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 2: PROMPTS ESSENCIAL (HIGHLIGHTED) -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative border-2 border-brand-accent bg-brand-surface/90 shadow-2xl shadow-brand-accent/20 scale-100 lg:scale-105 z-20">
+                    
+                    <!-- Popular Badge -->
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-accent text-white text-[11px] font-extrabold uppercase tracking-widest px-4 py-1 rounded-full shadow-lg shadow-brand-accent/50">
+                        MAIS POPULAR
+                    </div>
+
+                    <div class="space-y-6 pt-2">
+                        <div>
+                            <h3 class="font-heading font-bold text-2xl text-white">PROMPTS ESSENCIAL</h3>
+                            <p class="text-brand-textSub text-xs mt-2 min-h-[32px]">
+                                Para quem quer usar IA de forma mais estratégica no dia a dia.
+                            </p>
+                        </div>
+
+                        <!-- Price Tag Driven by JS -->
+                        <div class="py-4 border-y border-brand-accent/20">
+                            <span class="text-brand-accent text-xs font-semibold uppercase block">Investimento</span>
+                            <span id="preco-essencial" class="font-heading font-extrabold text-3xl text-white">R$ --,--</span>
+                        </div>
+
+                        <!-- Features Checklist -->
+                        <ul class="space-y-3 text-sm text-brand-textSub">
+                            <li class="flex items-center gap-3 text-white font-medium">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Tudo do Básico</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Prompts essenciais</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Marketing & Conteúdo</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Produtividade</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Estudos & Negócios</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <a id="btn-essencial" href="#" target="_blank" rel="noopener" class="btn-primary w-full text-center font-bold py-3.5 rounded-xl text-white block text-sm shadow-xl shadow-brand-accent/30">
+                            QUERO O ESSENCIAL
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 3: PROMPTS AVANÇADO -->
+                <div class="glass-card rounded-2xl p-8 flex flex-col justify-between relative border border-white/10">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-heading font-bold text-2xl text-white">PROMPTS AVANÇADO</h3>
+                            <p class="text-brand-textSub text-xs mt-2 min-h-[32px]">
+                                Para quem quer explorar estratégias mais avançadas com IA.
+                            </p>
+                        </div>
+
+                        <!-- Price Tag Driven by JS -->
+                        <div class="py-4 border-y border-white/5">
+                            <span class="text-brand-textMuted text-xs font-semibold uppercase block">Investimento</span>
+                            <span id="preco-avancado" class="font-heading font-extrabold text-3xl text-white">R$ --,--</span>
+                        </div>
+
+                        <!-- Features Checklist -->
+                        <ul class="space-y-3 text-sm text-brand-textSub">
+                            <li class="flex items-center gap-3 text-white font-medium">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Tudo do Essencial</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Prompts avançados</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Estratégias profissionais</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Prompts especializados</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Fluxos de trabalho com IA</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                <span>Conteúdos avançados</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <a id="btn-avancado" href="#" target="_blank" rel="noopener" class="btn-secondary w-full text-center font-semibold py-3.5 rounded-xl text-white block text-sm">
+                            QUERO O AVANÇADO
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 7. DEPOIMENTOS (INFINITE MARQUEE) -->
+        <section id="depoimentos" class="py-20 bg-brand-surface/20 border-y border-white/5 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 text-center">
+                <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                    O que nossos clientes estão dizendo
+                </h2>
+                <p class="text-brand-textSub text-base mt-2">
+                    Feedback de quem já está acelerando seus projetos com nossos prompts.
+                </p>
+            </div>
+
+            <!-- Marquee Scroll Container -->
+            <div class="marquee-container w-full relative">
+                <div id="marquee-track" class="marquee-track gap-6">
+                    <!-- Javascript dynamically injects cards here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. SOBRE A FLANSHAI -->
+        <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-navy/60 border border-brand-accent/30 text-brand-accent text-xs font-semibold uppercase">
+                        SOBRE NÓS
+                    </div>
+                    <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                        IA sem complicação.
+                    </h2>
+                    <p class="text-brand-textSub text-base sm:text-lg leading-relaxed">
+                        A FlanshAI nasceu para tornar o uso da inteligência artificial mais simples, estratégico e acessível.
+                    </p>
+                    <p class="text-brand-textSub text-sm sm:text-base leading-relaxed">
+                        Desenvolvemos estruturas de prompts testadas e refinadas para que você obtenha respostas precisas, economize tempo e elimine a frustração de tentar adivinhar a melhor pergunta.
+                    </p>
+                </div>
+
+                <!-- Visual Node Connection Flow -->
+                <div class="lg:col-span-6">
+                    <div class="glass-card rounded-2xl p-8 border border-white/10 relative overflow-hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center text-center">
+                            
+                            <div class="p-4 rounded-xl bg-brand-black/80 border border-white/10">
+                                <span class="font-heading font-bold text-sm text-white block">IDEIA</span>
+                                <span class="text-[10px] text-brand-textMuted">Conceito inicial</span>
+                            </div>
+
+                            <div class="hidden sm:flex justify-center text-brand-accent">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-brand-navy/60 border border-brand-accent/40 shadow-lg shadow-brand-accent/20">
+                                <span class="font-heading font-bold text-sm text-brand-accent block">PROMPT</span>
+                                <span class="text-[10px] text-brand-textSub">FlanshAI</span>
+                            </div>
+
+                            <div class="hidden sm:flex justify-center text-brand-accent">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                                <span class="text-xs text-brand-textSub">Resultado de alta precisão</span>
+                            </div>
+                            <span class="font-heading font-bold text-xs text-emerald-400">RESULTADO</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 9. FAQ (PERGUNTAS FREQUENTES) -->
+        <section id="faq" class="py-20 bg-brand-surface/20 border-t border-white/5 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-16">
+                <h2 class="font-heading font-bold text-3xl sm:text-4xl text-white">
+                    Perguntas Frequentes
+                </h2>
+                <p class="text-brand-textSub text-base">
+                    Tire suas dúvidas sobre o funcionamento dos prompts e acessos.
+                </p>
+            </div>
+
+            <!-- Accordion Container -->
+            <div id="faq-accordion" class="space-y-4">
+                <!-- Javascript populates accordion items dynamically -->
+            </div>
+        </section>
+
+        <!-- 10. CTA FINAL -->
+        <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative rounded-3xl bg-gradient-to-b from-brand-surface to-brand-black border border-brand-accent/30 p-8 sm:p-14 text-center overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 glow-radial pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-3xl mx-auto space-y-6">
+                    <h2 class="font-heading font-extrabold text-3xl sm:text-5xl text-white leading-tight">
+                        Pronto para usar melhor a Inteligência Artificial?
+                    </h2>
+                    <p class="text-brand-textSub text-base sm:text-lg">
+                        Escolha o nível de prompts que combina com você e comece a transformar suas ideias em resultados.
+                    </p>
+                    <div class="pt-4">
+                        <a href="#planos" class="btn-primary inline-flex items-center gap-2 font-bold px-8 py-4 rounded-xl text-white text-base">
+                            <span>EXPLORAR PROMPTS</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 11. FOOTER -->
+    <footer class="bg-brand-black border-t border-white/10 pt-16 pb-12 text-sm text-brand-textSub">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/5">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="md:col-span-5 space-y-4">
+                    <a href="#" class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-accent to-brand-navy flex items-center justify-center font-heading font-extrabold text-lg text-white border border-brand-accent/40">
+                            F
+                        </div>
+                        <span class="font-heading font-bold text-xl text-white">FLANSHAI</span>
+                    </a>
+                    <p class="text-brand-textMuted max-w-sm text-xs leading-relaxed">
+                        Prompts inteligentes para uma nova era de criação.
+                    </p>
+                    <p class="text-xs text-brand-textMuted">
+                        Prompts inteligentes. Resultados melhores.
+                    </p>
+                </div>
+
+                <!-- Col 2: Navigation Links -->
+                <div class="md:col-span-2 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-white block">Navegação</span>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#inicio" class="hover:text-white transition-colors">Início</a></li>
+                        <li><a href="#beneficios" class="hover:text-white transition-colors">Benefícios</a></li>
+                        <li><a href="#planos" class="hover:text-white transition-colors">Planos</a></li>
+                        <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Products Links -->
+                <div class="md:col-span-2 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-white block">Produtos</span>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#planos" class="hover:text-white transition-colors">Básico</a></li>
+                        <li><a href="#planos" class="hover:text-white transition-colors">Essencial</a></li>
+                        <li><a href="#planos" class="hover:text-white transition-colors">Avançado</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact & Social -->
+                <div class="md:col-span-3 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-white block">Contato</span>
+                    <ul class="space-y-2 text-xs">
+                        <li><a id="link-instagram" href="#" target="_blank" rel="noopener" class="hover:text-white transition-colors">Instagram</a></li>
+                        <li><a id="link-suporte" href="#" target="_blank" rel="noopener" class="hover:text-white transition-colors">Suporte</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-textMuted">
+                <p>&copy; 2026 FlanshAI. Todos os direitos reservados.</p>
+                <p>Desenvolvido para máxima performance e inteligência.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        /*
+        ============================================================
+        CONFIGURAÇÕES DA FLANSHAI
+        EDITE SOMENTE ESTA ÁREA PARA CONFIGURAR O SITE
+        ============================================================
+        */
+
+        // 1. PREÇOS E CHECKOUTS DOS PLANOS
+        const PLANOS = {
+            basico: {
+                preco: "R$ 29,90",
+                checkout: "#" // Substitua pelo seu link de checkout
+            },
+            essencial: {
+                preco: "R$ 49,90",
+                checkout: "#" // Substitua pelo seu link de checkout
+            },
+            avancado: {
+                preco: "R$ 89,90",
+                checkout: "#" // Substitua pelo seu link de checkout
+            }
+        };
+
+        // 2. REDES SOCIAIS E SUPORTE
+        const LINKS = {
+            instagram: "https://instagram.com", // Substitua pelo link do seu Instagram
+            suporte: "mailto:suporte@flanshai.com" // Substitua pelo seu e-mail ou WhatsApp
+        };
+
+        // 3. DEPOIMENTOS PLACEHOLDERS (10 CARDS)
+        const depoimentos = [
+            {
+                nome: "Carlos Eduardo",
+                cargo: "Cliente FlanshAI",
+                texto: "Os prompts facilitaram absurdamente meu processo de criação de conteúdo diário."
+            },
+            {
+                nome: "Mariana Souza",
+                cargo: "Cliente FlanshAI",
+                texto: "A estrutura dos prompts para estratégia de marketing mudou a agilidade das minhas entregas."
+            },
+            {
+                nome: "Lucas Mendes",
+                cargo: "Cliente FlanshAI",
+                texto: "Extremamente bem organizados. Bastou copiar, adaptar os dados e rodar no ChatGPT."
+            },
+            {
+                nome: "Fernanda Lima",
+                cargo: "Cliente FlanshAI",
+                texto: "Economizei horas de trabalho que gastava tentando ajustar comandos com IA."
+            },
+            {
+                nome: "Rodrigo Alves",
+                cargo: "Cliente FlanshAI",
+                texto: "A qualidade das respostas da IA melhora 100% quando usamos um prompt bem estruturado."
+            },
+            {
+                nome: "Beatriz Costa",
+                cargo: "Cliente FlanshAI",
+                texto: "Excelente investimento para quem quer usar Inteligência Artificial com foco em negócios."
+            },
+            {
+                nome: "Gabriel Rocha",
+                cargo: "Cliente FlanshAI",
+                texto: "A parte de produtividade e estudos me salvou nos prazos do projeto."
+            },
+            {
+                nome: "Camila Martins",
+                cargo: "Cliente FlanshAI",
+                texto: "Simples de entender, direto ao ponto e sem enrolação. Recomendo muito."
+            },
+            {
+                nome: "Thiago Ramos",
+                cargo: "Cliente FlanshAI",
+                texto: "Melhor material de prompts prontos que já adquiri. Funciona de verdade."
+            },
+            {
+                nome: "Vanessa Ribeiro",
+                cargo: "Cliente FlanshAI",
+                texto: "Os prompts avançados entregam uma profundidade incrível nas análises."
+            }
+        ];
+
+        // 4. PERGUNTAS FREQUENTES (FAQ)
+        const faqItems = [
+            {
+                pergunta: "O que é um prompt?",
+                resposta: "Um prompt é uma instrução ou comando fornecido a uma Inteligência Artificial para orientar a geração de respostas precisas e de alta qualidade."
+            },
+            {
+                pergunta: "Para quais IAs posso usar os prompts?",
+                resposta: "Nossos prompts foram desenhados para funcionar perfeitamente com os principais modelos de IA do mercado, como ChatGPT, Claude, Gemini, entre outros."
+            },
+            {
+                pergunta: "Posso editar os prompts?",
+                resposta: "Sim! Os prompts foram criados com campos personalizáveis para que você insira as informações exatas do seu projeto ou objetivo."
+            },
+            {
+                pergunta: "Como recebo meu acesso?",
+                resposta: "Após a confirmação do pagamento, você recebe imediatamente o acesso digital ao material pelo seu e-mail cadastrado."
+            },
+            {
+                pergunta: "Qual a diferença entre Básico, Essencial e Avançado?",
+                resposta: "O plano Básico reúne os comandos essenciais para iniciantes. O Essencial adiciona módulos estratégicos de marketing, conteúdo e vendas. O Avançado oferece fluxos de trabalho completos e estratégias de alta complexidade."
+            },
+            {
+                pergunta: "Os prompts funcionam para qualquer pessoa?",
+                resposta: "Sim! Mesmo que você nunca tenha usado Inteligência Artificial antes, a estrutura é simples: basta copiar, personalizar e colar na IA."
+            },
+            {
+                pergunta: "Posso usar os prompts profissionalmente?",
+                resposta: "Com certeza. Muitos de nossos clientes utilizam para prestar serviços, criar conteúdos comerciais e otimizar processos de trabalho."
+            },
+            {
+                pergunta: "Como entro em contato com a FlanshAI?",
+                resposta: "Você pode entrar em contato conosco diretamente pelo suporte no e-mail ou através de nossas redes sociais oficiais."
+            }
+        ];
+
+        /*
+        ============================================================
+        LÓGICA E EXECUÇÃO DAS FUNCIONALIDADES
+        ============================================================
+        */
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. APLICAR CONFIGURAÇÕES DOS PLANOS E LINKS
+            document.getElementById('preco-basico').innerText = PLANOS.basico.preco;
+            document.getElementById('btn-basico').href = PLANOS.basico.checkout;
+
+            document.getElementById('preco-essencial').innerText = PLANOS.essencial.preco;
+            document.getElementById('btn-essencial').href = PLANOS.essencial.checkout;
+
+            document.getElementById('preco-avancado').innerText = PLANOS.avancado.preco;
+            document.getElementById('btn-avancado').href = PLANOS.avancado.checkout;
+
+            document.getElementById('link-instagram').href = LINKS.instagram;
+            document.getElementById('link-suporte').href = LINKS.suporte;
+
+            // 2. MENU MOBILE
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIconOpen = document.getElementById('menu-icon-open');
+            const menuIconClose = document.getElementById('menu-icon-close');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            function toggleMobileMenu() {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                if (isOpen) {
+                    mobileMenu.classList.add('hidden');
+                    menuIconOpen.classList.remove('hidden');
+                    menuIconClose.classList.add('hidden');
+                    mobileBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    mobileMenu.classList.remove('hidden');
+                    menuIconOpen.classList.add('hidden');
+                    menuIconClose.classList.remove('hidden');
+                    mobileBtn.setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            mobileBtn.addEventListener('click', toggleMobileMenu);
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // 3. CARREGAR DEPOIMENTOS NO MARQUEE (DUPLICAÇÃO PARA LOOP INFINITO)
+            const marqueeTrack = document.getElementById('marquee-track');
+
+            function createCard(item, index) {
+                const card = document.createElement('div');
+                card.className = "w-72 sm:w-80 shrink-0 glass-card rounded-2xl p-6 space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex text-amber-400 gap-1 text-xs">
+                            ★ ★ ★ ★ ★
+                        </div>
+                        <span class="text-[10px] text-brand-textMuted uppercase font-mono">DEPOIMENTO 0${(index % 10) + 1}</span>
+                    </div>
+                    <p class="text-xs text-brand-textSub italic leading-relaxed">"${item.texto}"</p>
+                    <div class="pt-2 border-t border-white/5">
+                        <span class="font-heading font-semibold text-sm text-white block">${item.nome}</span>
+                        <span class="text-[11px] text-brand-textMuted">${item.cargo}</span>
+                    </div>
+                `;
+                return card;
+            }
+
+            // Duplica os 10 itens para criar a animação contínua perfeita
+            [...depoimentos, ...depoimentos].forEach((item, idx) => {
+                marqueeTrack.appendChild(createCard(item, idx));
+            });
+
+            // 4. CARREGAR E GERENCIAR FAQ ACCORDION
+            const faqContainer = document.getElementById('faq-accordion');
+
+            faqItems.forEach((item, index) => {
+                const faqCard = document.createElement('div');
+                faqCard.className = "glass-card rounded-xl overflow-hidden transition-all duration-300";
+
+                faqCard.innerHTML = `
+                    <button class="w-full text-left p-5 flex items-center justify-between gap-4 font-heading font-semibold text-white focus:outline-none focus:ring-1 focus:ring-brand-accent rounded-xl" aria-expanded="false">
+                        <span>${item.pergunta}</span>
+                        <svg class="faq-icon w-5 h-5 text-brand-accent transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5 text-sm text-brand-textSub leading-relaxed border-t border-white/5 pt-3">
+                        ${item.resposta}
+                    </div>
+                `;
+
+                const btn = faqCard.querySelector('button');
+                const answer = faqCard.querySelector('.faq-answer');
+                const icon = faqCard.querySelector('.faq-icon');
+
+                btn.addEventListener('click', () => {
+                    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+                    // Fecha todos os outros accordions
+                    document.querySelectorAll('#faq-accordion button').forEach(otherBtn => {
+                        otherBtn.setAttribute('aria-expanded', 'false');
+                        otherBtn.nextElementSibling.classList.add('hidden');
+                        otherBtn.querySelector('.faq-icon').classList.remove('rotate-180');
+                    });
+
+                    // Alterna o clicado
+                    if (!isExpanded) {
+                        btn.setAttribute('aria-expanded', 'true');
+                        answer.classList.remove('hidden');
+                        icon.classList.add('rotate-180');
+                    }
+                });
+
+                faqContainer.appendChild(faqCard);
+            });
+        });
+    </script>
 </body>
 </html>
